@@ -2,6 +2,7 @@
 using UnityEngine;
 using Mirror;
 using System.Text;
+using System.Collections.Generic;
 using UnityEngine.UI;
 
 public class ChatServer : MonoBehaviour
@@ -9,7 +10,7 @@ public class ChatServer : MonoBehaviour
 
     Telepathy.Server server = new Telepathy.Server();
 	public int port= 7777;
-	int connections = 0;
+	private LinkedList<int> clienList = new LinkedList<int>();
 	//public int MaxMessages = 15;
 	
 	
@@ -44,7 +45,7 @@ public class ChatServer : MonoBehaviour
                 {
                     case Telepathy.EventType.Connected:
                         Debug.Log(msg.connectionId + " Connected");
-						connections++;
+						clienList.AddLast(msg.connectionId);
                         break;
                     case Telepathy.EventType.Data:
                         Debug.Log(msg.connectionId + " Data: " + BitConverter.ToString(msg.data));
@@ -52,7 +53,7 @@ public class ChatServer : MonoBehaviour
                         break;
                     case Telepathy.EventType.Disconnected:
                         Debug.Log(msg.connectionId + " Disconnected");
-						connections--;
+						clienList.Remove(msg.connectionId);
                         break;
                 }
             }
@@ -79,10 +80,10 @@ public class ChatServer : MonoBehaviour
         server.Stop();
     }
 	void SendToAll(Byte[] data){
-		if(connections>0){
-		for(int i=1; i<=connections;i++){
+		if(clienList.Count>0){
+		foreach(int i in clienList)
 		server.Send(i,data);
 		}
 		}
-	}
+	
 }
