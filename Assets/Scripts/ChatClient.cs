@@ -90,7 +90,7 @@ public class ChatClient : MonoBehaviour
     }
 	
 	void UpdateChat(Byte[] data){
-	chatmsg += "\n" + BitConverter.ToString(data);
+	chatmsg += "\n" + System.Text.Encoding.UTF8.GetString(data);
 	msgnum++;
 	if(msgnum >= MaxMessages)
 		chatmsg = chatmsg.Substring(chatmsg.IndexOf('\n') + 1);

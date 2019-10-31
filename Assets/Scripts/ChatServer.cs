@@ -9,6 +9,7 @@ public class ChatServer : MonoBehaviour
 
     Telepathy.Server server = new Telepathy.Server();
 	public int port= 7777;
+	int connections = 0;
 	//public int MaxMessages = 15;
 	
 	
@@ -43,13 +44,15 @@ public class ChatServer : MonoBehaviour
                 {
                     case Telepathy.EventType.Connected:
                         Debug.Log(msg.connectionId + " Connected");
+						connections++;
                         break;
                     case Telepathy.EventType.Data:
                         Debug.Log(msg.connectionId + " Data: " + BitConverter.ToString(msg.data));
-						server.Send(msg.connectionId,msg.data);
+						SendToAll(msg.data);
                         break;
                     case Telepathy.EventType.Disconnected:
                         Debug.Log(msg.connectionId + " Disconnected");
+						connections--;
                         break;
                 }
             }
@@ -75,4 +78,11 @@ public class ChatServer : MonoBehaviour
     {
         server.Stop();
     }
+	void SendToAll(Byte[] data){
+		if(connections>0){
+		for(int i=1; i<=connections;i++){
+		server.Send(i,data);
+		}
+		}
+	}
 }
