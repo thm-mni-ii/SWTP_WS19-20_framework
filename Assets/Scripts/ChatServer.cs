@@ -2,8 +2,11 @@
 using UnityEngine;
 using Mirror;
 using System.Text;
+using System.IO;
 using System.Collections.Generic;
 using UnityEngine.UI;
+using System.Runtime.Serialization.Formatters.Binary;
+
 
 public class ChatServer : MonoBehaviour
 {
@@ -11,7 +14,7 @@ public class ChatServer : MonoBehaviour
     Telepathy.Server server = new Telepathy.Server();
 	public int port= 7777;
 	private LinkedList<int> clienList = new LinkedList<int>();
-	//public int MaxMessages = 15;
+
 	
 	
 
@@ -49,7 +52,7 @@ public class ChatServer : MonoBehaviour
                         break;
                     case Telepathy.EventType.Data:
                         Debug.Log(msg.connectionId + " Data: " + BitConverter.ToString(msg.data));
-						SendToAll(msg.data);
+						HandleMessage(msg.data);
                         break;
                     case Telepathy.EventType.Disconnected:
                         Debug.Log(msg.connectionId + " Disconnected");
@@ -79,11 +82,55 @@ public class ChatServer : MonoBehaviour
     {
         server.Stop();
     }
+	
+	void HandleMessage(Byte[] data){
+	MessageStruct Smsg = ByteArrayToObject(data);
+		
+		switch(Smsg.messagetype){
+		case 1://login request
+
+		break;
+		
+		
+		case 2://message
+		Debug.Log("Message from : "+ Smsg.senderName);
+		SendToAll(data);
+		break;		
+			
+			
+		}
+		
+	}
+	
 	void SendToAll(Byte[] data){
 		if(clienList.Count>0){
 		foreach(int i in clienList)
 		server.Send(i,data);
 		}
 		}
+		
+		
+	// Convert an object to a byte array
+	public byte[] ObjectToByteArray(MessageStruct obj)
+	{
+		BinaryFormatter bf = new BinaryFormatter();
+		using (var ms = new MemoryStream())
+		{
+			bf.Serialize(ms, obj);
+			return ms.ToArray();
+		}
+	}
+	
+		public MessageStruct ByteArrayToObject(byte[] arrBytes)
+	{
+		using (var memStream = new MemoryStream())
+		{
+			var binForm = new BinaryFormatter();
+			memStream.Write(arrBytes, 0, arrBytes.Length);
+			memStream.Seek(0, SeekOrigin.Begin);
+			var obj = binForm.Deserialize(memStream);
+			return (MessageStruct)obj;
+		}
+	}
 	
 }

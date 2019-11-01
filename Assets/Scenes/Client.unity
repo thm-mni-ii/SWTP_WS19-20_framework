@@ -270,7 +270,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   clientport: 7777
   ip: localhost
-  MaxMessages: 15
+  MaxMessages: 18
+  userName: User
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0

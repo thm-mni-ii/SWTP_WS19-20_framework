@@ -3,6 +3,8 @@ using UnityEngine;
 using Mirror;
 using System.Text;
 using UnityEngine.UI;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 
 
 public class ChatClient : MonoBehaviour
@@ -14,6 +16,7 @@ public class ChatClient : MonoBehaviour
 	private String chatmsg = null;
 	public int MaxMessages = 15;
 	private int msgnum = 0;
+	public string userName = "User";
 	
 	
 
@@ -48,7 +51,7 @@ public class ChatClient : MonoBehaviour
                         break;
                     case Telepathy.EventType.Data:
                         Debug.Log("Data: " + BitConverter.ToString(msg.data));
-						UpdateChat(msg.data);
+						HandleData(msg.data);
                         break;
                     case Telepathy.EventType.Disconnected:
                         Debug.Log("Disconnected");
@@ -76,21 +79,63 @@ public class ChatClient : MonoBehaviour
         if (GUI.Button(new Rect(130, 25, 120, 20), "Disconnect Client"))
             client.Disconnect();
 		
-		GUI.Box(new Rect(270, 100, 300, 400), chatmsg);
-		clientmsg = GUI.TextField(new Rect(130, 410, 120, 20),clientmsg);
-		if (GUI.Button(new Rect(300, 410, 120, 20), "send")){
+		GUI.Box(new Rect(270, 100, 300, 300), chatmsg);
+		clientmsg = GUI.TextField(new Rect(270, 410, 200, 20),clientmsg);
+		if (GUI.Button(new Rect(470, 410, 100, 20), "send")){
 			
-			byte[] bytes = Encoding.ASCII.GetBytes(clientmsg);
-			client.Send(bytes);
+			MessageStruct Smsg = new MessageStruct();
+				   Smsg.senderName = userName;
+					Smsg.Text = clientmsg;
+					Smsg.messagetype = 2;
 			
+			byte[] bytes = ObjectToByteArray(Smsg);
+			client.Send(bytes);	
 		}
-
 
         GUI.enabled = true;
     }
+
 	
-	void UpdateChat(Byte[] data){
-	chatmsg += "\n" + System.Text.Encoding.UTF8.GetString(data);
+	public void HandleData(Byte[] data){
+	MessageStruct Smsg = ByteArrayToObject(data);		
+		switch(Smsg.messagetype){
+		case 1: //login reqeust result
+		
+		break;
+		
+		case 2: //message recieved
+		UpdateChat(Smsg.Text,Smsg.senderName);
+		break;
+		}
+	}
+		
+		
+	
+		// Convert an object to a byte array
+	public byte[] ObjectToByteArray(MessageStruct obj)
+	{
+		BinaryFormatter bf = new BinaryFormatter();
+		using (var ms = new MemoryStream())
+		{
+			bf.Serialize(ms, obj);
+			return ms.ToArray();
+		}
+	}
+	
+		public MessageStruct ByteArrayToObject(byte[] arrBytes)
+	{
+		using (var memStream = new MemoryStream())
+		{
+			var binForm = new BinaryFormatter();
+			memStream.Write(arrBytes, 0, arrBytes.Length);
+			memStream.Seek(0, SeekOrigin.Begin);
+			var obj = binForm.Deserialize(memStream);
+			return (MessageStruct)obj;
+		}
+	}
+
+	void UpdateChat(String text,String name){
+	chatmsg += "\n" + name + ": " + text;
 	msgnum++;
 	if(msgnum >= MaxMessages)
 		chatmsg = chatmsg.Substring(chatmsg.IndexOf('\n') + 1);
