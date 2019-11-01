@@ -4,25 +4,36 @@ using Mirror;
 using System.Text;
 using UnityEngine.UI;
 using System.IO;
+using UnityEngine.SceneManagement;
+using System.Collections.Generic;
 using System.Runtime.Serialization.Formatters.Binary;
 
 
-public class ChatClient : MonoBehaviour
+
+public class ClientManager : MonoBehaviour
 {
+	
+	    //Input
+	public InputField ipAddressTF = null;
+	public InputField portNumberTF = null;
+    public InputField usernameTF = null;
+    public InputField passwordTF = null;
+	public InputField clientMessageTF = null;
+	private bool firstConnect = true;
+	public GameObject Canvas2 = null;
+	public GameObject Canvas1 = null;
+	public Text content = null;
+	
     Telepathy.Client client = new Telepathy.Client();
 	public int clientport= 7777;
 	public string ip = "localhost";
-	private String clientmsg = null;
-	private String chatmsg = null;
-	public int MaxMessages = 15;
-	private int msgnum = 0;
 	public string userName = "User";
+	private bool hideCanvas2 = true;
 	
-	
-
-    void Awake()
-    {
-        // update even if window isn't focused, otherwise we don't receive.
+		void awake()
+		{
+			
+		// update even if window isn't focused, otherwise we don't receive.
         Application.runInBackground = true;
 
         // use Debug.Log functions for Telepathy so we can see it in the console
@@ -30,16 +41,13 @@ public class ChatClient : MonoBehaviour
         Telepathy.Logger.LogWarning = Debug.LogWarning;
         Telepathy.Logger.LogError = Debug.LogError;
 		
-    }
+		}
 
     void Update()
     {
         // client
         if (client.Connected)
         {
-            //if (Input.GetKeyDown(KeyCode.Space))
-              //  client.Send(new byte[]{0x1});
-
             // show all new messages
             Telepathy.Message msg;
             while (client.GetNextMessage(out msg))
@@ -58,43 +66,55 @@ public class ChatClient : MonoBehaviour
                         break;
                 }
             }
-        }
+        }else if(hideCanvas2){
+					Canvas2.SetActive(false);
+				hideCanvas2=false;
+		}else if(!client.Connected && !firstConnect){
+			Canvas1.SetActive(true);
+			Canvas2.SetActive(false);
+			firstConnect = true;
+		}
 
     }
 
-    void OnGUI()
-    {
-        // client
-		
-		GUI.enabled = !client.Connected;
-		if (GUI.Button(new Rect(0, 25, 120, 20), "LAN Client"))
-		{
+		public void EstablishConnection()
+	{
+		ip = ipAddressTF.text;
+		userName = usernameTF.text;
+
+		if (firstConnect)
+        {
+			if(ip != null && (ip != "") && (userName != "") && userName != null){
 			client.Connect(ip, clientport);
-		}
-		ip = GUI.TextField(new Rect(260, 25, 120, 20),ip);
-
-        
-
-        GUI.enabled = client.Connected;
-        if (GUI.Button(new Rect(130, 25, 120, 20), "Disconnect Client"))
-            client.Disconnect();
-		
-		GUI.Box(new Rect(270, 100, 300, 300), chatmsg);
-		clientmsg = GUI.TextField(new Rect(270, 410, 200, 20),clientmsg);
-		if (GUI.Button(new Rect(470, 410, 100, 20), "send")){
-			
+				for(int i =0;i<50000;i++){} // Waiting loop
+            
+			if(client.Connected){
+			GameObject.Find("Canvas").SetActive(false);
+			Canvas2.SetActive(true);
+			firstConnect = false;
+			}else {
+				
+				Debug.Log("Connection Failed");
+			}
+			}else {
+			Debug.Log("client ERROR ip/username is null");
+			}
+        }
+		//Debug.Log("client.connect is " + client.Connected);
+	}
+	
+	
+	public void clientSendMessage(){
+		if(clientMessageTF.text != null){
 			MessageStruct Smsg = new MessageStruct();
-				   Smsg.senderName = userName;
-					Smsg.Text = clientmsg;
-					Smsg.messagetype = 2;
-			
+		   Smsg.senderName = userName;
+			Smsg.Text = clientMessageTF.text;
+			Smsg.messagetype = 2;
+			clientMessageTF.text = string.Empty;
 			byte[] bytes = ObjectToByteArray(Smsg);
 			client.Send(bytes);	
 		}
-
-        GUI.enabled = true;
-    }
-
+	}
 	
 	public void HandleData(Byte[] data){
 	MessageStruct Smsg = ByteArrayToObject(data);		
@@ -135,16 +155,20 @@ public class ChatClient : MonoBehaviour
 	}
 
 	void UpdateChat(String text,String name){
-	chatmsg += "\n" + name + ": " + text;
-	msgnum++;
-	if(msgnum >= MaxMessages)
-		chatmsg = chatmsg.Substring(chatmsg.IndexOf('\n') + 1);
-		
+	content.text += "\n" + name + ": " + text;
 	}
 
     void OnApplicationQuit()
     {
         client.Disconnect();
+    }
+	
+	    public void ValueChanged()
+    {
+        if (clientMessageTF.text.Contains("\n"))
+        {
+			clientSendMessage();
+        }
     }
 	
  
