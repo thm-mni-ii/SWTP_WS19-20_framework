@@ -12,7 +12,7 @@ public class Login : MonoBehaviour
 	[SerializeField] private Text WarningMsg;
 	private UserInfo user;
 	private Chat chat;
-	
+	//
     // Start is called before the first frame update
 	void Start () {		
 		globalCanvas = gameObject.GetComponent<GlobalManager>();
