@@ -10,25 +10,18 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 
 
-public class ClientManager : MonoBehaviour
+public class Chat : MonoBehaviour
 {
-	
-	    //Input
-	public InputField ipAddressTF = null;
-	public InputField portNumberTF = null;
-    public InputField usernameTF = null;
-    public InputField passwordTF = null;
+ 	    //Input
 	public InputField clientMessageTF = null;
-	private bool firstConnect = true;
-	public GameObject Canvas2 = null;
-	public GameObject Canvas1 = null;
 	public Text content = null;
 	
     Telepathy.Client client = new Telepathy.Client();
+	
 	public int clientport= 7777;
 	public string ip = "localhost";
 	public string userName = "User";
-	private bool hideCanvas2 = true;
+	private bool firstConnect = true;
 	
 		void awake()
 		{
@@ -66,41 +59,18 @@ public class ClientManager : MonoBehaviour
                         break;
                 }
             }
-        }else if(hideCanvas2){
-					Canvas2.SetActive(false);
-				hideCanvas2=false;
-		}else if(!client.Connected && !firstConnect){
-			Canvas1.SetActive(true);
-			Canvas2.SetActive(false);
-			firstConnect = true;
-		}
-
+        }
     }
 
 		public void EstablishConnection()
 	{
-		ip = ipAddressTF.text;
-		userName = usernameTF.text;
 
 		if (firstConnect)
         {
 			if(ip != null && (ip != "") && (userName != "") && userName != null){
 			client.Connect(ip, clientport);
-				for(int i =0;i<50000;i++){} // Waiting loop
-            
-			if(client.Connected){
-			GameObject.Find("Canvas").SetActive(false);
-			Canvas2.SetActive(true);
-			firstConnect = false;
-			}else {
-				
-				Debug.Log("Connection Failed");
 			}
-			}else {
-			Debug.Log("client ERROR ip/username is null");
-			}
-        }
-		//Debug.Log("client.connect is " + client.Connected);
+		}
 	}
 	
 	
