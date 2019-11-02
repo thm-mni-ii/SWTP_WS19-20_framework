@@ -31,7 +31,7 @@ public class Login : MonoBehaviour
 	public void LoginMethod(){
 	if(userName.text != null && userName.text != ""){
 		user.userN = userName.text;
-		chat.EstablishConnection();
+		chat.EstablishConnection(user);
 		globalCanvas.ToggleCanvas("chat");
 		
 		}else {

@@ -21,6 +21,7 @@ public class Chat : MonoBehaviour
 	public int clientport= 7777;
 	public string ip = "localhost";
 	public string userName = "User";
+	private UserInfo Cuser;
 	private bool firstConnect = true;
 	
 		void awake()
@@ -62,9 +63,10 @@ public class Chat : MonoBehaviour
         }
     }
 
-		public void EstablishConnection()
+		public void EstablishConnection(UserInfo user)
 	{
-
+		Cuser = user;
+		userName = Cuser.userN;
 		if (firstConnect)
         {
 			if(ip != null && (ip != "") && (userName != "") && userName != null){
