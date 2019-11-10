@@ -1486,6 +1486,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: GlobalManager
       objectReference: {fileID: 0}
+    - target: {fileID: 181336, guid: 445c0492e14a5184ea8c81818b5bbbd2, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 477272, guid: 445c0492e14a5184ea8c81818b5bbbd2, type: 3}
       propertyPath: m_LocalPosition.x
       value: 380.93552
@@ -1700,10 +1704,10 @@ GameObject:
   - component: {fileID: 542498849}
   - component: {fileID: 542498850}
   - component: {fileID: 542498851}
-  - component: {fileID: 542498852}
   - component: {fileID: 542498853}
   - component: {fileID: 542498854}
   - component: {fileID: 542498855}
+  - component: {fileID: 542498852}
   m_Layer: 0
   m_Name: GlobalManager
   m_TagString: Untagged
