@@ -7,6 +7,8 @@ using System.IO;
 using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Linq;
+using System.Net;
 
 
 
@@ -23,8 +25,13 @@ public class Chat : MonoBehaviour
 	public string userName = "User";
 	private UserInfo Cuser;
 	private bool firstConnect = true;
-	
-		void awake()
+    public Transform Listcontent;
+    public UIServerStatusSlot slotPrefab;
+
+    Dictionary<string, Game> list = new Dictionary<string, Game>();
+
+
+    void awake()
 		{
 			
 		// update even if window isn't focused, otherwise we don't receive.
@@ -42,6 +49,7 @@ public class Chat : MonoBehaviour
         // client
         if (client.Connected)
         {
+            
             // show all new messages
             Telepathy.Message msg;
             while (client.GetNextMessage(out msg))
@@ -59,6 +67,8 @@ public class Chat : MonoBehaviour
                         Debug.Log("Disconnected");
                         break;
                 }
+
+                UpdateServerList();
             }
         }
     }
@@ -85,13 +95,10 @@ public class Chat : MonoBehaviour
 
     public void clientSendMessage(){
 		if(clientMessageTF.text != null){
-			MessageStruct Smsg = new MessageStruct();
-		   Smsg.senderName = userName;
-			Smsg.Text = clientMessageTF.text;
-			Smsg.messagetype = 2;
-			clientMessageTF.text = string.Empty;
-			byte[] bytes = ObjectToByteArray(Smsg);
-			client.Send(bytes);	
+			//MessageStruct Smsg = new MessageStruct(userName, clientMessageTF.text,2,null,null);
+			byte[] bytes = ObjectToByteArray(new MessageStruct(userName, clientMessageTF.text, 2, null, null));
+            clientMessageTF.text = string.Empty;
+            client.Send(bytes);	
 		}
 	}
 	
@@ -105,6 +112,10 @@ public class Chat : MonoBehaviour
 		case 2: //message recieved
 		UpdateChat(Smsg.Text,Smsg.senderName);
 		break;
+
+         case 3://Updated server List from Main server
+                this.list = Smsg.list;
+         break;
 		}
 	}
 		
@@ -150,6 +161,41 @@ public class Chat : MonoBehaviour
 			clientSendMessage();
         }
     }
-	
- 
+
+    // instantiate/remove enough prefabs to match amount
+    public static void BalancePrefabs(GameObject prefab, int amount, Transform parent)
+    {
+        // instantiate until amount
+        for (int i = parent.childCount; i < amount; ++i)
+        {
+            Instantiate(prefab, parent, false);
+        }
+
+        // delete everything that's too much
+        // (backwards loop because Destroy changes childCount)
+        for (int i = parent.childCount - 1; i >= amount; --i)
+            Destroy(parent.GetChild(i).gameObject);
+    }
+
+    void UpdateServerList()
+    {
+        // instantiate/destroy enough slots
+        BalancePrefabs(slotPrefab.gameObject, list.Count, Listcontent);
+
+        // refresh all members
+        for (int i = 0; i < list.Values.Count; ++i)
+        {
+            UIServerStatusSlot slot = Listcontent.GetChild(i).GetComponent<UIServerStatusSlot>();
+            Game server = list.Values.ToList()[i];
+            slot.titleText.text = server.title;
+            slot.playersText.text = server.players + "/" + server.capacity;
+            slot.latencyText.text = server.lastLatency != -1 ? server.lastLatency.ToString() : "...";
+            slot.addressText.text = server.ip;
+            slot.joinButton.interactable = true;
+            slot.joinButton.gameObject.SetActive(server.players < server.capacity);
+            // slot.joinButton.onClick.
+        }
+    }
+
+
 }

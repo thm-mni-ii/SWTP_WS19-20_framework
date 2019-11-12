@@ -1,5 +1,8 @@
 ﻿using Mirror;
 using System;
+using System.Text;
+using System.IO;
+using System.Collections.Generic;
 
 [Serializable]
 public class MessageStruct 
@@ -13,5 +16,16 @@ public class MessageStruct
      3 - start game
      */
     public Game gameinfo = null;
+    public Dictionary<string, Game> list = null;
+
+   public MessageStruct(String sender,String text , int typ, Dictionary<string, Game> list,Game info)
+    {
+        this.senderName = sender;
+        this.Text = text;
+        this.messagetype = typ;
+        this.list = list;
+        this.gameinfo = info;
+
+    }
 
 }

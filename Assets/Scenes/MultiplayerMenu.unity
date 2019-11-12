@@ -1727,6 +1727,9 @@ MonoBehaviour:
   clientport: 7777
   mainServerip: localhost
   userName: User
+  Listcontent: {fileID: 1355492788}
+  slotPrefab: {fileID: 1071927678338519989, guid: bf522cc7f5a56bf498e572edca02055e,
+    type: 3}
 --- !u!114 &542498855
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1785,6 +1788,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   port: 7777
+  firststart: 1
 --- !u!4 &551764445
 Transform:
   m_ObjectHideFlags: 0
