@@ -6,11 +6,7 @@ public class GlobalManager : MonoBehaviour {
 	public Canvas RegisterCanvas;
 	public Canvas LoginCanvas;
 	public Canvas ChatCanvas;
-<<<<<<< HEAD
-	//public Canvas ForgetCanvas;
-=======
 	public Canvas LobbyCanvas;
->>>>>>> chat
 	//public Canvas ResetCanvas;
 	//public Canvas ActiveCanvas;
 
@@ -19,11 +15,7 @@ public class GlobalManager : MonoBehaviour {
 		RegisterCanvas.enabled = false;
 		LoginCanvas.enabled = true;
 		ChatCanvas.enabled  = false;
-<<<<<<< HEAD
-	//	ResetCanvas.enabled = false;
-=======
         LobbyCanvas.enabled = false;
->>>>>>> chat
 		//ForgetCanvas.enabled = false;
 		//ActiveCanvas.enabled = false;
 
@@ -40,18 +32,6 @@ public class GlobalManager : MonoBehaviour {
 		if (open == "login") {
 			RegisterCanvas.enabled = false;
 			LoginCanvas.enabled = true;
-<<<<<<< HEAD
-		//	ResetCanvas.enabled = false;
-			//ForgetCanvas.enabled = false;
-			//ActiveCanvas.enabled = false;
-
-		} else if (open == "register") {
-			RegisterCanvas.enabled = true;
-			LoginCanvas.enabled = false;
-			//ResetCanvas.enabled = false;
-			//ForgetCanvas.enabled = false;
-			//ActiveCanvas.enabled = false;
-=======
             LobbyCanvas.enabled = false;
             ChatCanvas.enabled = false;
 
@@ -61,31 +41,11 @@ public class GlobalManager : MonoBehaviour {
 			LoginCanvas.enabled = false;
             LobbyCanvas.enabled = false;
 
->>>>>>> chat
 
 		} else if (open == "chat") {
 			RegisterCanvas.enabled = false;
 			LoginCanvas.enabled = false;
 			ChatCanvas.enabled  = true;
-<<<<<<< HEAD
-			//ResetCanvas.enabled = false;
-			//ForgetCanvas.enabled = true;
-			//ActiveCanvas.enabled = false;
-
-		} else if (open == "forget") {
-			RegisterCanvas.enabled = false;
-			LoginCanvas.enabled = false;
-			//ResetCanvas.enabled = false;
-			//ForgetCanvas.enabled = true;
-			//ActiveCanvas.enabled = false;
-
-		} else if (open == "reset") {
-			RegisterCanvas.enabled = false;
-			LoginCanvas.enabled = false;
-			//ResetCanvas.enabled = true;
-			//ForgetCanvas.enabled = false;
-			//ActiveCanvas.enabled = false;
-=======
             LobbyCanvas.enabled = false;
 
 		} else if (open == "lobby") {
@@ -98,18 +58,11 @@ public class GlobalManager : MonoBehaviour {
 			RegisterCanvas.enabled = false;
 			LoginCanvas.enabled = false;
             LobbyCanvas.enabled = false;
->>>>>>> chat
 
 		} else if (open == "active") {
 			RegisterCanvas.enabled = false;
 			LoginCanvas.enabled = false;
-<<<<<<< HEAD
-			//ResetCanvas.enabled = false;
-			//ForgetCanvas.enabled = false;
-			//ActiveCanvas.enabled = true;
-=======
             LobbyCanvas.enabled = false;
->>>>>>> chat
 		}
 	
 	}

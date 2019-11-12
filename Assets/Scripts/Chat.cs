@@ -23,11 +23,6 @@ public class Chat : MonoBehaviour
 	public int clientport= 7777;
 	public string mainServerip = "localhost";
 	public string userName = "User";
-<<<<<<< HEAD:Assets/Scripts/Chat.cs
-	private bool firstConnect = true;
-	
-		void awake()
-=======
 	private UserInfo Cuser;
 	private bool firstConnect = true;
     public Transform Listcontent;
@@ -37,7 +32,6 @@ public class Chat : MonoBehaviour
 
 
     void awake()
->>>>>>> chat:Assets/Scripts/Chat.cs
 		{
 			
 		// update even if window isn't focused, otherwise we don't receive.
@@ -73,31 +67,20 @@ public class Chat : MonoBehaviour
                         Debug.Log("Disconnected");
                         break;
                 }
-<<<<<<< HEAD:Assets/Scripts/Chat.cs
-=======
 
                 UpdateServerList();
->>>>>>> chat:Assets/Scripts/Chat.cs
             }
         }
     }
 
 		public void EstablishConnection(UserInfo user)
 	{
-<<<<<<< HEAD:Assets/Scripts/Chat.cs
-
-		if (firstConnect)
-        {
-			if(ip != null && (ip != "") && (userName != "") && userName != null){
-			client.Connect(ip, clientport);
-=======
 		Cuser = user;
 		userName = Cuser.userN;
 		if (firstConnect)
         {
 			if(mainServerip != null && (mainServerip != "") && (userName != "") && userName != null){
 			client.Connect(mainServerip, clientport);
->>>>>>> chat:Assets/Scripts/Chat.cs
 			}
 		}
 	}
