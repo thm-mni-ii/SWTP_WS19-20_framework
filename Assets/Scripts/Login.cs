@@ -31,15 +31,39 @@ public class Login : MonoBehaviour
 	public void LoginMethod(){
 	if(userName.text != null && userName.text != ""){
 		user.userN = userName.text;
+<<<<<<< HEAD
 		chat.EstablishConnection();
 		globalCanvas.ToggleCanvas("chat");
 		
 		}else {
+=======
+		chat.EstablishConnection(user);
+		//globalCanvas.ToggleCanvas("chat");
+        globalCanvas.ToggleCanvas("lobby");
+
+        }
+        else {
+>>>>>>> chat
 			
 		WarningMsg.text = "Error no Username";
 		}
 	}
+<<<<<<< HEAD
 	
 
 	
+=======
+
+
+    public void LogoutMethod()
+    {
+
+        chat.Disconnection();
+        globalCanvas.ToggleCanvas("login");
+
+    }
+
+
+
+>>>>>>> chat
 }

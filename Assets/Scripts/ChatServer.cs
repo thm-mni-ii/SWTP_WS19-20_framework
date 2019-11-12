@@ -6,17 +6,22 @@ using System.IO;
 using System.Collections.Generic;
 using UnityEngine.UI;
 using System.Runtime.Serialization.Formatters.Binary;
-
+using System.Linq;
+using System.Net;
 
 public class ChatServer : MonoBehaviour
 {
 
     Telepathy.Server server = new Telepathy.Server();
 	public int port= 7777;
-	private LinkedList<int> clienList = new LinkedList<int>();
+    public bool firststart = true;
 
-	
-	
+    private LinkedList<int> clienList = new LinkedList<int>();
+
+    Dictionary<string, Game> list = new Dictionary<string, Game>();
+    //Dictionary<int, UserInfo> userLisr = new Dictionary<int, UserInfo>(); // user connection ID  and info
+
+
 
     void Awake()
     {
@@ -36,10 +41,11 @@ public class ChatServer : MonoBehaviour
         // server
         if (server.Active)
         {
-           // if (Input.GetKeyDown(KeyCode.Space)){
-             //   server.Send(1, new byte[]{0x2});
-			//}
+            // if (Input.GetKeyDown(KeyCode.Space)){
+            //   server.Send(1, new byte[]{0x2});
+            //}
 
+            
             // show all new messages
             Telepathy.Message msg;
             while (server.GetNextMessage(out msg))
@@ -48,17 +54,22 @@ public class ChatServer : MonoBehaviour
                 {
                     case Telepathy.EventType.Connected:
                         Debug.Log(msg.connectionId + " Connected");
-						clienList.AddLast(msg.connectionId);
+                        clienList.AddLast(msg.connectionId);
                         break;
                     case Telepathy.EventType.Data:
                         Debug.Log(msg.connectionId + " Data: " + BitConverter.ToString(msg.data));
-						HandleMessage(msg.data);
+                        HandleMessage(msg.data);
                         break;
                     case Telepathy.EventType.Disconnected:
                         Debug.Log(msg.connectionId + " Disconnected");
-						clienList.Remove(msg.connectionId);
+                        clienList.Remove(msg.connectionId);
                         break;
                 }
+                if (firststart) { 
+                list.Add("127.0.0.1", new Game("Game 1", 5, "127.0.0.1", 1, 10));
+                firststart = false;
+            }
+                SendToAll(ObjectToByteArray(new MessageStruct(null, null, 3, list, null)));
             }
         }
     }
@@ -95,10 +106,15 @@ public class ChatServer : MonoBehaviour
 		case 2://message
 		Debug.Log("Message from : "+ Smsg.senderName);
 		SendToAll(data);
-		break;		
-			
-			
-		}
+		break;
+        case 3:// new game host 
+        
+        break;
+            
+			default:
+                Debug.Log("msg Error unknown command");
+				break;
+        }
 		
 	}
 	
@@ -132,5 +148,7 @@ public class ChatServer : MonoBehaviour
 			return (MessageStruct)obj;
 		}
 	}
-	
+
+
+
 }
