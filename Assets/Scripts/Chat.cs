@@ -19,8 +19,9 @@ public class Chat : MonoBehaviour
     Telepathy.Client client = new Telepathy.Client();
 	
 	public int clientport= 7777;
-	public string ip = "localhost";
+	public string mainServerip = "localhost";
 	public string userName = "User";
+	private UserInfo Cuser;
 	private bool firstConnect = true;
 	
 		void awake()
@@ -48,7 +49,7 @@ public class Chat : MonoBehaviour
                 switch (msg.eventType)
                 {
                     case Telepathy.EventType.Connected:
-                        Debug.Log("Client Connected on using ip: "+ ip);
+                        Debug.Log("Client Connected on using ip: "+ mainServerip);
                         break;
                     case Telepathy.EventType.Data:
                         Debug.Log("Data: " + BitConverter.ToString(msg.data));
@@ -62,19 +63,27 @@ public class Chat : MonoBehaviour
         }
     }
 
-		public void EstablishConnection()
+		public void EstablishConnection(UserInfo user)
 	{
-
+		Cuser = user;
+		userName = Cuser.userN;
 		if (firstConnect)
         {
-			if(ip != null && (ip != "") && (userName != "") && userName != null){
-			client.Connect(ip, clientport);
+			if(mainServerip != null && (mainServerip != "") && (userName != "") && userName != null){
+			client.Connect(mainServerip, clientport);
 			}
 		}
 	}
-	
-	
-	public void clientSendMessage(){
+    public void Disconnection()
+    {
+        Cuser = null;
+        userName = null;
+        content.text = "";
+        client.Disconnect();
+    }
+
+
+    public void clientSendMessage(){
 		if(clientMessageTF.text != null){
 			MessageStruct Smsg = new MessageStruct();
 		   Smsg.senderName = userName;
@@ -130,6 +139,7 @@ public class Chat : MonoBehaviour
 
     void OnApplicationQuit()
     {
+        content.text = "";
         client.Disconnect();
     }
 	

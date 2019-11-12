@@ -6,7 +6,7 @@ public class GlobalManager : MonoBehaviour {
 	public Canvas RegisterCanvas;
 	public Canvas LoginCanvas;
 	public Canvas ChatCanvas;
-	//public Canvas ForgetCanvas;
+	public Canvas LobbyCanvas;
 	//public Canvas ResetCanvas;
 	//public Canvas ActiveCanvas;
 
@@ -15,7 +15,7 @@ public class GlobalManager : MonoBehaviour {
 		RegisterCanvas.enabled = false;
 		LoginCanvas.enabled = true;
 		ChatCanvas.enabled  = false;
-	//	ResetCanvas.enabled = false;
+        LobbyCanvas.enabled = false;
 		//ForgetCanvas.enabled = false;
 		//ActiveCanvas.enabled = false;
 
@@ -32,45 +32,37 @@ public class GlobalManager : MonoBehaviour {
 		if (open == "login") {
 			RegisterCanvas.enabled = false;
 			LoginCanvas.enabled = true;
-		//	ResetCanvas.enabled = false;
-			//ForgetCanvas.enabled = false;
-			//ActiveCanvas.enabled = false;
+            LobbyCanvas.enabled = false;
+            ChatCanvas.enabled = false;
 
-		} else if (open == "register") {
+
+        } else if (open == "register") {
 			RegisterCanvas.enabled = true;
 			LoginCanvas.enabled = false;
-			//ResetCanvas.enabled = false;
-			//ForgetCanvas.enabled = false;
-			//ActiveCanvas.enabled = false;
+            LobbyCanvas.enabled = false;
+
 
 		} else if (open == "chat") {
 			RegisterCanvas.enabled = false;
 			LoginCanvas.enabled = false;
 			ChatCanvas.enabled  = true;
-			//ResetCanvas.enabled = false;
-			//ForgetCanvas.enabled = true;
-			//ActiveCanvas.enabled = false;
+            LobbyCanvas.enabled = false;
 
-		} else if (open == "forget") {
+		} else if (open == "lobby") {
 			RegisterCanvas.enabled = false;
 			LoginCanvas.enabled = false;
-			//ResetCanvas.enabled = false;
-			//ForgetCanvas.enabled = true;
-			//ActiveCanvas.enabled = false;
+            LobbyCanvas.enabled = true;
+            ChatCanvas.enabled = true;
 
-		} else if (open == "reset") {
+        } else if (open == "logout") {
 			RegisterCanvas.enabled = false;
 			LoginCanvas.enabled = false;
-			//ResetCanvas.enabled = true;
-			//ForgetCanvas.enabled = false;
-			//ActiveCanvas.enabled = false;
+            LobbyCanvas.enabled = false;
 
 		} else if (open == "active") {
 			RegisterCanvas.enabled = false;
 			LoginCanvas.enabled = false;
-			//ResetCanvas.enabled = false;
-			//ForgetCanvas.enabled = false;
-			//ActiveCanvas.enabled = true;
+            LobbyCanvas.enabled = false;
 		}
 	
 	}

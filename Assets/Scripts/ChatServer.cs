@@ -15,6 +15,9 @@ public class ChatServer : MonoBehaviour
 	public int port= 7777;
 	private LinkedList<int> clienList = new LinkedList<int>();
 
+    //Dictionary<int, UserInfo> userLisr = new Dictionary<int, UserInfo>(); // user connection ID  and info
+  //  Dictionary<string,Game> GameList = new Dictionary<string,Game>();// ip and game info
+
 	
 	
 
@@ -95,10 +98,15 @@ public class ChatServer : MonoBehaviour
 		case 2://message
 		Debug.Log("Message from : "+ Smsg.senderName);
 		SendToAll(data);
-		break;		
-			
-			
-		}
+		break;
+        case 3:// new game host 
+        
+        break;
+            
+			default:
+                Debug.Log("msg Error unknown command");
+				break;
+        }
 		
 	}
 	
