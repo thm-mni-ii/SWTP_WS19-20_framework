@@ -6,20 +6,31 @@ public class GlobalManager : MonoBehaviour {
 	public Canvas RegisterCanvas;
 	public Canvas LoginCanvas;
 	public Canvas ChatCanvas;
-	public Canvas LobbyCanvas;
-	//public Canvas ResetCanvas;
-	//public Canvas ActiveCanvas;
-
+    //	public Canvas LobbyCanvas;
+    //public Canvas ResetCanvas;
+    //public Canvas ActiveCanvas;
+  //  public static GlobalManager manager;
 	// Use this for initialization
 	void Awake () {
 		RegisterCanvas.enabled = false;
 		LoginCanvas.enabled = true;
 		ChatCanvas.enabled  = false;
-        LobbyCanvas.enabled = false;
-		//ForgetCanvas.enabled = false;
-		//ActiveCanvas.enabled = false;
+      //  LobbyCanvas.enabled = false;
+      
+      /*  DontDestroyOnLoad(this.gameObject);
 
-	}
+        if (manager == null)
+        {
+            manager = this;
+        }
+        else
+        {
+            DestroyObject(gameObject);
+        }*/
+        //ForgetCanvas.enabled = false;
+        //ActiveCanvas.enabled = false;
+
+    }
 	void Start () {
 	
 	}
@@ -32,37 +43,37 @@ public class GlobalManager : MonoBehaviour {
 		if (open == "login") {
 			RegisterCanvas.enabled = false;
 			LoginCanvas.enabled = true;
-            LobbyCanvas.enabled = false;
+          //  LobbyCanvas.enabled = false;
             ChatCanvas.enabled = false;
 
 
         } else if (open == "register") {
 			RegisterCanvas.enabled = true;
 			LoginCanvas.enabled = false;
-            LobbyCanvas.enabled = false;
+           // LobbyCanvas.enabled = false;
 
 
 		} else if (open == "chat") {
 			RegisterCanvas.enabled = false;
 			LoginCanvas.enabled = false;
 			ChatCanvas.enabled  = true;
-            LobbyCanvas.enabled = false;
+          //  LobbyCanvas.enabled = false;
 
 		} else if (open == "lobby") {
 			RegisterCanvas.enabled = false;
 			LoginCanvas.enabled = false;
-            LobbyCanvas.enabled = true;
+           // LobbyCanvas.enabled = true;
             ChatCanvas.enabled = true;
 
         } else if (open == "logout") {
 			RegisterCanvas.enabled = false;
 			LoginCanvas.enabled = false;
-            LobbyCanvas.enabled = false;
+       //     LobbyCanvas.enabled = false;
 
 		} else if (open == "active") {
 			RegisterCanvas.enabled = false;
 			LoginCanvas.enabled = false;
-            LobbyCanvas.enabled = false;
+          //  LobbyCanvas.enabled = false;
 		}
 	
 	}

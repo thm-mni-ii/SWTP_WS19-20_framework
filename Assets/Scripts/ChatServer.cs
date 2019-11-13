@@ -18,7 +18,6 @@ public class ChatServer : MonoBehaviour
 
     private LinkedList<int> clienList = new LinkedList<int>();
 
-    Dictionary<string, Game> list = new Dictionary<string, Game>();
     //Dictionary<int, UserInfo> userLisr = new Dictionary<int, UserInfo>(); // user connection ID  and info
 
 
@@ -65,11 +64,8 @@ public class ChatServer : MonoBehaviour
                         clienList.Remove(msg.connectionId);
                         break;
                 }
-                if (firststart) { 
-                list.Add("127.0.0.1", new Game("Game 1", 5, "127.0.0.1", 1, 10));
-                firststart = false;
-            }
-                SendToAll(ObjectToByteArray(new MessageStruct(null, null, 3, list, null)));
+               
+      
             }
         }
     }
@@ -103,11 +99,11 @@ public class ChatServer : MonoBehaviour
 		break;
 		
 		
-		case 2://message
+		case 2:// Global message
 		Debug.Log("Message from : "+ Smsg.senderName);
 		SendToAll(data);
 		break;
-        case 3:// new game host 
+        case 3:// Private Message
         
         break;
             

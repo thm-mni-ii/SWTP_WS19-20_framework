@@ -10,22 +10,19 @@ public class MessageStruct
     public string senderName = null;
     public string Text = null;
 	public int messagetype = 0;
+    public string reciever = null;
     /* Type
      1 - login
      2 - chat message
-     3 - start game
+     3 - Private Message
      */
-    public Game gameinfo = null;
-    public Dictionary<string, Game> list = null;
 
-   public MessageStruct(String sender,String text , int typ, Dictionary<string, Game> list,Game info)
+   public MessageStruct(String sender,String text , int typ, string rec)
     {
         this.senderName = sender;
         this.Text = text;
         this.messagetype = typ;
-        this.list = list;
-        this.gameinfo = info;
-
+        this.reciever = rec;
     }
 
 }
