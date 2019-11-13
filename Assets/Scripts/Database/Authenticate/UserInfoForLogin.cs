@@ -5,13 +5,13 @@ using UnityEngine;
 
 [Serializable]
 
-public class UserInfo : MonoBehaviour
+public class UserInfoForLogin
 {
     public string userN;
     public int userScore;
     public string localId;
 
-    public UserInfo() 
+    public UserInfoForLogin() 
     {
         userN = Databasemanagment_Register.playerName;
         localId = Databasemanagment_Register.localId;

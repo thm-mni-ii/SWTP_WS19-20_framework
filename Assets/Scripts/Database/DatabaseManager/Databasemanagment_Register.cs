@@ -14,10 +14,10 @@ public class Databasemanagment_Register : MonoBehaviour
     public InputField passwordText;
 
 
-    UserInfo user = new UserInfo();
+    UserInfoForLogin user = new UserInfoForLogin();
 
-    private string databaseURL = "https://mein-5d0b2.firebaseio.com/";
-    private string AuthKey = "AIzaSyCscgviTiGsQOjWxxJJ4cERbxycPo4OdCg";
+    private string databaseURL = "https://mmo-spiel.firebaseio.com/";
+    private string AuthKey = "AIzaSyAUr_7gFkWnoOfPJvLnigo5KSq96lAlELg";
 
     public static fsSerializer serializer = new fsSerializer();
 
@@ -42,7 +42,7 @@ public class Databasemanagment_Register : MonoBehaviour
             idTokenTemp = idToken;
         }
 
-        UserInfo user = new UserInfo();
+        UserInfoForLogin user = new UserInfoForLogin();
 
 
 
@@ -80,9 +80,11 @@ public class Databasemanagment_Register : MonoBehaviour
 
     private void GetUsername()
     {
-        RestClient.Get<UserInfo>(databaseURL + "/" + localId + ".json?auth=" + idToken).Then(response =>
+        RestClient.Get<UserInfoForLogin>(databaseURL + "/" + localId + ".json?auth=" + idToken).Then(response =>
         {
             playerName = response.userN;
+            
+
 
 
         });

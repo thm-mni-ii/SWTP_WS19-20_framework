@@ -12,9 +12,9 @@ public class DatabasemangmentLogin : MonoBehaviour
     public Text nametext;
     public InputField emailTextlogin;
     public InputField passwordTextlogin;
-    UserInfo user = new UserInfo();
-    private string databaseURL = "https://mein-5d0b2.firebaseio.com/";
-    private string AuthKey = "AIzaSyCscgviTiGsQOjWxxJJ4cERbxycPo4OdCg";
+    UserInfoForLogin user = new UserInfoForLogin();
+    private string databaseURL = "https://mmo-spiel.firebaseio.com/";
+    private string AuthKey = "AIzaSyAUr_7gFkWnoOfPJvLnigo5KSq96lAlELg";
     public static fsSerializer serializer = new fsSerializer();
 
 
@@ -35,7 +35,7 @@ public class DatabasemangmentLogin : MonoBehaviour
     private void Updatename()
     {
         
-        nametext.text = "welcome :) " + playerName;
+        Debug.Log("hallo");
     }
     public void SignInUserButton()
     {
@@ -47,7 +47,7 @@ public class DatabasemangmentLogin : MonoBehaviour
     {
         
 
-        RestClient.Get<UserInfo>(databaseURL + "/" + getLocalId + ".json?auth=" + idToken).Then(response =>
+        RestClient.Get<UserInfoForLogin>(databaseURL + "/" + getLocalId + ".json?auth=" + idToken).Then(response =>
         {
             user = response;
            
@@ -95,10 +95,9 @@ public class DatabasemangmentLogin : MonoBehaviour
     }
     private void GetUsername()
     {
-        RestClient.Get<UserInfo>(databaseURL + "/" + localId + ".json?auth=" + idToken).Then(response =>
+        RestClient.Get<UserInfoForLogin>(databaseURL + "/" + localId + ".json?auth=" + idToken).Then(response =>
         {
             playerName = response.userN;
-            Debug.Log("hallo form " + playerName);
             Updatename();
 
 

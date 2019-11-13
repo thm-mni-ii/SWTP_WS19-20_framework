@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-﻿<?xml version="1.0" encoding="UTF-8"?>
-=======
 <?xml version="1.0" encoding="UTF-8"?>
->>>>>>> login
 <project version="4">
   <component name="ContentModelStore">
     <e p="C:\MyGit\GitHub\SWTP_WS19-20_framework" t="IncludeRecursive">
@@ -13,12 +9,9 @@
           <e p="LuckiestGuy" t="Include">
             <e p="FontLicense.txt" t="Include" />
           </e>
-<<<<<<< HEAD
-=======
           <e p="vampire_wars" t="Include">
-            <e p="License.txt" t="Include" />
+            <e p="license.txt" t="Include" />
           </e>
->>>>>>> login
         </e>
         <e p="Scripts" t="Include">
           <e p="Chat" t="Include">
@@ -30,6 +23,7 @@
               <e p="EmailConfirmationInfo.cs" t="Include" />
               <e p="SignResponse.cs" t="Include" />
               <e p="UserInfo.cs" t="Include" />
+              <e p="UserInfoForLogin.cs" t="Include" />
               <e p="UserVerified.cs" t="Include" />
             </e>
             <e p="DatabaseManager" t="Include">
@@ -45,12 +39,9 @@
           </e>
           <e p="Server" t="Include">
             <e p="ChatServer.cs" t="Include" />
-<<<<<<< HEAD
-=======
             <e p="Game.cs" t="Include" />
             <e p="HostServer.cs" t="Include" />
             <e p="UIServerStatusSlot.cs" t="Include" />
->>>>>>> login
           </e>
         </e>
         <e p="Sources" t="Include">
@@ -240,7 +231,7 @@
                 </e>
               </e>
             </e>
-            <e p="License.txt" t="Include" />
+            <e p="license.txt" t="Include" />
             <e p="Readme.txt" t="Include" />
             <e p="Runtime" t="Include">
               <e p="AssemblyInfo.cs" t="Include" />
