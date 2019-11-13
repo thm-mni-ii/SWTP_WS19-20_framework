@@ -83,7 +83,6 @@ public class Databasemanagment : MonoBehaviour
         RestClient.Get<User1>(databaseURL + "/" + localId + ".json?auth=" + idToken).Then(response =>
         {
             playerName = response.userN;
-            Debug.Log("hallo form " + playerName);
 
 
         });
