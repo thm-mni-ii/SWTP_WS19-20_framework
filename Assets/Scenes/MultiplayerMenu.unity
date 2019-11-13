@@ -133,7 +133,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 95844365}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c69928dac62d81846bdba82ea268f43d, type: 3}
   m_Name: 
@@ -141,6 +141,11 @@ MonoBehaviour:
   nametext: {fileID: 0}
   emailTextlogin: {fileID: 520685955}
   passwordTextlogin: {fileID: 1531665461}
+  user: {fileID: 0}
+  databaseURL: https://mmo-spiel.firebaseio.com/
+  AuthKey: AIzaSyAUr_7gFkWnoOfPJvLnigo5KSq96lAlELg
+  idToken: 
+  getLocalId: 
 --- !u!1 &231335287
 GameObject:
   m_ObjectHideFlags: 0
@@ -513,6 +518,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a62ca012cf090145a46bd64ae2a4c77, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  emailText: {fileID: 1411345654}
+  usernameText: {fileID: 904207034}
+  passwordText: {fileID: 1198212398}
 --- !u!114 &542498851
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1208,11 +1216,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1810151287}
+      objectReference: {fileID: 542498850}
     - target: {fileID: 5523140437066221434, guid: 08722e2566773cb4cb79c0fb1d66f2a6,
         type: 3}
       propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: SignUpUserButton
+      value: RegisterButtonMethod
       objectReference: {fileID: 0}
     - target: {fileID: 5523140436775347377, guid: 08722e2566773cb4cb79c0fb1d66f2a6,
         type: 3}
@@ -1238,11 +1246,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1810151287}
+      objectReference: {fileID: 542498850}
     - target: {fileID: 5523140437066221433, guid: 08722e2566773cb4cb79c0fb1d66f2a6,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: SignUpUserButton
+      value: RegisterButtonMethod
       objectReference: {fileID: 0}
     - target: {fileID: 5523140437066221433, guid: 08722e2566773cb4cb79c0fb1d66f2a6,
         type: 3}
@@ -1605,11 +1613,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 95844371}
+      objectReference: {fileID: 0}
     - target: {fileID: 8099398645746910732, guid: 01afe9a9abc72ab4d90baa233cfd4666,
         type: 3}
       propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: SignInUserButton
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 8099398644220942608, guid: 01afe9a9abc72ab4d90baa233cfd4666,
         type: 3}
@@ -1635,16 +1643,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 95844371}
+      objectReference: {fileID: 542498853}
     - target: {fileID: 8099398645746910733, guid: 01afe9a9abc72ab4d90baa233cfd4666,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: SignInUserButton
+      value: LoginMethod
       objectReference: {fileID: 0}
     - target: {fileID: 8099398645746910733, guid: 01afe9a9abc72ab4d90baa233cfd4666,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
+    - target: {fileID: 3857950391242219974, guid: 01afe9a9abc72ab4d90baa233cfd4666,
+        type: 3}
+      propertyPath: WarningMsg
+      value: 
+      objectReference: {fileID: 1756782991}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 01afe9a9abc72ab4d90baa233cfd4666, type: 3}

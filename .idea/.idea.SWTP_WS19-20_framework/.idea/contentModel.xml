@@ -19,16 +19,11 @@
             <e p="MessageStruct.cs" t="Include" />
           </e>
           <e p="Database" t="Include">
-            <e p="Authenticate" t="Include">
+            <e p="Authentication" t="Include">
               <e p="EmailConfirmationInfo.cs" t="Include" />
               <e p="SignResponse.cs" t="Include" />
               <e p="UserInfo.cs" t="Include" />
-              <e p="UserInfoForLogin.cs" t="Include" />
               <e p="UserVerified.cs" t="Include" />
-            </e>
-            <e p="DatabaseManager" t="Include">
-              <e p="Databasemanagment_Register.cs" t="Include" />
-              <e p="DatabasemangmentLogin.cs" t="Include" />
             </e>
           </e>
           <e p="GlobalManager.cs" t="Include" />

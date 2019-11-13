@@ -25,7 +25,5 @@ public class MessageStruct
         this.messagetype = typ;
         this.list = list;
         this.gameinfo = info;
-
     }
-
 }

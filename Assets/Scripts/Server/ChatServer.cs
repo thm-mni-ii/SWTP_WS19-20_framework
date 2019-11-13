@@ -11,8 +11,7 @@ using System.Net;
 
 public class ChatServer : MonoBehaviour
 {
-
-    Telepathy.Server server = new Telepathy.Server();
+	Telepathy.Server server = new Telepathy.Server();
 	public int port= 7777;
     public bool firststart = true;
 
@@ -20,9 +19,7 @@ public class ChatServer : MonoBehaviour
 
     Dictionary<string, Game> list = new Dictionary<string, Game>();
     //Dictionary<int, UserInfo> userLisr = new Dictionary<int, UserInfo>(); // user connection ID  and info
-
-
-
+    
     void Awake()
     {
         // update even if window isn't focused, otherwise we don't receive.
@@ -32,21 +29,13 @@ public class ChatServer : MonoBehaviour
         Telepathy.Logger.Log = Debug.Log;
         Telepathy.Logger.LogWarning = Debug.LogWarning;
         Telepathy.Logger.LogError = Debug.LogError;
-		
     }
-
     void Update()
     {
-
-        // server
+	    // server
         if (server.Active)
         {
-            // if (Input.GetKeyDown(KeyCode.Space)){
-            //   server.Send(1, new byte[]{0x2});
-            //}
-
-            
-            // show all new messages
+	        // show all new messages
             Telepathy.Message msg;
             while (server.GetNextMessage(out msg))
             {
@@ -73,11 +62,9 @@ public class ChatServer : MonoBehaviour
             }
         }
     }
-
     void OnGUI()
     {
-
-        // server
+	    // server
         GUI.enabled = !server.Active;
         if (GUI.Button(new Rect(0, 50, 120, 20), "Start Server"))
             server.Start(port);
@@ -88,45 +75,37 @@ public class ChatServer : MonoBehaviour
 
         GUI.enabled = true;
     }
-
     void OnApplicationQuit()
     {
         server.Stop();
     }
-	
-	void HandleMessage(Byte[] data){
+    void HandleMessage(Byte[] data){
 	MessageStruct Smsg = ByteArrayToObject(data);
 		
 		switch(Smsg.messagetype){
 		case 1://login request
-
-		break;
+			break;
 		
 		
 		case 2://message
-		Debug.Log("Message from : "+ Smsg.senderName);
-		SendToAll(data);
-		break;
+			Debug.Log("Message from : "+ Smsg.senderName);
+			SendToAll(data);
+			break;
         case 3:// new game host 
-        
-        break;
+	        break;
             
-			default:
-                Debug.Log("msg Error unknown command");
-				break;
+		default:
+			Debug.Log("msg Error unknown command"); 
+			break;
         }
-		
-	}
-	
-	void SendToAll(Byte[] data){
+    }
+    void SendToAll(Byte[] data){
 		if(clienList.Count>0){
-		foreach(int i in clienList)
-		server.Send(i,data);
+			foreach(int i in clienList)
+			server.Send(i,data);
 		}
-		}
-		
-		
-	// Convert an object to a byte array
+	}
+    // Convert an object to a byte array
 	public byte[] ObjectToByteArray(MessageStruct obj)
 	{
 		BinaryFormatter bf = new BinaryFormatter();
@@ -136,8 +115,7 @@ public class ChatServer : MonoBehaviour
 			return ms.ToArray();
 		}
 	}
-	
-		public MessageStruct ByteArrayToObject(byte[] arrBytes)
+	public MessageStruct ByteArrayToObject(byte[] arrBytes)
 	{
 		using (var memStream = new MemoryStream())
 		{
@@ -148,7 +126,4 @@ public class ChatServer : MonoBehaviour
 			return (MessageStruct)obj;
 		}
 	}
-
-
-
 }

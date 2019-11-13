@@ -10,17 +10,13 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Linq;
 using System.Net;
 
-
-
 public class Chat : MonoBehaviour
 {
- 	    //Input
 	public InputField clientMessageTF = null;
 	public Text content = null;
 	
     Telepathy.Client client = new Telepathy.Client();
-	
-	public int clientport= 7777;
+    public int clientport= 7777;
 	public string mainServerip = "localhost";
 	public string userName = "User";
 	private UserInfo Cuser;
@@ -30,27 +26,22 @@ public class Chat : MonoBehaviour
 
     Dictionary<string, Game> list = new Dictionary<string, Game>();
 
+    void awake() {
+	// update even if window isn't focused, otherwise we don't receive.
+    Application.runInBackground = true;
 
-    void awake()
-		{
-			
-		// update even if window isn't focused, otherwise we don't receive.
-        Application.runInBackground = true;
-
-        // use Debug.Log functions for Telepathy so we can see it in the console
-        Telepathy.Logger.Log = Debug.Log;
-        Telepathy.Logger.LogWarning = Debug.LogWarning;
-        Telepathy.Logger.LogError = Debug.LogError;
-		
-		}
+    // use Debug.Log functions for Telepathy so we can see it in the console
+    Telepathy.Logger.Log = Debug.Log;
+    Telepathy.Logger.LogWarning = Debug.LogWarning;
+    Telepathy.Logger.LogError = Debug.LogError;
+    }
 
     void Update()
-    {
-        // client
+    { 
+	    // client
         if (client.Connected)
         {
-            
-            // show all new messages
+	        // show all new messages
             Telepathy.Message msg;
             while (client.GetNextMessage(out msg))
             {
@@ -67,13 +58,11 @@ public class Chat : MonoBehaviour
                         Debug.Log("Disconnected");
                         break;
                 }
-
                 UpdateServerList();
             }
         }
     }
-
-		public void EstablishConnection(UserInfo user)
+    public void EstablishConnection(UserInfo user)
 	{
 		Cuser = user;
 		userName = Cuser.userN;
@@ -91,8 +80,6 @@ public class Chat : MonoBehaviour
         content.text = "";
         client.Disconnect();
     }
-
-
     public void clientSendMessage(){
 		if(clientMessageTF.text != null){
 			//MessageStruct Smsg = new MessageStruct(userName, clientMessageTF.text,2,null,null);
@@ -101,27 +88,22 @@ public class Chat : MonoBehaviour
             client.Send(bytes);	
 		}
 	}
-	
-	public void HandleData(Byte[] data){
+    public void HandleData(Byte[] data){
 	MessageStruct Smsg = ByteArrayToObject(data);		
 		switch(Smsg.messagetype){
 		case 1: //login reqeust result
-		
-		break;
+			break;
 		
 		case 2: //message recieved
-		UpdateChat(Smsg.Text,Smsg.senderName);
-		break;
+			UpdateChat(Smsg.Text,Smsg.senderName);
+			break;
 
-         case 3://Updated server List from Main server
-                this.list = Smsg.list;
-         break;
+		case 3://Updated server List from Main server
+			this.list = Smsg.list;
+			break;
 		}
 	}
-		
-		
-	
-		// Convert an object to a byte array
+	// Convert an object to a byte array
 	public byte[] ObjectToByteArray(MessageStruct obj)
 	{
 		BinaryFormatter bf = new BinaryFormatter();
@@ -131,8 +113,7 @@ public class Chat : MonoBehaviour
 			return ms.ToArray();
 		}
 	}
-	
-		public MessageStruct ByteArrayToObject(byte[] arrBytes)
+	public MessageStruct ByteArrayToObject(byte[] arrBytes)
 	{
 		using (var memStream = new MemoryStream())
 		{
@@ -143,26 +124,22 @@ public class Chat : MonoBehaviour
 			return (MessageStruct)obj;
 		}
 	}
-
 	void UpdateChat(String text,String name){
-	content.text += "\n" + name + ": " + text;
+		content.text += "\n" + name + ": " + text;
 	}
-
-    void OnApplicationQuit()
+	void OnApplicationQuit()
     {
         content.text = "";
         client.Disconnect();
     }
-	
-	    public void ValueChanged()
+	public void ValueChanged()
     {
         if (clientMessageTF.text.Contains("\n"))
         {
 			clientSendMessage();
         }
     }
-
-    // instantiate/remove enough prefabs to match amount
+	// instantiate/remove enough prefabs to match amount
     public static void BalancePrefabs(GameObject prefab, int amount, Transform parent)
     {
         // instantiate until amount
@@ -176,7 +153,6 @@ public class Chat : MonoBehaviour
         for (int i = parent.childCount - 1; i >= amount; --i)
             Destroy(parent.GetChild(i).gameObject);
     }
-
     void UpdateServerList()
     {
         // instantiate/destroy enough slots
@@ -196,6 +172,4 @@ public class Chat : MonoBehaviour
             // slot.joinButton.onClick.
         }
     }
-
-
 }

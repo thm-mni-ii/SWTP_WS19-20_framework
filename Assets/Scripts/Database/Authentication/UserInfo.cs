@@ -10,10 +10,4 @@ public class UserInfo : MonoBehaviour
     public string userN;
     public int userScore;
     public string localId;
-
-    public UserInfo() 
-    {
-        userN = Databasemanagment_Register.playerName;
-        localId = Databasemanagment_Register.localId;
-    }
 }

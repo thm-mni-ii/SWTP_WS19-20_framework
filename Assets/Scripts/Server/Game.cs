@@ -25,6 +25,5 @@ public class Game
         this.title = title;
         this.players = players;
         this.capacity = capacity;
-
     }
 }
