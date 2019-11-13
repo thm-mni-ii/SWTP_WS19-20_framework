@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 
-public class Databasemanagment : MonoBehaviour
+public class Databasemanagment_Register : MonoBehaviour
 {
 
     public InputField emailText;
@@ -14,7 +14,7 @@ public class Databasemanagment : MonoBehaviour
     public InputField passwordText;
 
 
-    User1 user = new User1();
+    UserInfo user = new UserInfo();
 
     private string databaseURL = "https://mein-5d0b2.firebaseio.com/";
     private string AuthKey = "AIzaSyCscgviTiGsQOjWxxJJ4cERbxycPo4OdCg";
@@ -42,7 +42,7 @@ public class Databasemanagment : MonoBehaviour
             idTokenTemp = idToken;
         }
 
-        User1 user = new User1();
+        UserInfo user = new UserInfo();
 
 
 
@@ -80,7 +80,7 @@ public class Databasemanagment : MonoBehaviour
 
     private void GetUsername()
     {
-        RestClient.Get<User1>(databaseURL + "/" + localId + ".json?auth=" + idToken).Then(response =>
+        RestClient.Get<UserInfo>(databaseURL + "/" + localId + ".json?auth=" + idToken).Then(response =>
         {
             playerName = response.userN;
 

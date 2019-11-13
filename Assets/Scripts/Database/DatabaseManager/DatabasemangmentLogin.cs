@@ -12,7 +12,7 @@ public class DatabasemangmentLogin : MonoBehaviour
     public Text nametext;
     public InputField emailTextlogin;
     public InputField passwordTextlogin;
-    User1 user = new User1();
+    UserInfo user = new UserInfo();
     private string databaseURL = "https://mein-5d0b2.firebaseio.com/";
     private string AuthKey = "AIzaSyCscgviTiGsQOjWxxJJ4cERbxycPo4OdCg";
     public static fsSerializer serializer = new fsSerializer();
@@ -47,7 +47,7 @@ public class DatabasemangmentLogin : MonoBehaviour
     {
         
 
-        RestClient.Get<User1>(databaseURL + "/" + getLocalId + ".json?auth=" + idToken).Then(response =>
+        RestClient.Get<UserInfo>(databaseURL + "/" + getLocalId + ".json?auth=" + idToken).Then(response =>
         {
             user = response;
            
@@ -95,7 +95,7 @@ public class DatabasemangmentLogin : MonoBehaviour
     }
     private void GetUsername()
     {
-        RestClient.Get<User1>(databaseURL + "/" + localId + ".json?auth=" + idToken).Then(response =>
+        RestClient.Get<UserInfo>(databaseURL + "/" + localId + ".json?auth=" + idToken).Then(response =>
         {
             playerName = response.userN;
             Debug.Log("hallo form " + playerName);

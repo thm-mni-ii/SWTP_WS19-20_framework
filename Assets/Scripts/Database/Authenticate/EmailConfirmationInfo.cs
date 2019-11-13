@@ -6,5 +6,5 @@ using UnityEngine;
 [Serializable]
 public class EmailConfirmationInfo 
 {
-    public User[] users;
+    public UserVerified[] users;
 }

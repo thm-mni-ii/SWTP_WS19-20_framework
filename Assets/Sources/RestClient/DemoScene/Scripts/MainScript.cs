@@ -30,9 +30,9 @@ public class MainScript : MonoBehaviour {
 			return RestClient.GetArray<Todo>(basePath + "/todos");
 		}).Then(res => {
 			this.LogMessage("Todos", JsonHelper.ArrayToJsonString<Todo>(res, true));
-			return RestClient.GetArray<User>(basePath + "/users");
+			return RestClient.GetArray<UserVerified>(basePath + "/users");
 		}).Then(res => {
-			this.LogMessage("Users", JsonHelper.ArrayToJsonString<User>(res, true));
+			this.LogMessage("Users", JsonHelper.ArrayToJsonString<UserVerified>(res, true));
 
 			// We can add specific options and override default headers for a request
 			requestOptions = new RequestHelper { 
