@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 ﻿<?xml version="1.0" encoding="UTF-8"?>
+=======
+<?xml version="1.0" encoding="UTF-8"?>
+>>>>>>> login
 <project version="4">
   <component name="ContentModelStore">
     <e p="C:\MyGit\GitHub\SWTP_WS19-20_framework" t="IncludeRecursive">
@@ -9,6 +13,12 @@
           <e p="LuckiestGuy" t="Include">
             <e p="FontLicense.txt" t="Include" />
           </e>
+<<<<<<< HEAD
+=======
+          <e p="vampire_wars" t="Include">
+            <e p="License.txt" t="Include" />
+          </e>
+>>>>>>> login
         </e>
         <e p="Scripts" t="Include">
           <e p="Chat" t="Include">
@@ -35,6 +45,12 @@
           </e>
           <e p="Server" t="Include">
             <e p="ChatServer.cs" t="Include" />
+<<<<<<< HEAD
+=======
+            <e p="Game.cs" t="Include" />
+            <e p="HostServer.cs" t="Include" />
+            <e p="UIServerStatusSlot.cs" t="Include" />
+>>>>>>> login
           </e>
         </e>
         <e p="Sources" t="Include">
