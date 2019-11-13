@@ -552,10 +552,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 542498848}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f48431cf0e5f8894f9552ab815532e37, type: 3}
+  m_Script: {fileID: 11500000, guid: 2b392a0dd5792604eb4ed23547ea51e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  userN: 
+  userN: 123
+  userScore: 0
+  localId: 
 --- !u!4 &542498856
 Transform:
   m_ObjectHideFlags: 0
@@ -577,11 +579,35 @@ Canvas:
     type: 3}
   m_PrefabInstance: {fileID: 5523140436018503419}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &904207034 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5523140436841216913, guid: 08722e2566773cb4cb79c0fb1d66f2a6,
+    type: 3}
+  m_PrefabInstance: {fileID: 5523140436018503419}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d199490a83bb2b844b9695cbf13b01ef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &1161265283 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1163364768702571547, guid: 8ff5c091d42b5b944a470bbaafb1eb44,
     type: 3}
   m_PrefabInstance: {fileID: 1163364767575778456}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d199490a83bb2b844b9695cbf13b01ef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1198212398 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5523140437188075735, guid: 08722e2566773cb4cb79c0fb1d66f2a6,
+    type: 3}
+  m_PrefabInstance: {fileID: 5523140436018503419}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
@@ -595,6 +621,18 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 7903690505428383640}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1411345654 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5523140435490591667, guid: 08722e2566773cb4cb79c0fb1d66f2a6,
+    type: 3}
+  m_PrefabInstance: {fileID: 5523140436018503419}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d199490a83bb2b844b9695cbf13b01ef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &1531665461 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8099398645918327749, guid: 01afe9a9abc72ab4d90baa233cfd4666,
@@ -625,6 +663,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1810151281 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5523140437066221444, guid: 08722e2566773cb4cb79c0fb1d66f2a6,
+    type: 3}
+  m_PrefabInstance: {fileID: 5523140436018503419}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1810151287
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1810151281}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51ccc9f05f0727e4e853bc28d66cd7e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  emailText: {fileID: 1411345654}
+  usernameText: {fileID: 904207034}
+  passwordText: {fileID: 1198212398}
 --- !u!223 &1873406233 stripped
 Canvas:
   m_CorrespondingSourceObject: {fileID: 1163364768256806273, guid: 8ff5c091d42b5b944a470bbaafb1eb44,
@@ -1128,12 +1187,47 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 542498850}
+      objectReference: {fileID: 1810151287}
+    - target: {fileID: 5523140437066221434, guid: 08722e2566773cb4cb79c0fb1d66f2a6,
+        type: 3}
+      propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: SignUpUserButton
+      objectReference: {fileID: 0}
     - target: {fileID: 5523140436775347377, guid: 08722e2566773cb4cb79c0fb1d66f2a6,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 542498851}
+    - target: {fileID: 5523140437066221433, guid: 08722e2566773cb4cb79c0fb1d66f2a6,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5523140437066221433, guid: 08722e2566773cb4cb79c0fb1d66f2a6,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5523140437066221433, guid: 08722e2566773cb4cb79c0fb1d66f2a6,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5523140437066221433, guid: 08722e2566773cb4cb79c0fb1d66f2a6,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1810151287}
+    - target: {fileID: 5523140437066221433, guid: 08722e2566773cb4cb79c0fb1d66f2a6,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: SignUpUserButton
+      objectReference: {fileID: 0}
+    - target: {fileID: 5523140437066221433, guid: 08722e2566773cb4cb79c0fb1d66f2a6,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 08722e2566773cb4cb79c0fb1d66f2a6, type: 3}
 --- !u!1001 &6959171783939119021

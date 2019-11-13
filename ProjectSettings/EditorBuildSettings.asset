@@ -9,6 +9,6 @@ EditorBuildSettings:
     path: Assets/Scenes/MultiplayerMenu.unity
     guid: 5b5d0eea7b6811d4fbe3bbb1d255ac79
   - enabled: 0
-    path: Assets/Mirror/Examples/ListServer/Scenes/Scene.unity
+    path: Assets/Sources/Mirror/Examples/ListServer/Scenes/Scene.unity
     guid: ccdea83d270df4b078963a0243e41ac0
   m_configObjects: {}
