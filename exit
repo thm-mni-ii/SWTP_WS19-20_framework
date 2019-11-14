@@ -1,0 +1,83 @@
+[33mcommit a327410e49f32e234379601d8053206fe48c5339[m[33m ([m[1;36mHEAD -> [m[1;32mchat[m[33m)[m
+Author: mazm52 <muhamad.azem@mni.thm.de>
+Date:   Wed Nov 13 17:08:14 2019 +0100
+
+    a
+
+[33mcommit 74eeb33793b40fcc990956c778ca9106803ab12b[m
+Author: mazm52 <muhamad.azem@mni.thm.de>
+Date:   Wed Nov 13 16:55:51 2019 +0100
+
+    Player Movement
+
+[33mcommit 7f90d2969557b70465b52f6123548c09cbd42138[m
+Author: mazm52 <muhamad.azem@mni.thm.de>
+Date:   Tue Nov 12 16:36:50 2019 +0100
+
+    ServerList update
+
+[33mcommit be1b203bbf37daf63e1f2eddf868dee58e1a820a[m
+Author: mazm52 <muhamad.azem@mni.thm.de>
+Date:   Sun Nov 10 19:06:04 2019 +0100
+
+    Logout from Lobby
+
+[33mcommit 05e46f9ed7a6f545b3dfbcb52ab1275f0318d7f2[m
+Author: mazm52 <muhamad.azem@mni.thm.de>
+Date:   Sun Nov 10 16:29:11 2019 +0100
+
+    clientList
+
+[33mcommit afd5c73e73ee614f6d9cbeb9eb6d3e063ecfbf37[m
+Author: mazm52 <muhamad.azem@mni.thm.de>
+Date:   Sat Nov 2 14:18:06 2019 +0100
+
+    Fix
+
+[33mcommit d9066aa98fd4c2280bdf43450c9db7a282adf6a6[m
+Author: mazm52 <muhamad.azem@mni.thm.de>
+Date:   Sat Nov 2 13:47:13 2019 +0100
+
+    Merge from login and chat with new UI
+
+[33mcommit d88cc1229a5990c136d52152253cdec1d0f215c2[m
+Author: mazm52 <muhamad.azem@mni.thm.de>
+Date:   Fri Nov 1 19:35:50 2019 +0100
+
+    login GUI mit Client verbunden
+
+[33mcommit 7ec875275196998c1a81cc9a007748c1ddd01dc4[m
+Author: mazm52 <muhamad.azem@mni.thm.de>
+Date:   Fri Nov 1 15:46:37 2019 +0100
+
+    Message class added
+
+[33mcommit a10bb956f598954e83a7eef96897c1f8c771aaa9[m
+Author: mazm52 <muhamad.azem@mni.thm.de>
+Date:   Thu Oct 31 18:23:23 2019 +0100
+
+    Bug Fixes
+
+[33mcommit 0029a70823d386f6f1f2c07603a8306ef7102ab8[m
+Author: mazm52 <muhamad.azem@mni.thm.de>
+Date:   Thu Oct 31 17:59:15 2019 +0100
+
+    Liste addiert
+
+[33mcommit 67fd452350d5022445281365b6f113ad5f440fbf[m
+Author: mazm52 <muhamad.azem@mni.thm.de>
+Date:   Thu Oct 31 12:16:38 2019 +0100
+
+    Chat Client/Server
+
+[33mcommit 6bb5775f80d949b465d2bab058a46b132a538d65[m[33m ([m[1;31morigin/azem[m[33m, [m[1;32mazem[m[33m)[m
+Author: mazm52 <muhamad.azem@mni.thm.de>
+Date:   Thu Oct 31 11:16:29 2019 +0100
+
+    Chat Client/Server
+
+[33mcommit 9c89955c0cf5945426de4e01918f943542ddbb63[m[33m ([m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmaster[m[33m)[m
+Author: Leon Peulings <leon.peulings@mni.thm.de>
+Date:   Tue Oct 8 12:02:56 2019 +0200
+
+    Initial commit
