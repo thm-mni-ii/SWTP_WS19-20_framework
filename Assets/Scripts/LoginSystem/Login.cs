@@ -5,8 +5,12 @@ using UnityEngine.UI;
 using Firebase;
 using Firebase.Database;
 using Firebase.Unity.Editor;
+using Mirror;
 
 
+
+
+[RequireComponent(typeof(NetworkManager))]
 public class Login : MonoBehaviour
 {
 	[SerializeField] private InputField userName;
@@ -26,6 +30,8 @@ public class Login : MonoBehaviour
     public bool loginfailed = false;
     public bool registration = false;
     public bool regfailed = false;
+   // public gameObject netmanagerCanvas; 
+    NetworkManager manager;
 
 
     // Start is called before the first frame update
@@ -33,6 +39,15 @@ public class Login : MonoBehaviour
 		globalCanvas = gameObject.GetComponent<GlobalManager>();
 		user = gameObject.GetComponent<UserInfo>();
 		chat = gameObject.GetComponent<Chat>();
+
+       
+
+        GameObject  NM = GameObject.FindWithTag("NetworkManager");
+
+        if (NM != null)
+        {
+            manager = NM.GetComponent<NetworkManager>();
+        }
 
         FirebaseApp.DefaultInstance.SetEditorDatabaseUrl("https://mmo-spiel.firebaseio.com/");
         reference = FirebaseDatabase.DefaultInstance.RootReference;
@@ -46,14 +61,40 @@ public class Login : MonoBehaviour
 
         if (openscene)
         {
-            globalCanvas.ToggleCanvas("chat");
+            if (!NetworkClient.isConnected)
+            {
+                if (NetworkServer.active)
+                {
+                    manager.StartClient();
+                    globalCanvas.ToggleCanvas("chat");
+                    if (NetworkClient.isConnected && !ClientScene.ready)
+                    {
+
+                        ClientScene.Ready(NetworkClient.connection);
+
+                            if (ClientScene.localPlayer == null)
+                            {
+                                ClientScene.AddPlayer();
+                            }
+                        
+                    }
+                    
+                }else
+                {
+                    WarningMsg.text = "Networkserver Offline";
+                }
+            }
+            
+                
             openscene = false;
         }
+
         if (loginfailed)
         {
             WarningMsg.text = "Invalid Email or password";
             loginfailed = false;
         }
+
         if (registration)
         {
 

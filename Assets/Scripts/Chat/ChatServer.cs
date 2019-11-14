@@ -12,7 +12,7 @@ using System.Net;
 public class ChatServer : MonoBehaviour
 {
 
-    Telepathy.Server server = new Telepathy.Server();
+    public Telepathy.Server server = new Telepathy.Server();
 	public int port= 7777;
     public bool firststart = true;
 
@@ -70,20 +70,6 @@ public class ChatServer : MonoBehaviour
         }
     }
 
-    void OnGUI()
-    {
-
-        // server
-        GUI.enabled = !server.Active;
-        if (GUI.Button(new Rect(0, 50, 120, 20), "Start Server"))
-            server.Start(port);
-
-        GUI.enabled = server.Active;
-        if (GUI.Button(new Rect(130, 50, 120, 20), "Stop Server"))
-            server.Stop();
-
-        GUI.enabled = true;
-    }
 
     void OnApplicationQuit()
     {
