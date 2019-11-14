@@ -138,14 +138,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c69928dac62d81846bdba82ea268f43d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nametext: {fileID: 0}
-  emailTextlogin: {fileID: 520685955}
-  passwordTextlogin: {fileID: 1531665461}
-  user: {fileID: 0}
-  databaseURL: https://mmo-spiel.firebaseio.com/
-  AuthKey: AIzaSyAUr_7gFkWnoOfPJvLnigo5KSq96lAlELg
-  idToken: 
-  getLocalId: 
 --- !u!1 &231335287
 GameObject:
   m_ObjectHideFlags: 0
@@ -521,6 +513,7 @@ MonoBehaviour:
   emailText: {fileID: 1411345654}
   usernameText: {fileID: 904207034}
   passwordText: {fileID: 1198212398}
+  WarningMsg: {fileID: 1756782991}
 --- !u!114 &542498851
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -710,9 +703,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 51ccc9f05f0727e4e853bc28d66cd7e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  emailText: {fileID: 1411345654}
-  usernameText: {fileID: 904207034}
-  passwordText: {fileID: 1198212398}
 --- !u!223 &1873406233 stripped
 Canvas:
   m_CorrespondingSourceObject: {fileID: 1163364768256806273, guid: 8ff5c091d42b5b944a470bbaafb1eb44,
@@ -1256,6 +1246,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 3173301336185208476, guid: 08722e2566773cb4cb79c0fb1d66f2a6,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 80
+      objectReference: {fileID: 0}
+    - target: {fileID: 5523140435398390288, guid: 08722e2566773cb4cb79c0fb1d66f2a6,
+        type: 3}
+      propertyPath: m_Text
+      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 08722e2566773cb4cb79c0fb1d66f2a6, type: 3}

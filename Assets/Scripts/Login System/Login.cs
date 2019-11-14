@@ -68,7 +68,7 @@ public class Login : MonoBehaviour
                             globalCanvas.ToggleCanvas("lobby");
                         } else
                         {
-                            WarningMsg.text = "Error no Username";
+                            WarningMsg.text = "you need to verify your email!!";
                             Debug.Log("You are stupid, you need to verify your email dumb");
                         }
                         Debug.Log("End of Email-Verified");
@@ -77,6 +77,7 @@ public class Login : MonoBehaviour
             }).Catch(error =>
             {
                 Debug.Log(error);
+                WarningMsg.text = "Wrong username or password";
             });
     }
     private void GetUsername()

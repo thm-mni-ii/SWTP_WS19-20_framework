@@ -13,6 +13,7 @@ public class Register : MonoBehaviour
 	public InputField emailText;
 	public InputField usernameText; 
 	public InputField passwordText;
+	[SerializeField] private Text WarningMsg;
     
 	UserInfo user = new UserInfo();
 
@@ -54,6 +55,7 @@ public class Register : MonoBehaviour
 			}).Catch(error =>
 		{
 			Debug.Log(error);
+			WarningMsg.text = "Username already exists";
 		});
 	}
 	private void GetUsername()
