@@ -86,19 +86,28 @@ public class Login : MonoBehaviour
                     return;
                 }
 
+                
+                Firebase.Auth.FirebaseUser newUser = task.Result;
+                if (newUser.IsEmailVerified)
+                {
+                    Debug.Log("IsEmailVerified");
+                    user.email = newUser.Email;
+                    user.Uid = newUser.UserId;
+                    user.userN = newUser.DisplayName;
 
-               Firebase.Auth.FirebaseUser newUser = task.Result;
-
-                user.email = newUser.Email;
-                user.Uid = newUser.UserId;
-                user.userN = newUser.DisplayName;
 
 
-
-                Debug.LogFormat("User signed in successfully: {0} ({1})",
-                    newUser.DisplayName, newUser.UserId);
-               chat.EstablishConnection(user);
-               openscene = true;
+                    Debug.LogFormat("User signed in successfully: {0} ({1})",
+                        newUser.DisplayName, newUser.UserId);
+                    chat.EstablishConnection(user);
+                    openscene = true;
+                }
+                else 
+                {
+                    Debug.Log("you need to confirm your email");
+                    return;
+                }
+               
            });
 
 
@@ -121,6 +130,7 @@ public class Login : MonoBehaviour
 
     public void RegisterMethod()
     {
+
         if (rUsername.text != null && rUsername.text != "" && rEmail.text != null && rEmail.text != "" && rPass1.text != null && rPass1.text != "" && rPass2.text != null && rPass2.text != "")
         {
 
@@ -146,8 +156,12 @@ public class Login : MonoBehaviour
 
                 // Firebase user has been created.
                 Firebase.Auth.FirebaseUser newUser = task.Result;
-
+                
+                newUser.SendEmailVerificationAsync();
+                
+                
                 setDisplayName(newUser);
+
                 writeNewUser(newUser.UserId,rUsername.text, rEmail.text);
 
                 Debug.LogFormat("Firebase user created successfully: {0} ({1})",
