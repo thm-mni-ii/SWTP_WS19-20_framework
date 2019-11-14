@@ -73,7 +73,9 @@ public class Chat : MonoBehaviour
 	{
 		Cuser = user;
 		userName = Cuser.userN;
-		if (firstConnect)
+        userName = "guest";
+
+        if (firstConnect)
         {
 			if(mainServerip != null && (mainServerip != "") && (userName != "") && userName != null){
 			client.Connect(mainServerip, clientport);

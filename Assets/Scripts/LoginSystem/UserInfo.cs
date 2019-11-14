@@ -8,5 +8,7 @@ public class UserInfo : MonoBehaviour
 {
 
 	public string userN;
+    public string Uid;
+    public string email;
 
 }
