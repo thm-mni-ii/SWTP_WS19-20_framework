@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using Firebase;
+using Firebase.Unity.Editor;
 
 public class GlobalManager : MonoBehaviour {
 	public Canvas RegisterCanvas;
@@ -32,8 +34,8 @@ public class GlobalManager : MonoBehaviour {
 
     }
 	void Start () {
-	
-	}
+
+    }
 	
 	// Update is called once per frame
 	void Update () {
