@@ -22,7 +22,7 @@ public class Chat : MonoBehaviour
 	
 	public int clientport= 7777;
 	public string mainServerip = "localhost";
-	public string userName = "User";
+	public string userName = "ILLEGAL USER";
 	private UserInfo Cuser;
 	private bool firstConnect = true;
 
@@ -73,7 +73,6 @@ public class Chat : MonoBehaviour
 	{
 		Cuser = user;
 		userName = Cuser.userN;
-        userName = "guest";
 
         if (firstConnect)
         {
