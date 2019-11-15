@@ -148,12 +148,15 @@ public class Login : MonoBehaviour
                 }
 
 
+
                 Firebase.Auth.FirebaseUser newUser = task.Result;
                 if (newUser.IsEmailVerified)
                 {
+
                     user.email = newUser.Email;
                     user.Uid = newUser.UserId;
                     user.userN = newUser.DisplayName;
+
 
                     Debug.LogFormat("User signed in successfully: {0} ({1})",
                         newUser.DisplayName, newUser.UserId);
@@ -164,6 +167,7 @@ public class Login : MonoBehaviour
                 {
                     report = 15;
                 }
+
 
             });
 
@@ -219,6 +223,7 @@ public class Login : MonoBehaviour
 
                 // Firebase user has been created.
                 Firebase.Auth.FirebaseUser newUser = task.Result;
+
 
                 newUser.SendEmailVerificationAsync();
 
