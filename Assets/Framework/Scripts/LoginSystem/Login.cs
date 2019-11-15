@@ -68,6 +68,8 @@ public class Login : MonoBehaviour
                         if (NetworkServer.active)
                         {
                             manager.StartClient();
+                            chat.EstablishConnection(user);
+
                             globalCanvas.ToggleCanvas("chat");
                             if (NetworkClient.isConnected && !ClientScene.ready)
                             {
@@ -160,8 +162,9 @@ public class Login : MonoBehaviour
 
                     Debug.LogFormat("User signed in successfully: {0} ({1})",
                         newUser.DisplayName, newUser.UserId);
-                    chat.EstablishConnection(user);
+                    
                     report = 1;
+                    
                 }
                 else
                 {

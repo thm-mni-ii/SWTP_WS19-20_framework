@@ -8,6 +8,8 @@ using UnityEngine.UI;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Linq;
 using System.Net;
+using System.Net.Sockets;
+
 
 public class ChatServer : MonoBehaviour
 {
@@ -17,8 +19,7 @@ public class ChatServer : MonoBehaviour
     public bool firststart = true;
 
     private LinkedList<int> clienList = new LinkedList<int>();
-
-    //Dictionary<int, UserInfo> userLisr = new Dictionary<int, UserInfo>(); // user connection ID  and info
+    Dictionary<int, string> userList = new Dictionary<int, string>(); // user connection ID  and info
 
 
 
@@ -54,6 +55,7 @@ public class ChatServer : MonoBehaviour
                     case Telepathy.EventType.Connected:
                         Debug.Log(msg.connectionId + " Connected");
                         clienList.AddLast(msg.connectionId);
+                        server.Send(msg.connectionId, ObjectToByteArray(new MessageStruct("server", msg.connectionId.ToString(), 0,null)));
                         break;
                     case Telepathy.EventType.Data:
                         Debug.Log(msg.connectionId + " Data: " + BitConverter.ToString(msg.data));
@@ -62,6 +64,7 @@ public class ChatServer : MonoBehaviour
                     case Telepathy.EventType.Disconnected:
                         Debug.Log(msg.connectionId + " Disconnected");
                         clienList.Remove(msg.connectionId);
+                        userList.Remove(msg.connectionId);
                         break;
                 }
                
@@ -75,14 +78,31 @@ public class ChatServer : MonoBehaviour
     {
         server.Stop();
     }
-	
-	void HandleMessage(Byte[] data){
-	MessageStruct Smsg = ByteArrayToObject(data);
-		
-		switch(Smsg.messagetype){
-		case 1://login request
 
-		break;
+    class ClientToken
+    {
+        public TcpClient client;
+
+        public ClientToken(TcpClient client)
+        {
+            this.client = client;
+        }
+    }
+
+    void HandleMessage(Byte[] data){
+	MessageStruct Smsg = ByteArrayToObject(data);
+
+        switch (Smsg.messagetype) {
+            case 1://user information after connection
+
+                // when id is found add it to the list on our server with the User Information
+                int id = Int32.Parse(Smsg.Text);
+                userList.Add(id, Smsg.senderName);
+                Debug.Log("Added user " + Smsg.senderName + " id: " + id);
+                 
+
+
+                break;
 		
 		
 		case 2:// Global message
@@ -90,7 +110,17 @@ public class ChatServer : MonoBehaviour
 		SendToAll(data);
 		break;
         case 3:// Private Message
-        
+                if(userList.Values.Contains(Smsg.reciever)){
+
+                    int to = userList.FirstOrDefault(x => x.Value == Smsg.reciever).Key;
+                    
+                    server.Send(to, ObjectToByteArray(new MessageStruct(Smsg.senderName, Smsg.Text, 3, Smsg.reciever)));
+                }
+                else
+                {
+                    server.Send(Smsg.senderId, ObjectToByteArray(new MessageStruct("Server:", "User unknown/offline", 2, null)));
+                }
+                
         break;
             
 			default:
