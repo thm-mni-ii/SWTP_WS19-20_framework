@@ -25,7 +25,7 @@ public class Chat : MonoBehaviour
 	public string userName = "ILLEGAL USER";
 	private UserInfo Cuser;
 	private bool firstConnect = true;
-
+    private int clientId = 0;
 
 
 
@@ -47,7 +47,8 @@ public class Chat : MonoBehaviour
         // client
         if (client.Connected)
         {
-            
+
+
             // show all new messages
             Telepathy.Message msg;
             while (client.GetNextMessage(out msg))
@@ -78,7 +79,7 @@ public class Chat : MonoBehaviour
         {
 			if(mainServerip != null && (mainServerip != "") && (userName != "") && userName != null){
 			client.Connect(mainServerip, clientport);
-			}
+            }
 		}
 	}
     public void Disconnection()
@@ -92,17 +93,40 @@ public class Chat : MonoBehaviour
 
     public void clientSendMessage(){
 		if(clientMessageTF.text != null){
-			//MessageStruct Smsg = new MessageStruct(userName, clientMessageTF.text,2,null,null);
-			byte[] bytes = ObjectToByteArray(new MessageStruct(userName, clientMessageTF.text, 2,null));
-            clientMessageTF.text = string.Empty;
-            client.Send(bytes);	
+
+            string[] tokens = clientMessageTF.text.Split(new char[] { ':' },2);
+            int lenth = 0;
+            foreach(string t in tokens){
+                lenth++;
+                }
+
+            if (lenth > 1)
+            {
+                MessageStruct Smsg = new MessageStruct(userName, tokens[1], 3, tokens[0]);
+                Smsg.senderId = clientId;
+                byte[] bytes = ObjectToByteArray(Smsg);
+
+                clientMessageTF.text = string.Empty;
+                client.Send(bytes);
+            }
+            else
+            {
+
+                byte[] bytes = ObjectToByteArray(new MessageStruct(userName, clientMessageTF.text, 2, null));
+                clientMessageTF.text = string.Empty;
+                client.Send(bytes);
+            }
 		}
 	}
 	
 	public void HandleData(Byte[] data){
 	MessageStruct Smsg = ByteArrayToObject(data);		
 		switch(Smsg.messagetype){
-		case 1: //login reqeust result
+            case 0:
+                clientId = Int32.Parse(Smsg.Text);
+                client.Send(ObjectToByteArray(new MessageStruct(userName, Smsg.Text, 1, null)));
+                break;
+            case 1: //login reqeust result
 		
 		break;
 		
@@ -111,8 +135,9 @@ public class Chat : MonoBehaviour
 		break;
 
          case 3:// Private Message
+                UpdateChat(Smsg.Text, "[Private]"+Smsg.senderName+":");
 
-         break;
+                break;
 		}
 	}
 		

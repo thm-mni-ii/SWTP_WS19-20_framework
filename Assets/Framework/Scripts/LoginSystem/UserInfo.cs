@@ -11,4 +11,14 @@ public class UserInfo : MonoBehaviour
     public string Uid;
     public string email;
 
+   public  UserInfo() { }
+
+    public UserInfo(string userN, string Uid, string email)
+    {
+        this.userN = userN;
+        this.Uid = Uid;
+        this.email = email;
+
+    }
+
 }
