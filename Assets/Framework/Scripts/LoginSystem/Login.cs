@@ -28,6 +28,7 @@ public class Login : MonoBehaviour
     private Firebase.Auth.FirebaseAuth auth;
     NetworkManager manager;
     private int report = 0;
+    private string resEmail = null;
 
 
     // Start is called before the first frame update
@@ -92,10 +93,10 @@ public class Login : MonoBehaviour
 
                     break;
                 case 10:
-                    WarningMsg.text = "Invalid Email or password #1";
+                    WarningMsg.text = "Invalid Username or password #1";
                     break;
                 case 11:
-                    WarningMsg.text = "Invalid Email or password #2";
+                    WarningMsg.text = "Invalid username or password #2";
                     break;
                 case 12:
                     globalCanvas.ToggleCanvas("login");
@@ -119,6 +120,17 @@ public class Login : MonoBehaviour
                 case 18:
                     WarningMsg.text = "Could not send reset E-mail #2";
                     break;
+                case 19:
+                    report = 0;
+                    reg2();
+                    break;
+                case 20:
+                    regWarningMsg.text = "Username is Taken";
+                    break;
+                case 21:
+                    report = 0;
+                    LoginMethod2(resEmail);
+                    break;
                 default:
                     Debug.Log("Error unkown Report (Login.class)");
                     break;
@@ -135,7 +147,39 @@ public class Login : MonoBehaviour
     {
         if (userName.text != null && userName.text != "" && passwordField.text != null && passwordField.text != "")
         {
-            auth.SignInWithEmailAndPasswordAsync(userName.text, passwordField.text).ContinueWith(task => {
+            resEmail = null;
+            FirebaseDatabase.DefaultInstance
+          .GetReference("users/" + userName.text + "/email")
+           .GetValueAsync().ContinueWith(task =>
+           {
+               if (task.IsFaulted)
+               {
+                   Debug.Log("reg task failed");
+                   return;
+               }
+               else if (task.IsCompleted)
+               {
+                   DataSnapshot snapshot = task.Result;
+                   resEmail = (string)snapshot.Value;
+                   if (resEmail == null)
+                   {
+                       report = 11;
+                       Debug.Log("not found");
+                   } else
+                   {
+                       report = 21;
+                   }
+               }
+           });
+        }
+    }
+    public void LoginMethod2(string resEmail)
+    {
+        if (resEmail != null && resEmail != "" && passwordField.text != null && passwordField.text != "")
+        {
+            
+
+            auth.SignInWithEmailAndPasswordAsync(resEmail, passwordField.text).ContinueWith(task => {
                 if (task.IsCanceled)
                 {
                     report = 10;
@@ -200,6 +244,43 @@ public class Login : MonoBehaviour
 
     public void RegisterMethod()
     {
+
+        if (rUsername.text != null && rUsername.text != "" && rEmail.text != null && rEmail.text != "" && rPass1.text != null && rPass1.text != "" && rPass2.text != null && rPass2.text != "")
+        {
+
+
+            string u = null;
+            FirebaseDatabase.DefaultInstance
+                      .GetReference("users/" + rUsername.text + "/UserName")
+                       .GetValueAsync().ContinueWith(task =>
+                       {
+                           if (task.IsFaulted)
+                           {
+                               Debug.Log("reg task failed");
+                               return;
+                           }
+                           else if (task.IsCompleted)
+                           {
+                               DataSnapshot snapshot = task.Result;
+                               u = (string)snapshot.Value;
+                               if (u == null)
+                               {
+
+                                   Debug.Log("not found");
+                                   report = 19;
+                               }else
+                               {
+
+                                  
+                                   report = 20;
+                               }
+                           }
+                       });
+
+        }
+    }
+
+        public void reg2() {
 
         if (rUsername.text != null && rUsername.text != "" && rEmail.text != null && rEmail.text != "" && rPass1.text != null && rPass1.text != "" && rPass2.text != null && rPass2.text != "")
         {
@@ -325,26 +406,27 @@ public class Login : MonoBehaviour
         public string UserName;
         public string email;
         public int xp;
-
+        public string id;
         public User()
         {
         }
 
-        public User(string username, string email)
+        public User(string username, string email,string id)
         {
             this.UserName = username;
             this.email = email;
             this.xp = 0;
+            this.id = id;
 
         }
     }
 
     private void writeNewUser(string userId, string name, string email)
     {
-        User user = new User(name, email);
+        User user = new User(name, email, userId);
         string json = JsonUtility.ToJson(user);
 
-        reference.Child("users").Child(userId).SetRawJsonValueAsync(json);
+        reference.Child("users").Child(name).SetRawJsonValueAsync(json);
     }
     // Example Method for Data change 
     // reference.Child("users").Child(userId).Child("UserName").SetValueAsync(name);
