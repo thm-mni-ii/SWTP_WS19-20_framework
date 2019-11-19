@@ -96,17 +96,17 @@ public class Login : MonoBehaviour
                     WarningMsg.text = "Invalid Username or password #1";
                     break;
                 case 11:
-                    WarningMsg.text = "Invalid username or password #2";
+                    WarningMsg.text = "Invalid username or password";
                     break;
                 case 12:
                     globalCanvas.ToggleCanvas("login");
                     WarningMsg.text = "Registration Succesful";
                     break;
                 case 13:
-                    regWarningMsg.text = "Registration failed #1";
+                    regWarningMsg.text = "Error Registration was canceled)";
                     break;
                 case 14:
-                    regWarningMsg.text = "Registration failed #2";
+                    regWarningMsg.text = "Email is already registered";
                     break;
                 case 15:
                     WarningMsg.text = "please confirm your email";
@@ -115,10 +115,10 @@ public class Login : MonoBehaviour
                     WarningMsg.text = "Password reset email sent successfully";
                     break;
                 case 17:
-                    WarningMsg.text = "Could not send reset E-mail #1";
+                    WarningMsg.text = "Error Send request was canceled";
                     break;
                 case 18:
-                    WarningMsg.text = "Could not send reset E-mail #2";
+                    WarningMsg.text = "Could not send reset E-mail";
                     break;
                 case 19:
                     report = 0;
@@ -287,7 +287,7 @@ public class Login : MonoBehaviour
 
             if (string.Compare(rPass1.text, rPass2.text) != 0)
             {
-                regWarningMsg.text = "Password don't match";
+                regWarningMsg.text = "Passwords don't match";
                 return;
             }
 
@@ -375,6 +375,11 @@ public class Login : MonoBehaviour
 
         if (userName.text != null && userName.text != "")
         {
+            if (!userName.text.Contains("@"))
+            {
+                WarningMsg.text = "Please enter your E-mail to reset password";
+                return;
+            }
             auth.SendPasswordResetEmailAsync(userName.text).ContinueWith(task => {
                 if (task.IsCanceled)
                 {
