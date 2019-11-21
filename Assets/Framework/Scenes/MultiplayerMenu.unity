@@ -30577,7 +30577,6 @@ GameObject:
   m_Component:
   - component: {fileID: 534201365}
   - component: {fileID: 534201364}
-  - component: {fileID: 534201363}
   - component: {fileID: 534201362}
   - component: {fileID: 534201366}
   - component: {fileID: 534201367}
@@ -30628,21 +30627,6 @@ MonoBehaviour:
   NoDelay: 1
   serverMaxMessageSize: 16384
   clientMaxMessageSize: 16384
---- !u!114 &534201363
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 534201361}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6442dc8070ceb41f094e44de0bf87274, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  showGUI: 1
-  offsetX: 0
-  offsetY: 0
 --- !u!114 &534201364
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -30666,7 +30650,7 @@ MonoBehaviour:
   networkAddress: localhost
   maxConnections: 4
   authenticator: {fileID: 0}
-  playerPrefab: {fileID: 8628839259906065382, guid: 68ae59084d6bb484299febe6d04661cf,
+  playerPrefab: {fileID: 5300366885289355566, guid: 01753b838c8042d489429aedeb02aee3,
     type: 3}
   autoCreatePlayer: 1
   playerSpawnMethod: 1
