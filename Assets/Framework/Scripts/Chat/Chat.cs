@@ -26,6 +26,9 @@ public class Chat : MonoBehaviour
 	private UserInfo Cuser;
 	private bool firstConnect = true;
     private int clientId = 0;
+    private bool isHost = false;
+    private bool inParty = false;
+    private string partyhostname = "";
 
 
 
@@ -82,12 +85,38 @@ public class Chat : MonoBehaviour
             }
 		}
 	}
+
+
+   public void leaveParty()
+    {
+        if (isHost && inParty)
+        {
+
+            //inform server that host left to close party
+
+            client.Send(ObjectToByteArray(new MessageStruct(userName, null, 7, null)));
+
+            isHost = false;
+            inParty = false;
+
+        }else if (inParty)
+        { //inform serer that client has left
+            if (clientMessageTF.text != null && clientMessageTF.text != "")
+            {
+                MessageStruct Smsg = new MessageStruct(userName, null, 8, clientMessageTF.text);
+                Smsg.senderId = clientId;
+                client.Send(ObjectToByteArray(Smsg));//change
+            }
+            //inParty = false;
+        }
+    }
     public void Disconnection()
     {
         Cuser = null;
         userName = null;
         content.text = "";
-        client.Disconnect();
+        leaveParty();
+    client.Disconnect();
     }
 
 
@@ -126,7 +155,7 @@ public class Chat : MonoBehaviour
                 clientId = Int32.Parse(Smsg.Text);
                 client.Send(ObjectToByteArray(new MessageStruct(userName, Smsg.Text, 1, null)));
                 break;
-            case 1: //login reqeust result
+            case 1: //only for server should never be used here
 		
 		break;
 		
@@ -138,13 +167,80 @@ public class Chat : MonoBehaviour
                 UpdateChat(Smsg.Text, "[Private]"+Smsg.senderName+":");
 
                 break;
-		}
+            case 4:// Host a party
+
+                CreatePartyButton();
+
+         break;
+            case 5:// updated list from server
+                string[] names = Smsg.Text.Split(new char[] { ';' });
+                //Debug.Log(Smsg.Text + "\n");
+                
+                for (int i=0; i< names.Length - 1; i++) { //might cause errors
+                    UpdateChat(names[i], "[Member]"+ i+" ");
+                }
+                break;
+
+            case 6://join a party
+                if (clientMessageTF.text != null && clientMessageTF.text != "") // change
+                {
+                    JoinPartyButton();
+                }
+                break;
+            case 7://party canceled
+                UpdateChat("[X]",Smsg.senderName);//change to party canvas display
+                inParty = false;
+                break;
+            case 8://join failed
+                UpdateChat("[X]", Smsg.senderName);//change to party canvas display
+                inParty = false;
+                break;
+        }
 	}
-		
-		
-	
-		// Convert an object to a byte array
-	public byte[] ObjectToByteArray(MessageStruct obj)
+
+
+
+
+    public void CreatePartyButton() {
+        if (inParty && isHost)
+        {
+        Debug.Log("you are already in a party please leave in order to create a new one");// should be changed to an ingame error message
+            return;
+        }
+        MessageStruct Smsg = new MessageStruct(userName, null, 4, null);
+        Smsg.senderId = clientId;
+        byte[] bytes = ObjectToByteArray(Smsg);
+        client.Send(bytes);
+
+        inParty = true;
+        isHost = true;
+
+    }
+    public void JoinPartyButton()
+    {
+        if (inParty)
+        {
+            Debug.Log("you are already in a party please leave in order to join a new one");// should be changed to an ingame error message
+            return;
+        }
+
+        if (clientMessageTF.text != null && clientMessageTF.text != "")//change to party canvas text field
+        {
+            MessageStruct Smsg = new MessageStruct(userName, null, 6, clientMessageTF.text);
+            Smsg.senderId = clientId;
+            client.Send(ObjectToByteArray(Smsg));
+            partyhostname = clientMessageTF.text;
+            inParty = true;
+        }else
+        {
+            Debug.Log("JOINPARTY: player name not specified");// should be changed to an ingame error message 
+        }
+
+
+    }
+
+    // Convert an object to a byte array
+    public byte[] ObjectToByteArray(MessageStruct obj)
 	{
 		BinaryFormatter bf = new BinaryFormatter();
 		using (var ms = new MemoryStream())
