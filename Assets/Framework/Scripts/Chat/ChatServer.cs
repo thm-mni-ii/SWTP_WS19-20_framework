@@ -51,6 +51,10 @@ public class ChatServer : MonoBehaviour
         Telepathy.Logger.Log = Debug.Log;
         Telepathy.Logger.LogWarning = Debug.LogWarning;
         Telepathy.Logger.LogError = Debug.LogError;
+       // party p = new party("test");
+       // p.addPlayer(44, "p1");
+       // p.addPlayer(45, "p2");
+       // partyList.Add("test", p);
 		
     }
 
@@ -180,6 +184,7 @@ public class ChatServer : MonoBehaviour
                 party temp4 = partyList[Smsg.reciever];
                 temp4.removPlayer(Smsg.senderId);
                 UpdateList(temp4);
+                //clear list for player
                 break;
             
 			default:
