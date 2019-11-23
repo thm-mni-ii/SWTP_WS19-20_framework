@@ -20,8 +20,27 @@ public class ChatServer : MonoBehaviour
 
     private LinkedList<int> clienList = new LinkedList<int>();
     Dictionary<int, string> userList = new Dictionary<int, string>(); // user connection ID  and info
+    Dictionary<string, party> partyList = new Dictionary<string, party>(); 
 
+    public class party
+    {
+       public string hostname;
 
+        public Dictionary<int, string> playersList = new Dictionary<int, string>();
+
+        public void addPlayer(int con,string name)
+        {
+            playersList.Add(con,name);
+        }
+
+        public void removPlayer(int con)
+        {
+            playersList.Remove(con);
+        }
+      public  party(string hostname) {
+            this.hostname = hostname;
+        }
+    }
 
     void Awake()
     {
@@ -32,6 +51,10 @@ public class ChatServer : MonoBehaviour
         Telepathy.Logger.Log = Debug.Log;
         Telepathy.Logger.LogWarning = Debug.LogWarning;
         Telepathy.Logger.LogError = Debug.LogError;
+       // party p = new party("test");
+       // p.addPlayer(44, "p1");
+       // p.addPlayer(45, "p2");
+       // partyList.Add("test", p);
 		
     }
 
@@ -122,6 +145,47 @@ public class ChatServer : MonoBehaviour
                 }
                 
         break;
+            case 4://handle a host party request
+                partyList.Add(Smsg.senderName, new party(Smsg.senderName));
+                party temp = partyList[Smsg.senderName];
+                temp.addPlayer(Smsg.senderId, Smsg.senderName);
+                UpdateList(temp);
+         break;
+            case 5:// only for client should never be used here
+
+                break;
+
+            case 6://join party request
+
+                if (!partyList.ContainsKey(Smsg.reciever))
+                {
+                    server.Send(Smsg.senderId, ObjectToByteArray(new MessageStruct("server: Host not found", null, 8, null)));
+                    return;
+                }
+                party temp2 = partyList[Smsg.reciever];
+                
+
+                temp2.addPlayer(Smsg.senderId, Smsg.senderName);
+                UpdateList(temp2);
+                break;
+
+            case 7://cancel party request (sent from host)
+                party temp3 = partyList[Smsg.senderName];
+
+                //inform clients that host has disconnected and delete party
+                foreach (var entry in temp3.playersList)
+                {
+                    server.Send(entry.Key, ObjectToByteArray(new MessageStruct("server: Host has Disconnected", null, 7, null)));
+                }
+
+                partyList.Remove(Smsg.senderName);
+                break;
+            case 8:// player left a party
+                party temp4 = partyList[Smsg.reciever];
+                temp4.removPlayer(Smsg.senderId);
+                UpdateList(temp4);
+                //clear list for player
+                break;
             
 			default:
                 Debug.Log("msg Error unknown command");
@@ -129,8 +193,25 @@ public class ChatServer : MonoBehaviour
         }
 		
 	}
-	
-	void SendToAll(Byte[] data){
+
+    void UpdateList(party temp)
+    {
+        String names = "";
+        foreach (var entry in temp.playersList)
+        {
+            if(entry.Value != "")
+            names += entry.Value + ";";
+        }
+        Byte[] data = ObjectToByteArray(new MessageStruct("server",names,5,null));
+        foreach (var entry in temp.playersList)
+        {
+            server.Send(entry.Key, data);
+        }
+
+
+    }
+
+    void SendToAll(Byte[] data){
 		if(clienList.Count>0){
 		foreach(int i in clienList)
 		server.Send(i,data);
