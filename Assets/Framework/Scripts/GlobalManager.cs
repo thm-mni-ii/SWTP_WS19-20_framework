@@ -8,12 +8,14 @@ public class GlobalManager : MonoBehaviour {
 	public Canvas RegisterCanvas;
 	public Canvas LoginCanvas;
 	public Canvas ChatCanvas;
+    public Canvas PartyCanvas;
 
-	// Use this for initialization
-	void Awake () {
+    // Use this for initialization
+    void Awake () {
 		RegisterCanvas.enabled = false;
 		LoginCanvas.enabled = true;
 		ChatCanvas.enabled  = false;
+        PartyCanvas.enabled = false;
 
     }
 	void Start () {
@@ -29,21 +31,29 @@ public class GlobalManager : MonoBehaviour {
 			RegisterCanvas.enabled = false;
 			LoginCanvas.enabled = true;
             ChatCanvas.enabled = false;
+            PartyCanvas.enabled = false;
 
 
         } else if (open == "register") {
 			RegisterCanvas.enabled = true;
 			LoginCanvas.enabled = false;
             ChatCanvas.enabled = false;
+            PartyCanvas.enabled = false;
 
 
         } else if (open == "chat") {
 			RegisterCanvas.enabled = false;
 			LoginCanvas.enabled = false;
 			ChatCanvas.enabled  = true;
+            PartyCanvas.enabled = true;
 
-		}
-	
-	}
+        }
+        else if (open == "party")
+        {
+            PartyCanvas.enabled = true;
+
+        }
+
+    }
 
 }

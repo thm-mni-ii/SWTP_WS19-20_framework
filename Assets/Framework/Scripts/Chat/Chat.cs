@@ -17,7 +17,11 @@ public class Chat : MonoBehaviour
  	    //Input
 	public InputField clientMessageTF = null;
 	public Text content = null;
-	
+    //party
+    public InputField partyTextField = null;
+    public Text PartycontentField = null;
+
+
     Telepathy.Client client = new Telepathy.Client();
 	
 	public int clientport= 7777;
@@ -101,9 +105,9 @@ public class Chat : MonoBehaviour
 
         }else if (inParty)
         { //inform serer that client has left
-            if (clientMessageTF.text != null && clientMessageTF.text != "")
+            if (partyTextField.text != null && partyTextField.text != "")
             {
-                MessageStruct Smsg = new MessageStruct(userName, null, 8, clientMessageTF.text);
+                MessageStruct Smsg = new MessageStruct(userName, null, 8, partyTextField.text);
                 Smsg.senderId = clientId;
                 client.Send(ObjectToByteArray(Smsg));//change
             }
@@ -175,24 +179,24 @@ public class Chat : MonoBehaviour
             case 5:// updated list from server
                 string[] names = Smsg.Text.Split(new char[] { ';' });
                 //Debug.Log(Smsg.Text + "\n");
-                
+                PartycontentField.text = "";
                 for (int i=0; i< names.Length - 1; i++) { //might cause errors
-                    UpdateChat(names[i], "[Member]"+ i+" ");
+                    UpdateChatP(names[i], "[Member]"+ i+" ");
                 }
                 break;
 
             case 6://join a party
-                if (clientMessageTF.text != null && clientMessageTF.text != "") // change
+                if (partyTextField.text != null && partyTextField.text != "")
                 {
                     JoinPartyButton();
                 }
                 break;
             case 7://party canceled
-                UpdateChat("[X]",Smsg.senderName);//change to party canvas display
+                PartycontentField.text = Smsg.senderName;
                 inParty = false;
                 break;
             case 8://join failed
-                UpdateChat("[X]", Smsg.senderName);//change to party canvas display
+                PartycontentField.text = Smsg.senderName;
                 inParty = false;
                 break;
         }
@@ -204,7 +208,7 @@ public class Chat : MonoBehaviour
     public void CreatePartyButton() {
         if (inParty && isHost)
         {
-        Debug.Log("you are already in a party please leave in order to create a new one");// should be changed to an ingame error message
+            PartycontentField.text += "\n you are already in a party please leave in order to create a new one";
             return;
         }
         MessageStruct Smsg = new MessageStruct(userName, null, 4, null);
@@ -220,20 +224,20 @@ public class Chat : MonoBehaviour
     {
         if (inParty)
         {
-            Debug.Log("you are already in a party please leave in order to join a new one");// should be changed to an ingame error message
+            PartycontentField.text += "\n you are already in a party please leave in order to join a new one";
             return;
         }
 
-        if (clientMessageTF.text != null && clientMessageTF.text != "")//change to party canvas text field
+        if (partyTextField.text != null && partyTextField.text != "")
         {
-            MessageStruct Smsg = new MessageStruct(userName, null, 6, clientMessageTF.text);
+            MessageStruct Smsg = new MessageStruct(userName, null, 6, partyTextField.text);
             Smsg.senderId = clientId;
             client.Send(ObjectToByteArray(Smsg));
-            partyhostname = clientMessageTF.text;
+            partyhostname = partyTextField.text;
             inParty = true;
         }else
         {
-            Debug.Log("JOINPARTY: player name not specified");// should be changed to an ingame error message 
+            PartycontentField.text = "Enter the Host name";
         }
 
 
@@ -265,6 +269,10 @@ public class Chat : MonoBehaviour
 	void UpdateChat(String text,String name){
 	content.text += "\n" + name + ": " + text;
 	}
+    void UpdateChatP(String text, String name)
+    {
+        PartycontentField.text += "\n" + name + ": " + text;
+    }
 
     void OnApplicationQuit()
     {
