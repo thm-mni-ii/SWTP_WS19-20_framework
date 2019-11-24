@@ -214,6 +214,7 @@ public class Login : MonoBehaviour
                 }
                 else
                 {
+                    newUser.SendEmailVerificationAsync();
                     report = 15;
                 }
 
@@ -249,6 +250,11 @@ public class Login : MonoBehaviour
 
         if (rUsername.text != null && rUsername.text != "" && rEmail.text != null && rEmail.text != "" && rPass1.text != null && rPass1.text != "" && rPass2.text != null && rPass2.text != "")
         {
+            if (!rEmail.text.Contains("@"))
+            {
+                regWarningMsg.text = "Please enter your E-mail";
+                return;
+            }
 
 
             string u = null;
@@ -286,6 +292,12 @@ public class Login : MonoBehaviour
 
         if (rUsername.text != null && rUsername.text != "" && rEmail.text != null && rEmail.text != "" && rPass1.text != null && rPass1.text != "" && rPass2.text != null && rPass2.text != "")
         {
+
+            if (rPass1.text.Length < 6 || rPass2.text.Length < 6)
+            {
+                regWarningMsg.text = "Password must contain at least 6 Charachters";
+                return;
+            }
 
             if (string.Compare(rPass1.text, rPass2.text) != 0)
             {
