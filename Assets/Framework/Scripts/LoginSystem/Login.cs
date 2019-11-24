@@ -21,6 +21,8 @@ public class Login : MonoBehaviour
     [SerializeField] private InputField rPass2;
     private GlobalManager globalCanvas;
     [SerializeField] private Text WarningMsg;
+    [SerializeField] private Text ResWarningMsg;
+    [SerializeField] private InputField ResEmail;
     [SerializeField] private Text regWarningMsg;
     private UserInfo user;
     private Chat chat;
@@ -112,13 +114,13 @@ public class Login : MonoBehaviour
                     WarningMsg.text = "please confirm your email";
                     break;
                 case 16:
-                    WarningMsg.text = "Password reset email sent successfully";
+                    ResWarningMsg.text = "Password reset email sent successfully";
                     break;
                 case 17:
-                    WarningMsg.text = "Error Send request was canceled";
+                    ResWarningMsg.text = "Error Send request was canceled";
                     break;
                 case 18:
-                    WarningMsg.text = "Could not send reset E-mail";
+                    ResWarningMsg.text = "Could not send reset E-mail";
                     break;
                 case 19:
                     report = 0;
@@ -362,6 +364,13 @@ public class Login : MonoBehaviour
 
 
     }
+    public void ResetButton()
+    {
+
+        globalCanvas.ToggleCanvas("forgot");
+
+
+    }
     public void backButton()
     {
 
@@ -373,14 +382,14 @@ public class Login : MonoBehaviour
     public void ResetPass()
     {
 
-        if (userName.text != null && userName.text != "")
+        if (ResEmail.text != null && ResEmail.text != "")
         {
-            if (!userName.text.Contains("@"))
+            if (!ResEmail.text.Contains("@"))
             {
-                WarningMsg.text = "Please enter your E-mail to reset password";
+                ResWarningMsg.text = "Please enter your E-mail to reset password";
                 return;
             }
-            auth.SendPasswordResetEmailAsync(userName.text).ContinueWith(task => {
+            auth.SendPasswordResetEmailAsync(ResEmail.text).ContinueWith(task => {
                 if (task.IsCanceled)
                 {
                     report = 17;
@@ -398,7 +407,7 @@ public class Login : MonoBehaviour
             });
         }else
         {
-            WarningMsg.text = "Please enter your E-mail to reset password";
+            ResWarningMsg.text = "Please enter your E-mail to reset password";
         }
 
 

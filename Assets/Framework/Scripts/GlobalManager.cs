@@ -9,6 +9,7 @@ public class GlobalManager : MonoBehaviour {
 	public Canvas LoginCanvas;
 	public Canvas ChatCanvas;
     public Canvas PartyCanvas;
+    public Canvas ForgotCanvas;
 
     // Use this for initialization
     void Awake () {
@@ -16,6 +17,7 @@ public class GlobalManager : MonoBehaviour {
 		LoginCanvas.enabled = true;
 		ChatCanvas.enabled  = false;
         PartyCanvas.enabled = false;
+        ForgotCanvas.enabled = false;
 
     }
 	void Start () {
@@ -32,6 +34,7 @@ public class GlobalManager : MonoBehaviour {
 			LoginCanvas.enabled = true;
             ChatCanvas.enabled = false;
             PartyCanvas.enabled = false;
+            ForgotCanvas.enabled = false;
 
 
         } else if (open == "register") {
@@ -39,6 +42,7 @@ public class GlobalManager : MonoBehaviour {
 			LoginCanvas.enabled = false;
             ChatCanvas.enabled = false;
             PartyCanvas.enabled = false;
+            ForgotCanvas.enabled = false;
 
 
         } else if (open == "chat") {
@@ -46,11 +50,20 @@ public class GlobalManager : MonoBehaviour {
 			LoginCanvas.enabled = false;
 			ChatCanvas.enabled  = true;
             PartyCanvas.enabled = true;
+            ForgotCanvas.enabled = false;
 
         }
         else if (open == "party")
         {
             PartyCanvas.enabled = true;
+
+        } else if (open == "forgot")
+        {
+            RegisterCanvas.enabled = false;
+            LoginCanvas.enabled = false;
+            ChatCanvas.enabled = false;
+            PartyCanvas.enabled = false;
+            ForgotCanvas.enabled = true;
 
         }
 
