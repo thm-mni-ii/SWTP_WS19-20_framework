@@ -3,6 +3,9 @@
 namespace Mirror
 {
     [RequireComponent(typeof(CharacterController))]
+    /**
+     * PlayerMovement class to set the Movement of the player (class token from mirror)
+     */
     public class PlayerMovement : NetworkBehaviour
     {
         [SyncVar]

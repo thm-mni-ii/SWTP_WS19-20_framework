@@ -1,18 +1,21 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using Firebase;
 using Firebase.Database;
 using Firebase.Unity.Editor;
 using Mirror;
 
-
-
-
 [RequireComponent(typeof(NetworkManager))]
+/**
+ * login class has many tasks:
+ * 1. (sign in) verify if the access data are right and make a connection between client and server
+ * 2. (sign up/register)  register a new data in the database
+ * 3. (sign out) logout from the connection between client and server
+ * 4. other functions like: forget the password
+  */
 public class Login : MonoBehaviour
 {
+    /*Variables*/
     [SerializeField] private InputField userName;
     [SerializeField] private InputField passwordField;
     [SerializeField] private InputField rEmail;
@@ -31,16 +34,15 @@ public class Login : MonoBehaviour
     NetworkManager manager;
     private int report = 0;
     private string resEmail = null;
-
-
-    // Start is called before the first frame update
+    
+    /**
+     * Start is called before the first frame update
+     */
     void Start()
     {
         globalCanvas = gameObject.GetComponent<GlobalManager>();
         user = gameObject.GetComponent<UserInfo>();
         chat = gameObject.GetComponent<Chat>();
-
-
 
         GameObject NM = GameObject.FindWithTag("NetworkManager");
 
@@ -52,19 +54,34 @@ public class Login : MonoBehaviour
         FirebaseApp.DefaultInstance.SetEditorDatabaseUrl("https://mmo-spiel.firebaseio.com/");
         reference = FirebaseDatabase.DefaultInstance.RootReference;
         auth = Firebase.Auth.FirebaseAuth.DefaultInstance;
-
     }
 
-    // Update is called once per frame
+    /**
+     * Update is called once per frame
+     * display the answer or check 
+     * display if there are any errors or if every think right
+     * There are many types of answers:
+     * case 1: // Login Succesful
+     * case 10: or case 11: // Invalid username or password
+     * case 12: // Registration Succesful
+     * case 13: // Error Registration was canceled
+     * case 14: // Email is already registered
+     * case 15: // please confirm your email
+     * case 16: // Password reset email sent successfully
+     * case 17: // Error Send request was canceled
+     * case 18: // Could not send reset E-mail
+     * case 19: // check: username and password (by register)
+     * case 20: // Username is Taken
+     * case 21: // check: username and password (by login)
+     */
     void Update()
     {
-
-
-        // Login-Menu messages are displayed from this switch-case becasue this action must be done from he main Thread
+        /*
+         * Login-Menu messages are displayed from this switch-case becasue this action must be done from he main Thread
+         */
         if (report != 0)
         {
             switch (report) {
-
                 case 1: //Login Succesful
                     if (!NetworkClient.isConnected)
                     {
@@ -76,23 +93,18 @@ public class Login : MonoBehaviour
                             globalCanvas.ToggleCanvas("chat");
                             if (NetworkClient.isConnected && !ClientScene.ready)
                             {
-
                                 ClientScene.Ready(NetworkClient.connection);
-
                                 if (ClientScene.localPlayer == null)
                                 {
                                     ClientScene.AddPlayer();
                                 }
-
                             }
-
                         }
                         else
                         {
                             WarningMsg.text = "Networkserver Offline";
                         }
                     }
-
                     break;
                 case 10:
                     WarningMsg.text = "Invalid Username or password #1";
@@ -136,15 +148,14 @@ public class Login : MonoBehaviour
                 default:
                     Debug.Log("Error unkown Report (Login.class)");
                     break;
-
             }
             report = 0;
-
         }
-
     }
 
-
+    /**
+     * login methode checks if user is registered on the database and returns the result accordingly 
+     */
     public void LoginMethod()
     {
         if (userName.text != null && userName.text != "" && passwordField.text != null && passwordField.text != "")
@@ -175,12 +186,13 @@ public class Login : MonoBehaviour
            });
         }
     }
+    /**
+     * a helping login method to allow login with username instead of email
+     */
     public void LoginMethod2(string resEmail)
     {
         if (resEmail != null && resEmail != "" && passwordField.text != null && passwordField.text != "")
         {
-            
-
             auth.SignInWithEmailAndPasswordAsync(resEmail, passwordField.text).ContinueWith(task => {
                 if (task.IsCanceled)
                 {
@@ -194,17 +206,13 @@ public class Login : MonoBehaviour
                     Debug.LogError("SignInWithEmailAndPasswordAsync encountered an error: " + task.Exception);
                     return;
                 }
-
-
-
+                
                 Firebase.Auth.FirebaseUser newUser = task.Result;
                 if (newUser.IsEmailVerified)
                 {
-
                     user.email = newUser.Email;
                     user.Uid = newUser.UserId;
                     user.userN = newUser.DisplayName;
-
 
                     Debug.LogFormat("User signed in successfully: {0} ({1})",
                         newUser.DisplayName, newUser.UserId);
@@ -217,24 +225,19 @@ public class Login : MonoBehaviour
                     newUser.SendEmailVerificationAsync();
                     report = 15;
                 }
-
-
             });
-
-
         }
         else
         {
-
             WarningMsg.text = "Please Enter a username and password";
         }
     }
 
-
-
+    /**
+     * logs out user and disconnects the connection
+     */
     public void LogoutMethod()
     {
-
         chat.Disconnection();
         if (NetworkClient.active)
         {
@@ -242,12 +245,13 @@ public class Login : MonoBehaviour
         }
         globalCanvas.ToggleCanvas("login");
         passwordField.text = "";
-
     }
 
+    /**
+     * Registers new user to the Databank and handles the request if the user is already registered
+     */
     public void RegisterMethod()
     {
-
         if (rUsername.text != null && rUsername.text != "" && rEmail.text != null && rEmail.text != "" && rPass1.text != null && rPass1.text != "" && rPass2.text != null && rPass2.text != "")
         {
             if (!rEmail.text.Contains("@"))
@@ -255,8 +259,7 @@ public class Login : MonoBehaviour
                 regWarningMsg.text = "Please enter your E-mail";
                 return;
             }
-
-
+            
             string u = null;
             FirebaseDatabase.DefaultInstance
                       .GetReference("users/" + rUsername.text + "/UserName")
@@ -284,15 +287,14 @@ public class Login : MonoBehaviour
                                }
                            }
                        });
-
         }
     }
-
-        public void reg2() {
-
+    /**
+     * helping register method to Registers new user to the Databank and handles the request if the user is already registered
+     */
+    public void reg2() { 
         if (rUsername.text != null && rUsername.text != "" && rEmail.text != null && rEmail.text != "" && rPass1.text != null && rPass1.text != "" && rPass2.text != null && rPass2.text != "")
         {
-
             if (rPass1.text.Length < 6 || rPass2.text.Length < 6)
             {
                 regWarningMsg.text = "Password must contain at least 6 Charachters";
@@ -334,16 +336,17 @@ public class Login : MonoBehaviour
                                         newUser.DisplayName, newUser.UserId);
                 report = 12;
             });
-
         }
         else
         {
             regWarningMsg.text = "Please fill in all the Fields";
 
         }
-
     }
-
+    
+    /**
+     * Saved the username in the Databank because firebase saves only the email and password
+     */
     public void setDisplayName(Firebase.Auth.FirebaseUser newUser)
     {
         if (newUser != null)
@@ -368,32 +371,36 @@ public class Login : MonoBehaviour
             });
         }
     }
-
+    
+    /**
+     * display "register" Canvas
+     */
     public void RegisterButton()
     {
-
         globalCanvas.ToggleCanvas("register");
-
-
     }
+    
+    /**
+     * display "forgot" Canvas
+     */
     public void ResetButton()
     {
-
         globalCanvas.ToggleCanvas("forgot");
-
-
     }
+    
+    /**
+     * display "login" Canvas
+     */
     public void backButton()
     {
-
         globalCanvas.ToggleCanvas("login");
-
-
     }
 
+    /**
+     * sends a recovery Email to reset password
+     */
     public void ResetPass()
     {
-
         if (ResEmail.text != null && ResEmail.text != "")
         {
             if (!ResEmail.text.Contains("@"))
@@ -421,21 +428,18 @@ public class Login : MonoBehaviour
         {
             ResWarningMsg.text = "Please enter your E-mail to reset password";
         }
-
-
     }
 
-    /* Database Definitions */
-
+    /**
+     * Database for user definition
+     */
     public class User
     {
         public string UserName;
         public string email;
         public int xp;
         public string id;
-        public User()
-        {
-        }
+        public User() { }
 
         public User(string username, string email,string id)
         {
@@ -443,10 +447,12 @@ public class Login : MonoBehaviour
             this.email = email;
             this.xp = 0;
             this.id = id;
-
         }
     }
 
+    /**
+     * after register take the new user and include him in the database
+     */
     private void writeNewUser(string userId, string name, string email)
     {
         User user = new User(name, email, userId);
@@ -456,9 +462,10 @@ public class Login : MonoBehaviour
     }
     // Example Method for Data change 
     // reference.Child("users").Child(userId).Child("UserName").SetValueAsync(name);
-
-
-    /* Read Data from Database */
+    
+    /**
+     * Read Data from Database
+     */
     public void readdata()
     {
         FirebaseDatabase.DefaultInstance
@@ -476,7 +483,4 @@ public class Login : MonoBehaviour
               }
           });
     }
-
-
-
 }
