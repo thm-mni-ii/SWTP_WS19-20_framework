@@ -1,16 +1,14 @@
 ﻿using System;
 using UnityEngine;
-using Mirror;
-using System.Text;
 using System.IO;
 using System.Collections.Generic;
-using UnityEngine.UI;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Linq;
-using System.Net;
 using System.Net.Sockets;
 
-
+/**
+ * ChatServer configuration
+ */
 public class ChatServer : MonoBehaviour
 {
 
@@ -22,22 +20,34 @@ public class ChatServer : MonoBehaviour
     Dictionary<int, string> userList = new Dictionary<int, string>(); // user connection ID  and info
     Dictionary<string, party> partyList = new Dictionary<string, party>(); 
 
+    /**
+     * make a new party and save the names of the players in the list of players
+     */
     public class party
     {
        public string hostname;
+       public Dictionary<int, string> playersList = new Dictionary<int, string>();
 
-        public Dictionary<int, string> playersList = new Dictionary<int, string>();
-
+       /**
+        * add a new player the list of players in the party
+        */
         public void addPlayer(int con,string name)
         {
             playersList.Add(con,name);
         }
 
+        /**
+        * remove a player from the list of players in the party
+        */
         public void removPlayer(int con)
         {
             playersList.Remove(con);
         }
-      public  party(string hostname) {
+        
+        /**
+         * make a new party and save the names of the players in the list of players
+         */
+        public  party(string hostname) {
             this.hostname = hostname;
         }
     }
@@ -51,13 +61,15 @@ public class ChatServer : MonoBehaviour
         Telepathy.Logger.Log = Debug.Log;
         Telepathy.Logger.LogWarning = Debug.LogWarning;
         Telepathy.Logger.LogError = Debug.LogError;
-       // party p = new party("test");
-       // p.addPlayer(44, "p1");
-       // p.addPlayer(45, "p2");
-       // partyList.Add("test", p);
-		
+         // party p = new party("test");
+        // p.addPlayer(44, "p1");
+         // p.addPlayer(45, "p2");
+         // partyList.Add("test", p);
     }
 
+    /**
+     * 
+     */
     void Update()
     {
 
@@ -67,7 +79,6 @@ public class ChatServer : MonoBehaviour
             // if (Input.GetKeyDown(KeyCode.Space)){
             //   server.Send(1, new byte[]{0x2});
             //}
-
             
             // show all new messages
             Telepathy.Message msg;
@@ -90,8 +101,6 @@ public class ChatServer : MonoBehaviour
                         userList.Remove(msg.connectionId);
                         break;
                 }
-               
-      
             }
         }
     }
@@ -112,88 +121,85 @@ public class ChatServer : MonoBehaviour
         }
     }
 
+    /**
+     * handle the data, send to the server
+     * Typs of data are:
+     * case 1:    //user information after connection
+     * case 2:    // Global message
+     * case 3:    // Private Message
+     * case 4:    //handle a host party request
+     * case 5:    // only for client should never be used here
+     * case 7:    //cancel party request (sent from host)
+     * case 8:    // player left a party
+     * 
+     */
     void HandleMessage(Byte[] data){
 	MessageStruct Smsg = ByteArrayToObject(data);
 
         switch (Smsg.messagetype) {
-            case 1://user information after connection
-
-                // when id is found add it to the list on our server with the User Information
+            case 1:    //user information after connection
+                   // when id is found add it to the list on our server with the User Information
                 int id = Int32.Parse(Smsg.Text);
                 userList.Add(id, Smsg.senderName);
                 Debug.Log("Added user " + Smsg.senderName + " id: " + id);
-                 
+                break; 
+        case 2:    // Global message
+		    Debug.Log("Message from : "+ Smsg.senderName);
+		    SendToAll(data);
+		    break;
+        case 3:    // Private Message
+            if(userList.Values.Contains(Smsg.reciever)){
+               int to = userList.FirstOrDefault(x => x.Value == Smsg.reciever).Key;
+               server.Send(to, ObjectToByteArray(new MessageStruct(Smsg.senderName, Smsg.Text, 3, Smsg.reciever)));
+            } else {
+                server.Send(Smsg.senderId, ObjectToByteArray(new MessageStruct("Server:", "User unknown/offline", 2, null)));
+            }
+            break;
+        case 4:    //handle a host party request
+            partyList.Add(Smsg.senderName, new party(Smsg.senderName));
+            party temp = partyList[Smsg.senderName];
+            temp.addPlayer(Smsg.senderId, Smsg.senderName);
+            UpdateList(temp);
+            break; 
+        case 5:    // only for client should never be used here
+            break;
 
-
-                break;
-		
-		
-		case 2:// Global message
-		Debug.Log("Message from : "+ Smsg.senderName);
-		SendToAll(data);
-		break;
-        case 3:// Private Message
-                if(userList.Values.Contains(Smsg.reciever)){
-
-                    int to = userList.FirstOrDefault(x => x.Value == Smsg.reciever).Key;
-                    
-                    server.Send(to, ObjectToByteArray(new MessageStruct(Smsg.senderName, Smsg.Text, 3, Smsg.reciever)));
-                }
-                else
-                {
-                    server.Send(Smsg.senderId, ObjectToByteArray(new MessageStruct("Server:", "User unknown/offline", 2, null)));
-                }
-                
-        break;
-            case 4://handle a host party request
-                partyList.Add(Smsg.senderName, new party(Smsg.senderName));
-                party temp = partyList[Smsg.senderName];
-                temp.addPlayer(Smsg.senderId, Smsg.senderName);
-                UpdateList(temp);
-         break;
-            case 5:// only for client should never be used here
-
-                break;
-
-            case 6://join party request
-
-                if (!partyList.ContainsKey(Smsg.reciever))
-                {
-                    server.Send(Smsg.senderId, ObjectToByteArray(new MessageStruct("server: Host not found", null, 8, null)));
-                    return;
-                }
-                party temp2 = partyList[Smsg.reciever];
-                
-
-                temp2.addPlayer(Smsg.senderId, Smsg.senderName);
-                UpdateList(temp2);
-                break;
-
-            case 7://cancel party request (sent from host)
-                party temp3 = partyList[Smsg.senderName];
-
-                //inform clients that host has disconnected and delete party
-                foreach (var entry in temp3.playersList)
-                {
-                    server.Send(entry.Key, ObjectToByteArray(new MessageStruct("server: Host has Disconnected", null, 7, null)));
-                }
-
-                partyList.Remove(Smsg.senderName);
-                break;
-            case 8:// player left a party
-                party temp4 = partyList[Smsg.reciever];
-                temp4.removPlayer(Smsg.senderId);
-                UpdateList(temp4);
-                //clear list for player
-                break;
+        case 6://join party request
+            if (!partyList.ContainsKey(Smsg.reciever)) {
+                server.Send(Smsg.senderId, ObjectToByteArray(new MessageStruct("server: Host not found", null, 8, null)));
+                return;
+            }
+            party temp2 = partyList[Smsg.reciever];
             
-			default:
-                Debug.Log("msg Error unknown command");
-				break;
-        }
-		
-	}
+            temp2.addPlayer(Smsg.senderId, Smsg.senderName);
+            UpdateList(temp2);
+            break;
 
+        case 7:    //cancel party request (sent from host)
+            party temp3 = partyList[Smsg.senderName];
+            //inform clients that host has disconnected and delete party
+            foreach (var entry in temp3.playersList)
+            {
+               server.Send(entry.Key, ObjectToByteArray(new MessageStruct("server: Host has Disconnected", null, 7, null)));
+            }
+            partyList.Remove(Smsg.senderName);
+            break;
+        case 8:    // player left a party
+            party temp4 = partyList[Smsg.reciever];
+            temp4.removPlayer(Smsg.senderId);
+            UpdateList(temp4);
+            //clear list for player
+            break;
+        default:
+           Debug.Log("msg Error unknown command");
+		    break;
+        }
+    }
+
+    /**
+     * to update the list of partys
+     * (update new changes of partys and include (update) them in the party list)
+     */
     void UpdateList(party temp)
     {
         String names = "";
@@ -207,19 +213,21 @@ public class ChatServer : MonoBehaviour
         {
             server.Send(entry.Key, data);
         }
-
-
     }
 
+    /**
+     * send a message to all players
+     */
     void SendToAll(Byte[] data){
 		if(clienList.Count>0){
-		foreach(int i in clienList)
-		server.Send(i,data);
-		}
-		}
-		
-		
-	// Convert an object to a byte array
+		    foreach(int i in clienList)
+		     server.Send(i,data);
+        }
+    }
+
+    /**
+     * Convert an object to a byte array
+     */
 	public byte[] ObjectToByteArray(MessageStruct obj)
 	{
 		BinaryFormatter bf = new BinaryFormatter();
@@ -230,7 +238,10 @@ public class ChatServer : MonoBehaviour
 		}
 	}
 	
-		public MessageStruct ByteArrayToObject(byte[] arrBytes)
+    /**
+     * Convert a byte array to an object
+     */
+    public MessageStruct ByteArrayToObject(byte[] arrBytes)
 	{
 		using (var memStream = new MemoryStream())
 		{
@@ -241,7 +252,4 @@ public class ChatServer : MonoBehaviour
 			return (MessageStruct)obj;
 		}
 	}
-
-
-
 }
