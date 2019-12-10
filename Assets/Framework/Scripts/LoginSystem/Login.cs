@@ -13,6 +13,7 @@ using Mirror;
 [RequireComponent(typeof(NetworkManager))]
 public class Login : MonoBehaviour
 {
+    /*Variables*/
     [SerializeField] private InputField userName;
     [SerializeField] private InputField passwordField;
     [SerializeField] private InputField rEmail;
@@ -33,7 +34,7 @@ public class Login : MonoBehaviour
     private string resEmail = null;
 
 
-    // Start is called before the first frame update
+    /* Start is called before the first frame update */
     void Start()
     {
         globalCanvas = gameObject.GetComponent<GlobalManager>();
@@ -55,12 +56,12 @@ public class Login : MonoBehaviour
 
     }
 
-    // Update is called once per frame
+    /*  Update is called once per frame */
     void Update()
     {
 
 
-        // Login-Menu messages are displayed from this switch-case becasue this action must be done from he main Thread
+        /* Login-Menu messages are displayed from this switch-case becasue this action must be done from he main Thread */
         if (report != 0)
         {
             switch (report) {
@@ -144,6 +145,8 @@ public class Login : MonoBehaviour
 
     }
 
+    /* login methode checks if user is registered on the database and returns the result accordingly 
+     */
 
     public void LoginMethod()
     {
@@ -175,6 +178,7 @@ public class Login : MonoBehaviour
            });
         }
     }
+    /* a helping login method to allow login with username instead of email*/
     public void LoginMethod2(string resEmail)
     {
         if (resEmail != null && resEmail != "" && passwordField.text != null && passwordField.text != "")
@@ -231,7 +235,7 @@ public class Login : MonoBehaviour
     }
 
 
-
+    /*  logs out user and disconnects the connection */
     public void LogoutMethod()
     {
 
@@ -245,6 +249,9 @@ public class Login : MonoBehaviour
 
     }
 
+    /*
+     * Registers new user to the Databank and handles the request if the user is already registered
+     */
     public void RegisterMethod()
     {
 
@@ -287,7 +294,7 @@ public class Login : MonoBehaviour
 
         }
     }
-
+    /*  helping register method*/
         public void reg2() {
 
         if (rUsername.text != null && rUsername.text != "" && rEmail.text != null && rEmail.text != "" && rPass1.text != null && rPass1.text != "" && rPass2.text != null && rPass2.text != "")
@@ -343,7 +350,7 @@ public class Login : MonoBehaviour
         }
 
     }
-
+    /* Saved the username in the Databank because firebase saves only the email and password  */
     public void setDisplayName(Firebase.Auth.FirebaseUser newUser)
     {
         if (newUser != null)
@@ -368,7 +375,7 @@ public class Login : MonoBehaviour
             });
         }
     }
-
+    /* display "register" Canvas */
     public void RegisterButton()
     {
 
@@ -376,6 +383,7 @@ public class Login : MonoBehaviour
 
 
     }
+    /* display "forgot" Canvas */
     public void ResetButton()
     {
 
@@ -383,6 +391,7 @@ public class Login : MonoBehaviour
 
 
     }
+    /* display "login" Canvas */
     public void backButton()
     {
 
@@ -391,6 +400,9 @@ public class Login : MonoBehaviour
 
     }
 
+    /*
+     * sends a recovery Email to reset password
+     */
     public void ResetPass()
     {
 

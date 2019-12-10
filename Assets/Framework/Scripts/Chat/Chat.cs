@@ -14,14 +14,14 @@ using System.Net;
 
 public class Chat : MonoBehaviour
 {
- 	    //Input
+ 	//Input varaibles
 	public InputField clientMessageTF = null;
 	public Text content = null;
-    //party
+    //party vaiables
     public InputField partyTextField = null;
     public Text PartycontentField = null;
 
-
+    /* client variables */
     Telepathy.Client client = new Telepathy.Client();
 	
 	public int clientport= 7777;
@@ -76,7 +76,7 @@ public class Chat : MonoBehaviour
             }
         }
     }
-
+    /*Connect user to the global chat (called after login)*/
 		public void EstablishConnection(UserInfo user)
 	{
 		Cuser = user;
@@ -123,7 +123,7 @@ public class Chat : MonoBehaviour
     client.Disconnect();
     }
 
-
+    /* send a message to all clients or a private message*/
     public void clientSendMessage(){
 		if(clientMessageTF.text != null){
 
@@ -204,7 +204,7 @@ public class Chat : MonoBehaviour
 
 
 
-
+    /* Host a party */
     public void CreatePartyButton() {
         if (inParty && isHost)
         {
@@ -220,6 +220,7 @@ public class Chat : MonoBehaviour
         isHost = true;
 
     }
+    /*Join an existing Party*/
     public void JoinPartyButton()
     {
         if (inParty)

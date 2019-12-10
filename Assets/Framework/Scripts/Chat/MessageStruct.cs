@@ -19,6 +19,11 @@ public class MessageStruct
      1 - connection started with this message the user id and data will be sent to server and saved in a list
      2 - chat message
      3 - Private Message
+     4 - Host request
+     5 - update list from server
+     6 - join a party
+     7 - party is canceled
+     8 - join party failed
      */
     MessageStruct() { }
 
