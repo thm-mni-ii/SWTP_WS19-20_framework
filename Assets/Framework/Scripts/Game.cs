@@ -9,6 +9,9 @@ using UnityEngine.UI;
 
 
 [Serializable]
+/**
+ * Game class to save the game information
+ */
 public class Game
 {
     public string ip;
@@ -19,6 +22,9 @@ public class Game
 
     public int lastLatency = -1;
 
+    /**
+    * make a new Game and save the game information (ip, port, title, players, capacity)
+    */
     public Game(string ip, ushort port, string title, ushort players, ushort capacity)
     {
         this.ip = ip;

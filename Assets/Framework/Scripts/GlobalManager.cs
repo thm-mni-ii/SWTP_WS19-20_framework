@@ -4,6 +4,9 @@ using UnityEngine.UI;
 using Firebase;
 using Firebase.Unity.Editor;
 
+/**
+ * GlobalManager class to manage the whole game
+ */
 public class GlobalManager : MonoBehaviour {
 	public Canvas RegisterCanvas;
 	public Canvas LoginCanvas;
@@ -11,23 +14,26 @@ public class GlobalManager : MonoBehaviour {
     public Canvas PartyCanvas;
     public Canvas ForgotCanvas;
 
-    // Use this for initialization
+    /**
+     * Use this for initialization
+     */
     void Awake () {
 		RegisterCanvas.enabled = false;
 		LoginCanvas.enabled = true;
 		ChatCanvas.enabled  = false;
         PartyCanvas.enabled = false;
         ForgotCanvas.enabled = false;
-
     }
-	void Start () {
-
-    }
+	void Start () { }
 	
-	// Update is called once per frame
-	void Update () {
+	/**
+	 * Update is called once per frame
+	 */
+	void Update () { }
 	
-	}
+	/**
+	 * change between canvases
+	 */
 	public void ToggleCanvas(string open){
 		if (open == "login") {
 			RegisterCanvas.enabled = false;
@@ -35,28 +41,22 @@ public class GlobalManager : MonoBehaviour {
             ChatCanvas.enabled = false;
             PartyCanvas.enabled = false;
             ForgotCanvas.enabled = false;
-
-
-        } else if (open == "register") {
+		} else if (open == "register") {
 			RegisterCanvas.enabled = true;
 			LoginCanvas.enabled = false;
             ChatCanvas.enabled = false;
             PartyCanvas.enabled = false;
             ForgotCanvas.enabled = false;
-
-
-        } else if (open == "chat") {
+		} else if (open == "chat") {
 			RegisterCanvas.enabled = false;
 			LoginCanvas.enabled = false;
 			ChatCanvas.enabled  = true;
             PartyCanvas.enabled = true;
             ForgotCanvas.enabled = false;
-
-        }
+		}
         else if (open == "party")
         {
             PartyCanvas.enabled = true;
-
         } else if (open == "forgot")
         {
             RegisterCanvas.enabled = false;
@@ -64,9 +64,6 @@ public class GlobalManager : MonoBehaviour {
             ChatCanvas.enabled = false;
             PartyCanvas.enabled = false;
             ForgotCanvas.enabled = true;
-
         }
-
-    }
-
+	}
 }
