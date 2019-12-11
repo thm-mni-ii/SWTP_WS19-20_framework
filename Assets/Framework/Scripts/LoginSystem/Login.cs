@@ -85,7 +85,7 @@ public class Login : MonoBehaviour
                 case 1: //Login Succesful
                     if (!NetworkClient.isConnected)
                     {
-                        if (NetworkServer.active)
+                        if (!NetworkClient.active)
                         {
                             manager.StartClient();
                             chat.EstablishConnection(user);
