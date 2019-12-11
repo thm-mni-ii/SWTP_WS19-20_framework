@@ -15,28 +15,100 @@ using Mirror;
   */
 public class Login : MonoBehaviour
 {
-    /*Variables*/
+    /// <summary>
+    /// Take username from GUI (login portal)
+    /// </summary>
     [SerializeField] private InputField userName;
+    
+    /// <summary>
+    /// Take password from GUI (login portal)
+    /// </summary>
     [SerializeField] private InputField passwordField;
+    
+    /// <summary>
+    /// Take E-Mail address from GUI (register portal)
+    /// </summary>
     [SerializeField] private InputField rEmail;
+    
+    /// <summary>
+    /// Take desired username from GUI (register portal)
+    /// </summary>
     [SerializeField] private InputField rUsername;
+    
+    /// <summary>
+    /// Take desired password from GUI (register portal)
+    /// </summary>
     [SerializeField] private InputField rPass1;
+    
+    /// <summary>
+    /// confirmation phase: Take desired password from GUI (register portal) 
+    /// </summary>
     [SerializeField] private InputField rPass2;
+    
+    /// <summary>
+    /// manage the whole game. Hide and show the components.
+    /// </summary>
     private GlobalManager globalCanvas;
+    
+    /// <summary>
+    /// warning message (by login portal)
+    /// </summary>
     [SerializeField] private Text WarningMsg;
+    
+    /// <summary>
+    /// warning message from forgot password portal
+    /// </summary>
     [SerializeField] private Text ResWarningMsg;
+    
+    /// <summary>
+    /// Take E-Mail address from forgot password portal
+    /// </summary>
     [SerializeField] private InputField ResEmail;
+    
+    /// <summary>
+    /// warning message from register portal
+    /// </summary>
     [SerializeField] private Text regWarningMsg;
+    
+    /// <summary>
+    /// data struct of user information
+    /// </summary>
     private UserInfo user;
+    
+    /// <summary>
+    /// chat manager by client
+    /// </summary>
     private Chat chat;
+    
+    /// <summary>
+    /// DatabaseReference from Firebase packages
+    /// </summary>
     private DatabaseReference reference;
+    
+    /// <summary>
+    /// Database Authentication from Firebase packages
+    /// </summary>
     private Firebase.Auth.FirebaseAuth auth;
+    
+    /// <summary>
+    /// NetworkManager is responsible for the network connection.
+    /// He has connection settings (network address, maxConnections, etc)
+    /// </summary>
     NetworkManager manager;
+    
+    /// <summary>
+    /// Answer from database server (to know if all thinks right or to do some think)
+    /// </summary>
     private int report = 0;
+    
+    /// <summary>
+    /// auxiliary variable to rest the password using E-Mail address
+    /// </summary>
     private string resEmail = null;
     
     /**
      * Start is called before the first frame update
+     * connection to database (Firebase) configuration and show login portal
      */
     void Start()
     {
@@ -61,18 +133,18 @@ public class Login : MonoBehaviour
      * display the answer or check 
      * display if there are any errors or if every think right
      * There are many types of answers:
-     * case 1: // Login Succesful
-     * case 10: or case 11: // Invalid username or password
-     * case 12: // Registration Succesful
-     * case 13: // Error Registration was canceled
-     * case 14: // Email is already registered
-     * case 15: // please confirm your email
-     * case 16: // Password reset email sent successfully
-     * case 17: // Error Send request was canceled
-     * case 18: // Could not send reset E-mail
-     * case 19: // check: username and password (by register)
-     * case 20: // Username is Taken
-     * case 21: // check: username and password (by login)
+     * case 1: Login Succesful
+     * case 10: or case 11: Invalid username or password
+     * case 12: Registration Succesful
+     * case 13: Error Registration was canceled
+     * case 14: Email is already registered
+     * case 15: please confirm your email
+     * case 16: Password reset email sent successfully
+     * case 17: Error Send request was canceled
+     * case 18: Could not send reset E-mail
+     * case 19: check: username and password (by register)
+     * case 20: Username is Taken
+     * case 21: check: username and password (by login)
      */
     void Update()
     {

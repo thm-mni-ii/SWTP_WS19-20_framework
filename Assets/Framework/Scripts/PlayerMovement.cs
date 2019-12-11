@@ -11,22 +11,36 @@ namespace Mirror
         [SyncVar]
         public int index;
 
+        /// <summary>
+        /// Player score (helpful for the reward system)
+        /// </summary>
         [SyncVar]
         public uint score;
 
+        /// <summary>
+        /// playerColor: to distinguish between player levels
+        /// </summary>
         [SyncVar(hook = nameof(SetColor))]
         public Color playerColor = Color.black;
-
-        // Unity clones the material when GetComponent<Renderer>().material is called
-        // Cache it here and destroy it in OnDestroy to prevent a memory leak
+        
+        /// <summary>
+        /// Unity clones the material when GetComponent<Renderer>().material is called
+        /// Cache it here and destroy it in OnDestroy to prevent a memory leak
+        /// </summary>
         Material cachedMaterial;
 
+        /**
+         * Used from Mirror
+         */
         void SetColor(Color color)
         {
             if (cachedMaterial == null) cachedMaterial = GetComponent<Renderer>().material;
             cachedMaterial.color = color;
         }
 
+        /**
+         * Used from Mirror
+         */
         void OnDisable()
         {
             if (isLocalPlayer)
@@ -37,6 +51,9 @@ namespace Mirror
             }
         }
 
+        /**
+         * Used from Mirror
+         */
         void OnDestroy()
         {
             Destroy(cachedMaterial);
@@ -72,6 +89,9 @@ namespace Mirror
         public bool isGrounded = true;
         public bool isFalling = false;
 
+        /**
+         * Update player position 
+         */
         void Update()
         {
             if (!isLocalPlayer) return;
@@ -101,6 +121,9 @@ namespace Mirror
             }
         }
 
+        /**
+         * Used from Mirror
+         */
         void FixedUpdate()
         {
             if (!isLocalPlayer || characterController == null) return;
@@ -122,6 +145,9 @@ namespace Mirror
 
         GameObject controllerColliderHitObject;
 
+        /**
+         * Used from Mirror
+         */
         void OnControllerColliderHit(ControllerColliderHit hit)
         {
             // If player and prize objects are on their own layer(s) with correct
@@ -143,6 +169,9 @@ namespace Mirror
             }
         }
 
+        /**
+         * Used from Mirror
+         */
         [Command]
         void CmdClaimPrize(GameObject hitObject)
         {
@@ -153,6 +182,9 @@ namespace Mirror
             }
         }
 
+        /**
+         * Used from Mirror
+         */
         void OnGUI()
         {
             GUI.Box(new Rect(10f + (index * 110), 10f, 100f, 25f), score.ToString().PadLeft(10));

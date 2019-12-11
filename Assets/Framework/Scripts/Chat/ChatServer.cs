@@ -12,12 +12,34 @@ using System.Net.Sockets;
 public class ChatServer : MonoBehaviour
 {
 
+    /// <summary>
+    /// make a new Telepathy.Server (responsible for chat)
+    /// </summary>
     public Telepathy.Server server = new Telepathy.Server();
+    
+    /// <summary>
+    /// set port of chat server
+    /// </summary>
 	public int port= 7777;
+    
+    /// <summary>
+    /// Temp Variable (We don't need it anymore)
+    /// </summary>
     public bool firststart = true;
 
+    /// <summary>
+    /// Client list: Iteration the list of clients
+    /// </summary>
     private LinkedList<int> clienList = new LinkedList<int>();
-    Dictionary<int, string> userList = new Dictionary<int, string>(); // user connection ID  and info
+    
+    /// <summary>
+    /// user connection ID  and his information (Using in database)
+    /// </summary>
+    Dictionary<int, string> userList = new Dictionary<int, string>();
+    
+    /// <summary>
+    /// party list to save all partys
+    /// </summary>
     Dictionary<string, party> partyList = new Dictionary<string, party>(); 
 
     /**
@@ -25,7 +47,14 @@ public class ChatServer : MonoBehaviour
      */
     public class party
     {
+        /// <summary>
+        /// hostname of party
+        /// </summary>
        public string hostname;
+        
+        /// <summary>
+        /// players id and names, which are in the party
+        /// </summary>
        public Dictionary<int, string> playersList = new Dictionary<int, string>();
 
        /**
@@ -68,7 +97,12 @@ public class ChatServer : MonoBehaviour
     }
 
     /**
-     * 
+     * Update is called once per frame
+     * receive messages from clients
+     * There are many types of messages:
+     * 1. Connected: add client to the client list
+     * 2. Data: send message to clients
+     * 3. Disconnected: remove client from client list
      */
     void Update()
     {
@@ -106,6 +140,9 @@ public class ChatServer : MonoBehaviour
     }
 
 
+    /**
+     * stop server
+     */
     void OnApplicationQuit()
     {
         server.Stop();
@@ -123,15 +160,14 @@ public class ChatServer : MonoBehaviour
 
     /**
      * handle the data, send to the server
-     * Typs of data are:
-     * case 1:    //user information after connection
-     * case 2:    // Global message
-     * case 3:    // Private Message
-     * case 4:    //handle a host party request
-     * case 5:    // only for client should never be used here
-     * case 7:    //cancel party request (sent from host)
-     * case 8:    // player left a party
-     * 
+     * Types of data are:
+     * case 1: user information after connection
+     * case 2: Global message
+     * case 3: Private Message
+     * case 4: handle a host party request
+     * case 5: only for client should never be used here
+     * case 7: cancel party request (sent from host)
+     * case 8: player left a party
      */
     void HandleMessage(Byte[] data){
 	MessageStruct Smsg = ByteArrayToObject(data);
@@ -197,8 +233,8 @@ public class ChatServer : MonoBehaviour
     }
 
     /**
-     * to update the list of partys
-     * (update new changes of partys and include (update) them in the party list)
+     * to update the list of parties
+     * (update new changes of parties and include (update) them in the party list)
      */
     void UpdateList(party temp)
     {

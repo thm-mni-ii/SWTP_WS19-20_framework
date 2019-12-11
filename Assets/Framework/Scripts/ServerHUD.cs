@@ -4,12 +4,21 @@ using UnityEngine;
 using Mirror;
     
 /**
- * ServerHUD is GUI of the main server in the game
+ * ServerHUD is a GUI of the main server in the game
  * the main server token from mirror
  */
 public class ServerHUD : MonoBehaviour
 {
+   /// <summary>
+   /// NetworkManager is responsible for the network connection.
+   /// He has connection settings (network address, maxConnections, etc)
+   /// </summary>
    NetworkManager manager;
+   
+   /// <summary>
+   /// ChatServer configuration. Token form Telepathy.Server
+   /// He has Information about Chat settings (clienList) and server port
+   /// </summary>
    ChatServer cServer;
    
    /// <summary>
@@ -26,7 +35,7 @@ public class ServerHUD : MonoBehaviour
    /// The vertical offset in pixels to draw the HUD runtime GUI at.
    /// </summary>
    public int offsetY;
-
+   
    void Awake()
    {
       manager = GetComponent<NetworkManager>();
@@ -36,7 +45,7 @@ public class ServerHUD : MonoBehaviour
    /**
     * handle events in NetworkManager
     * events are:
-    * LAN Server Only to make a new server
+    * LAN Server Only to make and start a new server
     * other events are deleted by us
     */
    void OnGUI()

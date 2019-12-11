@@ -10,16 +10,36 @@ using UnityEngine.UI;
 
 [Serializable]
 /**
- * Game class to save the game information
+ * Game class to create a game and save the game information
  */
 public class Game
 {
+    /// <summary>
+    /// ip address of the Hosting player
+    /// players can join to the game with this ip address
+    /// </summary>
     public string ip;
+    
+    /// <summary>
+    /// Hosting port
+    /// </summary>
     public ushort port;
+    
+    /// <summary>
+    /// game title
+    /// </summary>
     public string title;
+    
+    /// <summary>
+    /// number of players
+    /// </summary>
     public ushort players;
+    
+    /// <summary>
+    /// game capacity
+    /// </summary>
     public ushort capacity;
-
+    
     public int lastLatency = -1;
 
     /**

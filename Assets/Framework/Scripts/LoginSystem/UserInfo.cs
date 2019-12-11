@@ -9,14 +9,25 @@ using System;
  */
 public class UserInfo : MonoBehaviour
 {
+    /// <summary>
+    /// Username 
+    /// </summary>
     public string userN;
+    
+    /// <summary>
+    /// User id: auxiliary variable for the database server
+    /// </summary>
     public string Uid;
+    
+    /// <summary>
+    /// User E-Mail
+    /// </summary>
     public string email;
 
    public  UserInfo() { }
 
    /**
-    * data struct of user information
+    * create new user information
     */
     public UserInfo(string userN, string Uid, string email)
     {

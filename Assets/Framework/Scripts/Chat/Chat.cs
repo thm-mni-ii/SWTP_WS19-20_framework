@@ -5,24 +5,54 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 
 /**
- *  Chat Class for GlobalChat Prefab
+ *  Chat Class to set Chat client configuration
  */
 public class Chat : MonoBehaviour
 {
- 	//Input varaibles
+ 	/// <summary>
+ 	/// Take message text from client
+ 	/// </summary>
 	public InputField clientMessageTF = null;
+    
+    /// <summary>
+    /// show received messages 
+    /// </summary>
 	public Text content = null;
-    //party vaiables
+    
+    /// <summary>
+    /// party variable: NOT IMPLEMENTED 
+    /// </summary>
     public InputField partyTextField = null;
+    
+    /// <summary>
+    /// party variable: NOT IMPLEMENTED
+    /// </summary>
     public Text PartycontentField = null;
 
-    // client variables
+    /// <summary>
+    /// make a new Telepathy.Client (responsible for chat)
+    /// </summary>
     Telepathy.Client client = new Telepathy.Client();
 	
+    /// <summary>
+    /// set port of chat client
+    /// </summary>
 	public int clientport= 7777;
+    
+    /// <summary>
+    /// Server ip address
+    /// </summary>
 	public string mainServerip = "localhost";
 	public string userName = "ILLEGAL USER";
+    
+    /// <summary>
+    /// save data information in data struct Cuser
+    /// </summary>
 	private UserInfo Cuser;
+    
+    /// <summary>
+    /// auxiliary variable to make connection between client and server
+    /// </summary>
 	private bool firstConnect = true;
     private int clientId = 0;
     private bool isHost = false;
@@ -40,6 +70,14 @@ public class Chat : MonoBehaviour
         Telepathy.Logger.LogError = Debug.LogError;
     }
 
+    /**
+     * Update is called once per frame
+     * receive messages from server
+     * There are many types of messages:
+     * 1. Connected
+     * 2. Data: receive message from server
+     * 3. Disconnected
+     */
     void Update()
     {
         // client
@@ -67,7 +105,7 @@ public class Chat : MonoBehaviour
     }
     
     /**
-     * Connect user to the global chat (called after login)
+     * Connect user (client) with server to open global chat (called after login)
      */
     public void EstablishConnection(UserInfo user)
 	{
@@ -154,14 +192,14 @@ public class Chat : MonoBehaviour
     /**
      * handle the data, send from the server
      * Typs of data are:
-     * case 1: // data are only for server should never be used here
-     * case 2: // message recieved
-     * case 3: // Private Message for special client
-     * case 4: // Host a party to create a new party system
-     * case 5: // updated list from server
-     * case 6: // join a party
-     * case 7: // party canceled
-     * case 8: // join failed 
+     * case 1: data are only for server should never be used here
+     * case 2: message recieved
+     * case 3: Private Message for special client
+     * case 4: Host a party to create a new party system
+     * case 5: updated list from server
+     * case 6: join a party
+     * case 7: party canceled
+     * case 8: join failed 
      */
 	public void HandleData(Byte[] data){
 	MessageStruct Smsg = ByteArrayToObject(data);		
@@ -294,12 +332,18 @@ public class Chat : MonoBehaviour
         PartycontentField.text += "\n" + name + ": " + text;
     }
     
+    /**
+     * Disconnect client
+     */
     void OnApplicationQuit()
     {
         content.text = "";
         client.Disconnect();
     }
 	
+    /**
+     * client send a message
+     */
     public void ValueChanged()
     {
         if (clientMessageTF.text.Contains("\n"))
