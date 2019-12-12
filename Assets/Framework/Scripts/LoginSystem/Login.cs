@@ -34,6 +34,7 @@ public class Login : MonoBehaviour
     NetworkManager manager;
     private int report = 0;
     private string resEmail = null;
+    private bool connecting = false;
     
     /**
      * Start is called before the first frame update
@@ -76,34 +77,51 @@ public class Login : MonoBehaviour
      */
     void Update()
     {
-        /*
-         * Login-Menu messages are displayed from this switch-case becasue this action must be done from he main Thread
-         */
-        if (report != 0)
+
+        /* Show the connection status after clicking the Login button */
+        if (connecting)
+        {
+
+                if (NetworkClient.isConnected)
+            {
+                connecting = false;
+                chat.EstablishConnection(user);
+                globalCanvas.ToggleCanvas("chat");
+
+                if (NetworkClient.isConnected && !ClientScene.ready)
+                {
+
+                    ClientScene.Ready(NetworkClient.connection);
+                    if (ClientScene.localPlayer == null)
+                    {
+                        ClientScene.AddPlayer();
+
+                    }
+
+                }
+            }
+                else if(!NetworkClient.isConnected && !NetworkClient.active)
+            {
+                connecting = false;
+                WarningMsg.text = "NetworkServer Offline!";
+            }
+        }
+
+
+
+                /*
+                 * Login-Menu messages are displayed from this switch-case becasue this action must be done from he main Thread
+                 */
+                if (report != 0)
         {
             switch (report) {
-                case 1: //Login Succesful
-                    if (!NetworkClient.isConnected)
+                case 1: //Connection Request
+                    if (!NetworkClient.isConnected && !NetworkClient.active && !connecting)
                     {
-                        if (!NetworkClient.active)
-                        {
-                            manager.StartClient();
-                            chat.EstablishConnection(user);
-
-                            globalCanvas.ToggleCanvas("chat");
-                            if (NetworkClient.isConnected && !ClientScene.ready)
-                            {
-                                ClientScene.Ready(NetworkClient.connection);
-                                if (ClientScene.localPlayer == null)
-                                {
-                                    ClientScene.AddPlayer();
-                                }
-                            }
-                        }
-                        else
-                        {
-                            WarningMsg.text = "Networkserver Offline";
-                        }
+                        connecting = true;
+                        WarningMsg.text = "Connecting to Server..";
+                        manager.StartClient();
+                        
                     }
                     break;
                 case 10:
