@@ -5,17 +5,38 @@ using Firebase;
 using Firebase.Unity.Editor;
 
 /**
- * GlobalManager class to manage the whole game
+ * GlobalManager class to manage the whole game (like: Canvases)
+ * Hide and show the components
  */
 public class GlobalManager : MonoBehaviour {
+	
+	/// <summary>
+	/// RegisterCanvas manage the Register portal
+	/// </summary>
 	public Canvas RegisterCanvas;
+	
+	/// <summary>
+	/// LoginCanvas manage the login portal
+	/// </summary>
 	public Canvas LoginCanvas;
+	
+	/// <summary>
+	/// ChatCanvas manage Chat window
+	/// </summary>
 	public Canvas ChatCanvas;
+	
+	/// <summary>
+	/// PartyCanvas manage party System and his components
+	/// </summary>
     public Canvas PartyCanvas;
+	
+	/// <summary>
+	/// ForgotCanvas manage Forgot password window
+	/// </summary>
     public Canvas ForgotCanvas;
-
+	
     /**
-     * Use this for initialization
+     * Use this for initialization canvases, which we need
      */
     void Awake () {
 		RegisterCanvas.enabled = false;
