@@ -188,7 +188,7 @@ public class Chat : MonoBehaviour
             }
 		}
 	}
-	
+
     /**
      * handle the data, send from the server
      * Typs of data are:
@@ -201,51 +201,71 @@ public class Chat : MonoBehaviour
      * case 7: party canceled
      * case 8: join failed 
      */
-	public void HandleData(Byte[] data){
-	MessageStruct Smsg = ByteArrayToObject(data);		
-		switch(Smsg.messagetype){
+    public void HandleData(Byte[] data)
+    {
+        MessageStruct Smsg = ByteArrayToObject(data);
+        switch (Smsg.messagetype)
+        {
             case 0:
                 clientId = Int32.Parse(Smsg.Text);
                 client.Send(ObjectToByteArray(new MessageStruct(userName, Smsg.Text, 1, null)));
                 break;
             case 1: //only for server should never be used here
-		
-		break;
-		
-		case 2: //message recieved
-		    UpdateChat(Smsg.Text,Smsg.senderName); 
-            break;
 
-        case 3:// Private Message
-            UpdateChat(Smsg.Text, "[Private]"+Smsg.senderName+":");
-            break; 
-        case 4:// Host a party
-            CreatePartyButton();
-            break;
-        case 5:// updated list from server
-            string[] names = Smsg.Text.Split(new char[] { ';' });
-            //Debug.Log(Smsg.Text + "\n");
-            PartycontentField.text = "";
-            for (int i=0; i< names.Length - 1; i++) { //might cause errors
-                UpdateChatP(names[i], "[Member]"+ i+" ");
-            }
-            break; 
-        case 6://join a party
-            if (partyTextField.text != null && partyTextField.text != "") {
+                break;
+
+            case 2: //message recieved
+                UpdateChat(Smsg.Text, Smsg.senderName);
+                break;
+
+            case 3:// Private Message
+                UpdateChat(Smsg.Text, "[Private]" + Smsg.senderName + ":");
+                break;
+            case 4:// Host a party
+                CreatePartyButton();
+                break;
+            case 5:// updated list from server
+                string[] names = Smsg.Text.Split(new char[] { ';' });
+                //Debug.Log(Smsg.Text + "\n");
+                PartycontentField.text = "";
+                for (int i = 0; i < names.Length - 1; i++)
+                { //might cause errors
+                    UpdateChatP(names[i], "Player[" + i + "] ");
+                }
+                break;
+            case 6://join a party
+                if (partyTextField.text != null && partyTextField.text != "")
+                {
                     JoinPartyButton();
-            }
-            break;
-        case 7://party canceled
-            PartycontentField.text = Smsg.senderName;
-            inParty = false;
-            break;
-        case 8://join failed
-             PartycontentField.text = Smsg.senderName;
-             inParty = false;
-             break;
+                }
+                break;
+            case 7://party canceled
+                PartycontentField.text = Smsg.senderName;
+                inParty = false;
+                break;
+            case 8://join failed
+                PartycontentField.text = Smsg.senderName;
+                inParty = false;
+                break;
         }
-	}
+    }
 
+    /**
+     * Ready Player
+     */
+     public void ReadyButton()
+    {
+        if (!inParty)
+        {
+            PartycontentField.text += "\n you are Not in Party";
+            return;
+        }
+
+        MessageStruct Smsg = new MessageStruct(userName, null, 9, partyhostname);
+        Smsg.senderId = clientId;
+        byte[] bytes = ObjectToByteArray(Smsg);
+        client.Send(bytes);
+    }
     /**
      * Host a party
      */
@@ -259,7 +279,7 @@ public class Chat : MonoBehaviour
         Smsg.senderId = clientId;
         byte[] bytes = ObjectToByteArray(Smsg);
         client.Send(bytes);
-
+        partyhostname = userName;
         inParty = true;
         isHost = true;
 

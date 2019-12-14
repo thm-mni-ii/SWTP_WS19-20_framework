@@ -34,7 +34,12 @@ public class GlobalManager : MonoBehaviour {
 	/// ForgotCanvas manage Forgot password window
 	/// </summary>
     public Canvas ForgotCanvas;
-	
+
+    /// <summary>
+    /// GameCanvas manage displays the Game
+    /// </summary>
+    public Canvas GameCanvas;
+
     /**
      * Use this for initialization canvases, which we need
      */
@@ -44,6 +49,7 @@ public class GlobalManager : MonoBehaviour {
 		ChatCanvas.enabled  = false;
         PartyCanvas.enabled = false;
         ForgotCanvas.enabled = false;
+        GameCanvas.enabled = false;
     }
 	void Start () { }
 	
@@ -56,25 +62,27 @@ public class GlobalManager : MonoBehaviour {
 	 * change between canvases
 	 */
 	public void ToggleCanvas(string open){
-		if (open == "login") {
-			RegisterCanvas.enabled = false;
-			LoginCanvas.enabled = true;
+        if (open == "login") {
+            RegisterCanvas.enabled = false;
+            LoginCanvas.enabled = true;
             ChatCanvas.enabled = false;
             PartyCanvas.enabled = false;
             ForgotCanvas.enabled = false;
-		} else if (open == "register") {
-			RegisterCanvas.enabled = true;
-			LoginCanvas.enabled = false;
+            GameCanvas.enabled = false;
+        } else if (open == "register") {
+            RegisterCanvas.enabled = true;
+            LoginCanvas.enabled = false;
             ChatCanvas.enabled = false;
             PartyCanvas.enabled = false;
             ForgotCanvas.enabled = false;
-		} else if (open == "chat") {
-			RegisterCanvas.enabled = false;
-			LoginCanvas.enabled = false;
-			ChatCanvas.enabled  = true;
+        } else if (open == "chat") {
+            RegisterCanvas.enabled = false;
+            LoginCanvas.enabled = false;
+            ChatCanvas.enabled = true;
             PartyCanvas.enabled = true;
             ForgotCanvas.enabled = false;
-		}
+            GameCanvas.enabled = false;
+        }
         else if (open == "party")
         {
             PartyCanvas.enabled = true;
@@ -86,5 +94,13 @@ public class GlobalManager : MonoBehaviour {
             PartyCanvas.enabled = false;
             ForgotCanvas.enabled = true;
         }
-	}
+        else if (open == "gameOn") {
+            GameCanvas.enabled = true;
+         }
+        else if (open == "gameOff")
+        {
+            GameCanvas.enabled = false;
+        }
+
+    }
 }

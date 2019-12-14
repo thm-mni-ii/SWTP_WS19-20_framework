@@ -42,6 +42,20 @@ public class ChatServer : MonoBehaviour
     /// </summary>
     Dictionary<string, party> partyList = new Dictionary<string, party>(); 
 
+
+    /**
+     * PartyPlayer class to manage users before a game starts
+     */
+     public class PartyPlayer
+    {
+        public string playername;
+        public bool isReady = false;
+      public  PartyPlayer(string name)
+        {
+            this.playername = name;
+        }
+    }
+
     /**
      * make a new party and save the names of the players in the list of players
      */
@@ -51,18 +65,22 @@ public class ChatServer : MonoBehaviour
         /// hostname of party
         /// </summary>
        public string hostname;
-        
+
+        public bool gameStarted = false;
+
+        public  uint playersReady = 0;
+
         /// <summary>
         /// players id and names, which are in the party
         /// </summary>
-       public Dictionary<int, string> playersList = new Dictionary<int, string>();
+       public Dictionary<int, PartyPlayer> playersList = new Dictionary<int, PartyPlayer>();
 
        /**
         * add a new player the list of players in the party
         */
-        public void addPlayer(int con,string name)
+        public void addPlayer(int con,PartyPlayer player)
         {
-            playersList.Add(con,name);
+            playersList.Add(con,player);
         }
 
         /**
@@ -79,6 +97,35 @@ public class ChatServer : MonoBehaviour
         public  party(string hostname) {
             this.hostname = hostname;
         }
+
+        public void PlayerReady(int con)
+        {
+            if (!playersList[con].isReady)
+            {
+                playersList[con].isReady = true;
+                playersReady++;
+            }else
+            {
+                playersList[con].isReady = false;
+                playersReady--;
+            }
+            
+        }
+
+        public bool allPlayersReady()
+        {
+            if(playersReady == playersList.Count)
+            {
+                return true;
+            }else
+            {
+                return false;
+            }
+
+        }
+
+
+
     }
 
     void Awake()
@@ -194,7 +241,7 @@ public class ChatServer : MonoBehaviour
         case 4:    //handle a host party request
             partyList.Add(Smsg.senderName, new party(Smsg.senderName));
             party temp = partyList[Smsg.senderName];
-            temp.addPlayer(Smsg.senderId, Smsg.senderName);
+            temp.addPlayer(Smsg.senderId, new PartyPlayer(Smsg.senderName));
             UpdateList(temp);
             break; 
         case 5:    // only for client should never be used here
@@ -207,7 +254,7 @@ public class ChatServer : MonoBehaviour
             }
             party temp2 = partyList[Smsg.reciever];
             
-            temp2.addPlayer(Smsg.senderId, Smsg.senderName);
+            temp2.addPlayer(Smsg.senderId, new PartyPlayer(Smsg.senderName));
             UpdateList(temp2);
             break;
 
@@ -224,9 +271,17 @@ public class ChatServer : MonoBehaviour
             party temp4 = partyList[Smsg.reciever];
             temp4.removPlayer(Smsg.senderId);
             UpdateList(temp4);
-            //clear list for player
-            break;
-        default:
+
+                //clear list for player
+                server.Send(Smsg.senderId, ObjectToByteArray(new MessageStruct("You left the Party", null, 7, null)));
+                break;
+
+            case 9://ready
+                party temp5 = partyList[Smsg.reciever];
+                temp5.PlayerReady(Smsg.senderId);
+                UpdateList(temp5);
+                break;
+            default:
            Debug.Log("msg Error unknown command");
 		    break;
         }
@@ -241,8 +296,14 @@ public class ChatServer : MonoBehaviour
         String names = "";
         foreach (var entry in temp.playersList)
         {
-            if(entry.Value != "")
-            names += entry.Value + ";";
+            if (entry.Value.playername != "")
+                if (entry.Value.isReady)
+                {
+                    names += "<color=#00ff00ff>" + entry.Value.playername + "</color>;";//Color Green if player is ready
+                }else
+                {
+                    names += "<color=#ff0000ff>" + entry.Value.playername + "</color>;";//Color Red if player is not ready
+                }
         }
         Byte[] data = ObjectToByteArray(new MessageStruct("server",names,5,null));
         foreach (var entry in temp.playersList)

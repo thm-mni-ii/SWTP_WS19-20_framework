@@ -12,6 +12,12 @@ namespace Mirror
         public int index;
 
         /// <summary>
+        /// manage the whole game. Hide and show the components.
+        /// </summary>
+        private GlobalManager globalCanvas;
+
+
+        /// <summary>
         /// Player score (helpful for the reward system)
         /// </summary>
         [SyncVar]
@@ -28,6 +34,20 @@ namespace Mirror
         /// Cache it here and destroy it in OnDestroy to prevent a memory leak
         /// </summary>
         Material cachedMaterial;
+
+
+        void Start()
+        {
+            //globalCanvas = gameObject.GetComponent<GlobalManager>();
+            
+            GameObject GM = GameObject.FindWithTag("GlobalManager");
+
+            if (GM != null)
+            {
+                globalCanvas = GM.GetComponent<GlobalManager>();
+            }
+            var sphereCollider = gameObject.AddComponent<SphereCollider>();
+        }
 
         /**
          * Used from Mirror
@@ -145,49 +165,42 @@ namespace Mirror
 
         GameObject controllerColliderHitObject;
 
-        /**
-         * Used from Mirror
-         */
-        void OnControllerColliderHit(ControllerColliderHit hit)
+
+       private void OnTriggerEnter(Collider other)
         {
-            // If player and prize objects are on their own layer(s) with correct
-            // collision matrix, we wouldn't have to validate the hit.gameobject.
-            // Since this is just an example, project settings aren't included so we check the name.
-
-            controllerColliderHitObject = hit.gameObject;
-
-            if (isLocalPlayer && controllerColliderHitObject.name.StartsWith("Class"))
+            if (other.gameObject.tag.Equals("NTG"))
             {
-                if (LogFilter.Debug) Debug.LogFormat("OnControllerColliderHit {0}[{1}] with {2}[{3}]", name, netId, controllerColliderHitObject.name, controllerColliderHitObject.GetComponent<NetworkIdentity>().netId);
-
-                // Disable the prize gameobject so it doesn't impede player movement
-                // It's going to be destroyed in a few frames and we don't want to spam CmdClaimPrize.
-                // OnControllerColliderHit will fire many times as the player slides against the object.
-                controllerColliderHitObject.SetActive(false);
-
-                CmdClaimPrize(controllerColliderHitObject);
+                globalCanvas.ToggleCanvas("gameOn");
             }
         }
 
-        /**
-         * Used from Mirror
-         */
-        [Command]
-        void CmdClaimPrize(GameObject hitObject)
-        {
-            // Null check is required, otherwise close timing of multiple claims could throw a null ref.
-            if (hitObject != null)
-            {
-               // hitObject.GetComponent<Class>().Methode(gameObject);
-            }
-        }
 
-        /**
-         * Used from Mirror
-         */
-        void OnGUI()
-        {
-            GUI.Box(new Rect(10f + (index * 110), 10f, 100f, 25f), score.ToString().PadLeft(10));
-        }
+        // stayCount allows the OnTriggerStay to be displayed less often
+        // than it actually occurs.
+        private float stayCount = 0.0f;
+    private void OnTriggerStay(Collider other)
+    {/*
+            if (stayCount > 0.25f)
+            {
+                Debug.Log("staying");
+                stayCount = stayCount - 0.25f;
+            }
+            else
+            {
+                stayCount = stayCount + Time.deltaTime;
+            }
+        */
     }
+
+    private void OnTriggerExit(Collider other)
+    {
+            if (other.gameObject.tag.Equals("NTG"))
+            {
+                globalCanvas.ToggleCanvas("gameOff");
+            }
+        }
 }
+
+
+    }
+
