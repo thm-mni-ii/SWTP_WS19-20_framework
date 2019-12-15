@@ -33334,7 +33334,7 @@ GameObject:
   - component: {fileID: 493846731}
   - component: {fileID: 493846730}
   m_Layer: 5
-  m_Name: Game
+  m_Name: StarGame
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
