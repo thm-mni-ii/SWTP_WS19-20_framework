@@ -29,6 +29,8 @@ namespace Mirror
         /// </summary>
         Material cachedMaterial;
 
+        // public Input chatInput;
+
         /**
          * Used from Mirror
          */
@@ -99,7 +101,8 @@ namespace Mirror
             horizontal = Input.GetAxis("Horizontal");
             vertical = Input.GetAxis("Vertical");
 
-            if (Input.GetKey(KeyCode.Q) && (turn > -maxTurnSpeed))
+            
+            if (Input.GetKey(KeyCode.Q) && (turn > -maxTurnSpeed) /* && !chatInput.Equals("Q") && !chatInput.Equals("Q")*/)
                 turn -= turnSpeedAccel;
             else if (Input.GetKey(KeyCode.E) && (turn < maxTurnSpeed))
                 turn += turnSpeedAccel;
