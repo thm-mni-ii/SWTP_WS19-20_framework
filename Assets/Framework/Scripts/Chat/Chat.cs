@@ -9,59 +9,84 @@ using System.Runtime.Serialization.Formatters.Binary;
  */
 public class Chat : MonoBehaviour
 {
- 	/// <summary>
- 	/// Take message text from client
- 	/// </summary>
-	public InputField clientMessageTF = null;
-    
+    /// <summary>
+    /// Take message text from client
+    /// </summary>
+    public InputField clientMessageTF = null;
+
     /// <summary>
     /// show received messages 
     /// </summary>
-	public Text content = null;
-    
+    public Text content = null;
+
     /// <summary>
-    /// party variable: NOT IMPLEMENTED 
+    /// party variable
     /// </summary>
     public InputField partyTextField = null;
-    
+
     /// <summary>
-    /// party variable: NOT IMPLEMENTED
+    /// Title
+    /// </summary>
+    public Text startgameTitle = null;
+
+    /// <summary>
+    /// party variable
     /// </summary>
     public Text PartycontentField = null;
+
+    /// <summary>
+    /// GameHosts Text Field
+    /// </summary>
+    public Text GameHostsField = null;
 
     /// <summary>
     /// make a new Telepathy.Client (responsible for chat)
     /// </summary>
     Telepathy.Client client = new Telepathy.Client();
-	
+
     /// <summary>
     /// set port of chat client
     /// </summary>
-	public int clientport= 7777;
-    
+    public int clientport = 7777;
+
     /// <summary>
     /// Server ip address
     /// </summary>
-	public string mainServerip = "localhost";
-	public string userName = "ILLEGAL USER";
-    
+    public string mainServerip = "localhost";
+    public string userName = "ILLEGAL USER";
+
     /// <summary>
     /// save data information in data struct Cuser
     /// </summary>
-	private UserInfo Cuser;
-    
+    private UserInfo Cuser;
+
     /// <summary>
     /// auxiliary variable to make connection between client and server
     /// </summary>
-	private bool firstConnect = true;
+    private bool firstConnect = true;
     private int clientId = 0;
     private bool isHost = false;
     private bool inParty = false;
     private string partyhostname = "";
 
+    /// <summary>
+    /// variable for gameType, it is changed from the class PlayerMovement upon Trigger
+    /// </summary>
+    private string gameType = null;
+
+    public string getgameType()
+    {
+        return this.gameType;
+    }
+
+    public void setgameType(string type)
+    {
+        this.gameType = type;
+    }
+
     void awake()
     {
-	    // update even if window isn't focused, otherwise we don't receive.
+        // update even if window isn't focused, otherwise we don't receive.
         Application.runInBackground = true;
 
         // use Debug.Log functions for Telepathy so we can see it in the console
@@ -90,11 +115,11 @@ public class Chat : MonoBehaviour
                 switch (msg.eventType)
                 {
                     case Telepathy.EventType.Connected:
-                        Debug.Log("Client Connected on using ip: "+ mainServerip);
+                        Debug.Log("Client Connected on using ip: " + mainServerip);
                         break;
                     case Telepathy.EventType.Data:
                         Debug.Log("Data: " + BitConverter.ToString(msg.data));
-						HandleData(msg.data);
+                        HandleData(msg.data);
                         break;
                     case Telepathy.EventType.Disconnected:
                         Debug.Log("Disconnected");
@@ -103,23 +128,24 @@ public class Chat : MonoBehaviour
             }
         }
     }
-    
+
     /**
      * Connect user (client) with server to open global chat (called after login)
      */
     public void EstablishConnection(UserInfo user)
-	{
-		Cuser = user;
-		userName = Cuser.userN;
+    {
+        Cuser = user;
+        userName = Cuser.userN;
 
         if (firstConnect)
         {
-			if(mainServerip != null && (mainServerip != "") && (userName != "") && userName != null){
-			client.Connect(mainServerip, clientport);
+            if (mainServerip != null && (mainServerip != "") && (userName != "") && userName != null)
+            {
+                client.Connect(mainServerip, clientport);
             }
-		}
-	}
-    
+        }
+    }
+
     /**
      * The player leave the game
      */
@@ -134,7 +160,9 @@ public class Chat : MonoBehaviour
             isHost = false;
             inParty = false;
 
-        } else if (inParty) {         //inform serer that client has left
+        }
+        else if (inParty)
+        {         //inform serer that client has left
             if (partyTextField.text != null && partyTextField.text != "")
             {
                 MessageStruct Smsg = new MessageStruct(userName, null, 8, partyTextField.text);
@@ -144,7 +172,7 @@ public class Chat : MonoBehaviour
             //inParty = false;
         }
     }
-    
+
     /**
      * disconnect the client socket
      */
@@ -160,13 +188,16 @@ public class Chat : MonoBehaviour
     /**
      * send a message to all clients or a private message
      */
-    public void clientSendMessage(){
-		if(clientMessageTF.text != null){
+    public void clientSendMessage()
+    {
+        if (clientMessageTF.text != null)
+        {
 
-            string[] tokens = clientMessageTF.text.Split(new char[] { ':' },2);
+            string[] tokens = clientMessageTF.text.Split(new char[] { ':' }, 2);
             int lenth = 0;
-            
-            foreach(string t in tokens){
+
+            foreach (string t in tokens)
+            {
                 lenth++;
             }
 
@@ -186,8 +217,8 @@ public class Chat : MonoBehaviour
                 clientMessageTF.text = string.Empty;
                 client.Send(bytes);
             }
-		}
-	}
+        }
+    }
 
     /**
      * handle the data, send from the server
@@ -226,12 +257,9 @@ public class Chat : MonoBehaviour
                 break;
             case 5:// updated list from server
                 string[] names = Smsg.Text.Split(new char[] { ';' });
-                //Debug.Log(Smsg.Text + "\n");
-                PartycontentField.text = "";
-                for (int i = 0; i < names.Length - 1; i++)
-                { //might cause errors
-                    UpdateChatP(names[i], "Player[" + i + "] ");
-                }
+
+                RenderPartyList(names);
+
                 break;
             case 6://join a party
                 if (partyTextField.text != null && partyTextField.text != "")
@@ -247,13 +275,27 @@ public class Chat : MonoBehaviour
                 PartycontentField.text = Smsg.senderName;
                 inParty = false;
                 break;
+            case 9://update host list
+                string[] hlist = Smsg.Text.Split(new char[] { ';' });
+
+                RenderHosts(hlist);
+                break;
         }
+    }
+
+    /**
+     * update the StartGame UI variables according to the game Module
+     */
+    public void updateStartGameUI()
+    {
+        startgameTitle.text = "Welcome to " + gameType + " Module";
+
     }
 
     /**
      * Ready Player
      */
-     public void ReadyButton()
+    public void ReadyButton()
     {
         if (!inParty)
         {
@@ -266,16 +308,33 @@ public class Chat : MonoBehaviour
         byte[] bytes = ObjectToByteArray(Smsg);
         client.Send(bytes);
     }
+     /**
+     * Start the Game by the Host
+     */
+    public void StartGame()
+    {
+        if (!isHost)
+        {
+            //report error here "Only the a Host can Start a Game"
+            return;
+        }
+
+
+        
+
+
+    }
     /**
      * Host a party
      */
-    public void CreatePartyButton() {
+    public void CreatePartyButton()
+    {
         if (inParty && isHost)
         {
             PartycontentField.text += "\n you are already in a party please leave in order to create a new one";
             return;
         }
-        MessageStruct Smsg = new MessageStruct(userName, null, 4, null);
+        MessageStruct Smsg = new MessageStruct(userName, gameType, 4, null);
         Smsg.senderId = clientId;
         byte[] bytes = ObjectToByteArray(Smsg);
         client.Send(bytes);
@@ -284,7 +343,7 @@ public class Chat : MonoBehaviour
         isHost = true;
 
     }
-    
+
     /**
      * Join an existing Party
      */
@@ -303,7 +362,8 @@ public class Chat : MonoBehaviour
             client.Send(ObjectToByteArray(Smsg));
             partyhostname = partyTextField.text;
             inParty = true;
-        }else
+        }
+        else
         {
             PartycontentField.text = "Enter the Host name";
         }
@@ -313,45 +373,63 @@ public class Chat : MonoBehaviour
      * Convert an object to a byte array
      */
     public byte[] ObjectToByteArray(MessageStruct obj)
-	{
-		BinaryFormatter bf = new BinaryFormatter();
-		using (var ms = new MemoryStream())
-		{
-			bf.Serialize(ms, obj);
-			return ms.ToArray();
-		}
-	}
-	
+    {
+        BinaryFormatter bf = new BinaryFormatter();
+        using (var ms = new MemoryStream())
+        {
+            bf.Serialize(ms, obj);
+            return ms.ToArray();
+        }
+    }
+
     /**
      * Convert a byte array to an object
      */
     public MessageStruct ByteArrayToObject(byte[] arrBytes)
-	{
-		using (var memStream = new MemoryStream())
-		{
-			var binForm = new BinaryFormatter();
-			memStream.Write(arrBytes, 0, arrBytes.Length);
-			memStream.Seek(0, SeekOrigin.Begin);
-			var obj = binForm.Deserialize(memStream);
-			return (MessageStruct)obj;
-		}
-	}
+    {
+        using (var memStream = new MemoryStream())
+        {
+            var binForm = new BinaryFormatter();
+            memStream.Write(arrBytes, 0, arrBytes.Length);
+            memStream.Seek(0, SeekOrigin.Begin);
+            var obj = binForm.Deserialize(memStream);
+            return (MessageStruct)obj;
+        }
+    }
 
     /**
      * to update the new incoming messages
      */
-	void UpdateChat(String text,String name){
-	    content.text += "\n" + name + ": " + text;
-	}
-    
-    /**
-     * to update the new incoming private messages
-     */
-    void UpdateChatP(String text, String name)
+    void UpdateChat(String text, String name)
     {
-        PartycontentField.text += "\n" + name + ": " + text;
+        content.text += "\n" + name + ": " + text;
     }
-    
+
+    /**
+     * to update the party list
+     */
+    void RenderPartyList(String[] text)
+    {
+        PartycontentField.text = "";
+        for (int i = 0; i < text.Length - 1; i++)
+        {
+            PartycontentField.text += "\n" + "Player[" + i + 1 + "]:" + text[i];
+        }
+    }
+
+    /**
+ * to update the Hostlist
+ */
+    void RenderHosts(String[] text)
+    {
+        GameHostsField.text = "\n Type     Host     Players";
+
+        for (int i = 0; i+3 < text.Length; i += 3)
+        {
+            GameHostsField.text += "\n" + text[i] + "     " + text[i + 1] + "     " + text[i + 2];
+        }
+    }
+
     /**
      * Disconnect client
      */
@@ -360,7 +438,7 @@ public class Chat : MonoBehaviour
         content.text = "";
         client.Disconnect();
     }
-	
+
     /**
      * client send a message
      */
@@ -368,7 +446,7 @@ public class Chat : MonoBehaviour
     {
         if (clientMessageTF.text.Contains("\n"))
         {
-			clientSendMessage();
+            clientSendMessage();
         }
     }
 }

@@ -92,7 +92,6 @@ GameObject:
   - component: {fileID: 8522672927704540658}
   - component: {fileID: 8515454949233343286}
   - component: {fileID: -5209383652885972783}
-  - component: {fileID: 8512550662685408644}
   - component: {fileID: 8516159843429910494}
   m_Layer: 0
   m_Name: GamePlayer
@@ -108,14 +107,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8628839259906065382}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: 0}
+  m_LocalRotation: {x: 0, y: -0.5735764, z: 0, w: 0.8191521}
+  m_LocalPosition: {x: -19, y: 1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 8625645203399960088}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -70, z: 0}
 --- !u!33 &8632690908655043370
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -195,7 +194,7 @@ MonoBehaviour:
   serverOnly: 0
   localPlayerAuthority: 1
   m_AssetId: 
-  m_SceneId: 2402217207
+  m_SceneId: 0
 --- !u!114 &-5209383652885972783
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -210,34 +209,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  index: 0
-  score: 0
-  playerColor: {r: 0, g: 0, b: 0, a: 1}
-  moveSpeed: 8
-  turnSpeedAccel: 5
-  turnSpeedDecel: 5
-  maxTurnSpeed: 150
-  jumpSpeed: 0
-  jumpFactor: 0.025
-  horizontal: 0
-  vertical: 0
-  turn: 0
-  isGrounded: 1
-  isFalling: 0
---- !u!114 &8512550662685408644
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8628839259906065382}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 24fd13686a451ad498101a604d134e39, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0
   index: 0
   score: 0
   playerColor: {r: 0, g: 0, b: 0, a: 1}

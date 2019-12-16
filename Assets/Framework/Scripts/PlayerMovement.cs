@@ -36,6 +36,9 @@ namespace Mirror
         Material cachedMaterial;
 
 
+        private Chat clientVar;
+
+
         void Start()
         {
             //globalCanvas = gameObject.GetComponent<GlobalManager>();
@@ -47,6 +50,7 @@ namespace Mirror
                 globalCanvas = GM.GetComponent<GlobalManager>();
             }
             var sphereCollider = gameObject.AddComponent<SphereCollider>();
+            clientVar = globalCanvas.GetComponent<Chat>();
         }
 
         /**
@@ -94,8 +98,8 @@ namespace Mirror
 
         [Header("Movement Settings")]
         public float moveSpeed = 8f;
-        public float turnSpeedAccel = 5f;
-        public float turnSpeedDecel = 5f;
+        public float turnSpeedAccel = 10f;
+        public float turnSpeedDecel = 10f;
         public float maxTurnSpeed = 150f;
 
         [Header("Jump Settings")]
@@ -146,7 +150,10 @@ namespace Mirror
          */
         void FixedUpdate()
         {
+            
             if (!isLocalPlayer || characterController == null) return;
+
+            if (clientVar.clientMessageTF.isFocused) return; 
 
             transform.Rotate(0f, turn * Time.fixedDeltaTime, 0f);
 
@@ -166,36 +173,28 @@ namespace Mirror
         GameObject controllerColliderHitObject;
 
 
+
        private void OnTriggerEnter(Collider other)
         {
-            if (other.gameObject.tag.Equals("NTG"))
+            if (!isLocalPlayer || characterController == null) return;
+
+            if (other.gameObject.tag.Equals("MATH") || other.gameObject.tag.Equals("NTG") || other.gameObject.tag.Equals("OOP"))
             {
+                clientVar.setgameType(other.gameObject.tag);
                 globalCanvas.ToggleCanvas("gameOn");
+                clientVar.updateStartGameUI();
             }
         }
 
 
-        // stayCount allows the OnTriggerStay to be displayed less often
-        // than it actually occurs.
-        private float stayCount = 0.0f;
-    private void OnTriggerStay(Collider other)
-    {/*
-            if (stayCount > 0.25f)
-            {
-                Debug.Log("staying");
-                stayCount = stayCount - 0.25f;
-            }
-            else
-            {
-                stayCount = stayCount + Time.deltaTime;
-            }
-        */
-    }
 
     private void OnTriggerExit(Collider other)
     {
-            if (other.gameObject.tag.Equals("NTG"))
+            if (!isLocalPlayer || characterController == null) return;
+
+            if (other.gameObject.tag.Equals("MATH") || other.gameObject.tag.Equals("NTG") || other.gameObject.tag.Equals("OOP"))
             {
+                clientVar.setgameType(null);
                 globalCanvas.ToggleCanvas("gameOff");
             }
         }

@@ -18,32 +18,32 @@ public class Login : MonoBehaviour
     /// <summary>
     /// Take username from GUI (login portal)
     /// </summary>
-    [SerializeField] private InputField userName;
+    [SerializeField] private InputField userName = null;
     
     /// <summary>
     /// Take password from GUI (login portal)
     /// </summary>
-    [SerializeField] private InputField passwordField;
+    [SerializeField] private InputField passwordField = null;
     
     /// <summary>
     /// Take E-Mail address from GUI (register portal)
     /// </summary>
-    [SerializeField] private InputField rEmail;
+    [SerializeField] private InputField rEmail = null;
     
     /// <summary>
     /// Take desired username from GUI (register portal)
     /// </summary>
-    [SerializeField] private InputField rUsername;
+    [SerializeField] private InputField rUsername = null;
     
     /// <summary>
     /// Take desired password from GUI (register portal)
     /// </summary>
-    [SerializeField] private InputField rPass1;
+    [SerializeField] private InputField rPass1 = null;
     
     /// <summary>
     /// confirmation phase: Take desired password from GUI (register portal) 
     /// </summary>
-    [SerializeField] private InputField rPass2;
+    [SerializeField] private InputField rPass2 = null;
     
     /// <summary>
     /// manage the whole game. Hide and show the components.
@@ -53,22 +53,22 @@ public class Login : MonoBehaviour
     /// <summary>
     /// warning message (by login portal)
     /// </summary>
-    [SerializeField] private Text WarningMsg;
+    [SerializeField] private Text WarningMsg = null;
     
     /// <summary>
     /// warning message from forgot password portal
     /// </summary>
-    [SerializeField] private Text ResWarningMsg;
+    [SerializeField] private Text ResWarningMsg = null;
     
     /// <summary>
     /// Take E-Mail address from forgot password portal
     /// </summary>
-    [SerializeField] private InputField ResEmail;
+    [SerializeField] private InputField ResEmail = null;
     
     /// <summary>
     /// warning message from register portal
     /// </summary>
-    [SerializeField] private Text regWarningMsg;
+    [SerializeField] private Text regWarningMsg = null;
     
     /// <summary>
     /// data struct of user information
@@ -248,6 +248,12 @@ public class Login : MonoBehaviour
      */
     public void LoginMethod()
     {
+        //user.email = newUser.Email;
+        //user.Uid = newUser.UserId;
+        user.userN = userName.text;
+
+        report = 1;
+        /*
         if (userName.text != null && userName.text != "" && passwordField.text != null && passwordField.text != "")
         {
             resEmail = null;
@@ -275,6 +281,7 @@ public class Login : MonoBehaviour
                }
            });
         }
+        */
     }
     /**
      * a helping login method to allow login with username instead of email

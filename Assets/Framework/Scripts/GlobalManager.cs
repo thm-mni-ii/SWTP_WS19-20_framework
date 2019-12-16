@@ -25,10 +25,6 @@ public class GlobalManager : MonoBehaviour {
 	/// </summary>
 	public Canvas ChatCanvas;
 	
-	/// <summary>
-	/// PartyCanvas manage party System and his components
-	/// </summary>
-    public Canvas PartyCanvas;
 	
 	/// <summary>
 	/// ForgotCanvas manage Forgot password window
@@ -47,7 +43,6 @@ public class GlobalManager : MonoBehaviour {
 		RegisterCanvas.enabled = false;
 		LoginCanvas.enabled = true;
 		ChatCanvas.enabled  = false;
-        PartyCanvas.enabled = false;
         ForgotCanvas.enabled = false;
         GameCanvas.enabled = false;
     }
@@ -66,32 +61,25 @@ public class GlobalManager : MonoBehaviour {
             RegisterCanvas.enabled = false;
             LoginCanvas.enabled = true;
             ChatCanvas.enabled = false;
-            PartyCanvas.enabled = false;
             ForgotCanvas.enabled = false;
             GameCanvas.enabled = false;
         } else if (open == "register") {
             RegisterCanvas.enabled = true;
             LoginCanvas.enabled = false;
             ChatCanvas.enabled = false;
-            PartyCanvas.enabled = false;
             ForgotCanvas.enabled = false;
         } else if (open == "chat") {
             RegisterCanvas.enabled = false;
             LoginCanvas.enabled = false;
             ChatCanvas.enabled = true;
-            PartyCanvas.enabled = true;
             ForgotCanvas.enabled = false;
             GameCanvas.enabled = false;
         }
-        else if (open == "party")
-        {
-            PartyCanvas.enabled = true;
-        } else if (open == "forgot")
+        else if (open == "forgot")
         {
             RegisterCanvas.enabled = false;
             LoginCanvas.enabled = false;
             ChatCanvas.enabled = false;
-            PartyCanvas.enabled = false;
             ForgotCanvas.enabled = true;
         }
         else if (open == "gameOn") {
