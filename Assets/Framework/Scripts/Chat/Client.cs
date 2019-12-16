@@ -7,7 +7,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 /**
  *  Chat Class to set Chat client configuration
  */
-public class Chat : MonoBehaviour
+public class Client : MonoBehaviour
 {
     /// <summary>
     /// Take message text from client

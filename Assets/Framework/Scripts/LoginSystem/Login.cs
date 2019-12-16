@@ -78,7 +78,7 @@ public class Login : MonoBehaviour
     /// <summary>
     /// chat manager by client
     /// </summary>
-    private Chat chat;
+    private Client chat;
     
     /// <summary>
     /// DatabaseReference from Firebase packages
@@ -115,7 +115,7 @@ public class Login : MonoBehaviour
     {
         globalCanvas = gameObject.GetComponent<GlobalManager>();
         user = gameObject.GetComponent<UserInfo>();
-        chat = gameObject.GetComponent<Chat>();
+        chat = gameObject.GetComponent<Client>();
 
         GameObject NM = GameObject.FindWithTag("NetworkManager");
 

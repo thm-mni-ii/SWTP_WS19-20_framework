@@ -19,7 +19,7 @@ public class ServerHUD : MonoBehaviour
    /// ChatServer configuration. Token form Telepathy.Server
    /// He has Information about Chat settings (clienList) and server port
    /// </summary>
-   ChatServer cServer;
+   Server cServer;
    
    /// <summary>
    /// Whether to show the default control HUD at runtime.
@@ -39,7 +39,7 @@ public class ServerHUD : MonoBehaviour
    void Awake()
    {
       manager = GetComponent<NetworkManager>();
-      cServer = GetComponent<ChatServer>();
+      cServer = GetComponent<Server>();
    }
 
    /**

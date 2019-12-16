@@ -36,7 +36,7 @@ namespace Mirror
         Material cachedMaterial;
 
 
-        private Chat clientVar;
+        private Client clientVar;
 
 
         void Start()
@@ -50,7 +50,7 @@ namespace Mirror
                 globalCanvas = GM.GetComponent<GlobalManager>();
             }
             var sphereCollider = gameObject.AddComponent<SphereCollider>();
-            clientVar = globalCanvas.GetComponent<Chat>();
+            clientVar = globalCanvas.GetComponent<Client>();
         }
 
         /**

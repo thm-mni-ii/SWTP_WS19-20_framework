@@ -9,7 +9,7 @@ using UnityEngine;
 /**
  * ChatServer configuration
  */
-public class ChatServer : MonoBehaviour
+public class Server : MonoBehaviour
 {
 
     /// <summary>
