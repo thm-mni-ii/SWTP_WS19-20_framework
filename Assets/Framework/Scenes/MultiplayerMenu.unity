@@ -36736,6 +36736,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd1bec4e837cda84ea3c42baf5147dd2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  logout: {fileID: 1661734125}
+  hideLogoutButton: 0
   clientMessageTF: {fileID: 1161265283}
   content: {fileID: 2137435618}
   partyTextField: {fileID: 660972337}

@@ -9,6 +9,14 @@ using System.Runtime.Serialization.Formatters.Binary;
  */
 public class Chat : MonoBehaviour
 {
+    /// <summary>
+    /// logout Button to sign out from the game
+    /// </summary>
+    public Button logout = null;
+    /// <summary>
+    /// auxiliary variable to know if the logout button has been hidden
+    /// </summary>
+    public bool hideLogoutButton = false;
  	/// <summary>
  	/// Take message text from client
  	/// </summary>
@@ -100,6 +108,21 @@ public class Chat : MonoBehaviour
                         Debug.Log("Disconnected");
                         break;
                 }
+            }
+        }
+
+        // hide/show logout button by pressed on ESC
+        if (Input.GetKey(KeyCode.Escape))
+        {
+            if (hideLogoutButton)
+            {
+                logout.gameObject.SetActive(true);
+                hideLogoutButton = false;
+            }
+            else
+            {
+                logout.gameObject.SetActive(false);
+                hideLogoutButton = true;
             }
         }
     }
