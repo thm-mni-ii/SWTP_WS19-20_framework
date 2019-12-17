@@ -19067,7 +19067,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: -0.0000038146973}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &238673834
@@ -36971,6 +36971,7 @@ MonoBehaviour:
   clientport: 7777
   mainServerip: localhost
   userName: User
+  ChatSR: {fileID: 1030435310}
 --- !u!114 &542498855
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -61862,7 +61863,7 @@ GameObject:
   - component: {fileID: 1030435310}
   m_Layer: 5
   m_Name: Scroll View
-  m_TagString: Untagged
+  m_TagString: ChatScroll
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -104773,7 +104774,7 @@ RectTransform:
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 6, y: 0}
-  m_Pivot: {x: 1, y: 1}
+  m_Pivot: {x: 1, y: 0}
 --- !u!114 &1532476940
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -104813,10 +104814,10 @@ MonoBehaviour:
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
   m_Interactable: 1
-  m_TargetGraphic: {fileID: 421743578}
+  m_TargetGraphic: {fileID: 2042914690}
   m_HandleRect: {fileID: 421743577}
   m_Direction: 2
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:

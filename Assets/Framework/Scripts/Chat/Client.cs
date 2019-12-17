@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System.IO;
@@ -84,6 +86,9 @@ public class Client : MonoBehaviour
         this.gameType = type;
     }
 
+    public ScrollRect ChatSR;
+   // public GameObject scrollView;
+
     void awake()
     {
         // update even if window isn't focused, otherwise we don't receive.
@@ -93,7 +98,12 @@ public class Client : MonoBehaviour
         Telepathy.Logger.Log = Debug.Log;
         Telepathy.Logger.LogWarning = Debug.LogWarning;
         Telepathy.Logger.LogError = Debug.LogError;
+
+
+
+
     }
+
 
     /**
      * Update is called once per frame
@@ -118,7 +128,7 @@ public class Client : MonoBehaviour
                         Debug.Log("Client Connected on using ip: " + mainServerip);
                         break;
                     case Telepathy.EventType.Data:
-                        Debug.Log("Data: " + BitConverter.ToString(msg.data));
+                       // Debug.Log("Data: " + BitConverter.ToString(msg.data));
                         HandleData(msg.data);
                         break;
                     case Telepathy.EventType.Disconnected:
@@ -397,12 +407,16 @@ public class Client : MonoBehaviour
         }
     }
 
+
+
+
     /**
      * to update the new incoming messages
      */
     void UpdateChat(String text, String name)
     {
         content.text += "\n" + name + ": " + text;
+        ChatSR.verticalNormalizedPosition = 0f;
     }
 
     /**

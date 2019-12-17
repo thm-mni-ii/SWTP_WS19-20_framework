@@ -21,6 +21,7 @@ TagManager:
   - GlobalManager
   - MATH
   - OOP
+  - ChatScroll
   layers:
   - Default
   - TransparentFX

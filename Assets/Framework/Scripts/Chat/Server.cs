@@ -7,7 +7,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 
 /**
- * ChatServer configuration
+ * MainServer configuration
  */
 public class Server : MonoBehaviour
 {
