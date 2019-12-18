@@ -131,8 +131,13 @@ public class Login : MonoBehaviour
 
     /**
      * Update is called once per frame
-     * display the answer or check 
-     * display if there are any errors or if every think right
+     * 
+     * The warning text objects of the login/register interfaces are updated here
+     * Unity is not Thread save, therefore it allows the game objects to be updated ONLY from the main thread
+     * upon clicking a button the response is set to the variable "report" and then is read and handled once the frame is called
+     * Also after clicking the login button if the userinformation is correct the connection is established here.
+     * 
+     * 
      * There are many types of answers:
      * case 1: Login Succesful
      * case 10: or case 11: Invalid username or password
@@ -243,8 +248,10 @@ public class Login : MonoBehaviour
         }
     }
 
-    /**
-     * login methode checks if user is registered on the database and returns the result accordingly 
+    /**  *TEMP* changed the methode for easier login to allow faster testing of the game
+     * 
+     * login methode checks if user is registered on the database,
+     * then return the email of the user to be used by the LoginMethode2 this is done to allow login using name instead of email
      */
     public void LoginMethod()
     {
@@ -284,7 +291,9 @@ public class Login : MonoBehaviour
         */
     }
     /**
-     * a helping login method to allow login with username instead of email
+     * once LoginMethod finds the email of the users it's given here as a parameter
+     * This Methode logs in the user once the login is succesful it sets report to 1 which then starts the connection on 'update'
+     * after the next frame is called
      */
     public void LoginMethod2(string resEmail)
     {
@@ -442,7 +451,7 @@ public class Login : MonoBehaviour
     }
     
     /**
-     * Saved the username in the Databank because firebase saves only the email and password
+     * Saved the username in the Databank for later use, this is needed because firebase saves only the email and password
      */
     public void setDisplayName(Firebase.Auth.FirebaseUser newUser)
     {

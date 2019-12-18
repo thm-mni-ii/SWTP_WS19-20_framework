@@ -7,13 +7,14 @@ using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 
 /**
- * MainServer configuration
+ * Server class
+ * This class contains all the methods and variables for the handling of client requests on the main server
  */
 public class Server : MonoBehaviour
 {
 
     /// <summary>
-    /// make a new Telepathy.Server (responsible for chat)
+    /// Server variable of type Telepathy
     /// </summary>
     public Telepathy.Server server = new Telepathy.Server();
 
@@ -23,33 +24,34 @@ public class Server : MonoBehaviour
     public int port = 7777;
 
     /// <summary>
-    /// Temp Variable (We don't need it anymore)
-    /// </summary>
-    public bool firststart = true;
-
-    /// <summary>
-    /// Client list: Iteration the list of clients
+    /// This list contains all the client ids
     /// </summary>
     private LinkedList<int> clienList = new LinkedList<int>();
 
     /// <summary>
-    /// user connection ID  and his information (Using in database)
+    /// Map to store user connection ID and username
     /// </summary>
     Dictionary<int, string> userList = new Dictionary<int, string>();
 
     /// <summary>
-    /// party list to save all partys
+    /// party Map to store information about every current party that is running on the server
     /// </summary>
     Dictionary<string, party> partyList = new Dictionary<string, party>();
 
 
     /**
-     * PartyPlayer class to manage users before a game starts
+     * PartyPlayer class to manage users before a game starts 
+     * 
+     * it keeps track of the player name and his ready state
      */
     public class PartyPlayer
     {
         public string playername;
         public bool isReady = false;
+
+        /**
+         * constructor to save the player name
+         */
         public PartyPlayer(string name)
         {
             this.playername = name;
@@ -57,7 +59,8 @@ public class Server : MonoBehaviour
     }
 
     /**
-     * make a new party and save the names of the players in the list of players
+     * Party class
+     * This class contains all the information and methods to manage a party
      */
     public class party
     {
@@ -66,18 +69,29 @@ public class Server : MonoBehaviour
         /// </summary>
         public string hostname;
 
+        /// <summary>
+        /// This variable is used to determine if the party is in a game or not
+        /// With the help of this variable the game will be started for all party members
+        /// </summary>
         public bool gameStarted = false;
 
+        /// <summary>
+        /// Number of ready players in the party
+        /// </summary>
         public uint playersReady = 0;
+
+        /// <summary>
+        /// Game type { OOP, NTG, MATHE ...}
+        /// </summary>
         public string gameType;
 
         /// <summary>
-        /// players id and names, which are in the party
+        /// Map of player ids and names, which are currently in the party
         /// </summary>
         public Dictionary<int, PartyPlayer> playersList = new Dictionary<int, PartyPlayer>();
 
         /**
-         * add a new player the list of players in the party
+         * add a new player the party
          */
         public void addPlayer(int con, PartyPlayer player)
         {
@@ -85,7 +99,7 @@ public class Server : MonoBehaviour
         }
 
         /**
-        * remove a player from the list of players in the party
+        * remove a player from the party
         */
         public void removPlayer(int con)
         {
@@ -93,7 +107,9 @@ public class Server : MonoBehaviour
         }
 
         /**
-         * make a new party and save the names of the players in the list of players
+         * constructor
+         * 
+         * Create a new party with hostname and game type
          */
         public party(string hostname, string ptype)
         {
@@ -101,6 +117,9 @@ public class Server : MonoBehaviour
             this.gameType = ptype;
         }
 
+        /*
+         * check of the player is ready or not
+         */
         public void PlayerReady(int con)
         {
             if (!playersList[con].isReady)
@@ -115,7 +134,13 @@ public class Server : MonoBehaviour
             }
 
         }
-
+        /*
+         * check if all party players are ready
+         * 
+         * the return value determines if the party can be started or not
+         * true game can be started
+         * false game canno't be started
+         */
         public bool allPlayersReady()
         {
             if (playersReady == playersList.Count)
@@ -146,7 +171,7 @@ public class Server : MonoBehaviour
 
     /**
      * Update is called once per frame
-     * receive messages from clients
+     * receive messages from clients and handle them
      * There are many types of messages:
      * 1. Connected: add client to the client list
      * 2. Data: send message to clients
@@ -196,16 +221,6 @@ public class Server : MonoBehaviour
         server.Stop();
     }
 
-    class ClientToken
-    {
-        public TcpClient client;
-
-        public ClientToken(TcpClient client)
-        {
-            this.client = client;
-        }
-    }
-
     /**
      * handle the data, send to the server
      * Types of data are:
@@ -216,6 +231,7 @@ public class Server : MonoBehaviour
      * case 5: only for client should never be used here
      * case 7: cancel party request (sent from host)
      * case 8: player left a party
+     * case9: player clicked the ready button
      */
     void HandleMessage(Byte[] data)
     {
@@ -302,6 +318,8 @@ public class Server : MonoBehaviour
     /**
      * Update the Party-List only to the Party Members
      * 
+     * A list of all player names and thier ready state is sen to all clients in the party
+     * 
      */
     void UpdateList(party temp)
     {
@@ -328,6 +346,7 @@ public class Server : MonoBehaviour
 
     /**
      * Update the Host list for all players on the StartGame Menu
+     * A list of all host name on the server is sent to all game players
      */
     public void UpdateHostList()
     {

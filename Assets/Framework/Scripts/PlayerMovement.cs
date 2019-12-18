@@ -35,7 +35,10 @@ namespace Mirror
         /// </summary>
         Material cachedMaterial;
 
-
+        /// <summary>
+        /// a reference to the client class which contains all of the client information it is used here to change the scene/canvas of the player,
+        /// and to fix the problem where the player moves automaticly, when he types in the chat
+        /// </summary>
         private Client clientVar;
 
 
@@ -153,7 +156,7 @@ namespace Mirror
             
             if (!isLocalPlayer || characterController == null) return;
 
-            if (clientVar.clientMessageTF.isFocused) return; 
+            if (clientVar.clientMessageTF.isFocused) return; //stops the player from moving when writing on the chat
 
             transform.Rotate(0f, turn * Time.fixedDeltaTime, 0f);
 
@@ -174,6 +177,14 @@ namespace Mirror
 
 
 
+        /**
+         * override methode
+         * 
+         * When the player stand on the "Magic Circle" :
+         * 
+         * change the game type of in the client variable accordingly
+         * and show the startgame canvas to allow players to join host a party and start a game
+         */
        private void OnTriggerEnter(Collider other)
         {
             if (!isLocalPlayer || characterController == null) return;
@@ -187,7 +198,11 @@ namespace Mirror
         }
 
 
-
+        /*
+         * override methode
+         * disable the startgame canvas when the player leave the "Magic Circle"
+         * 
+         */
     private void OnTriggerExit(Collider other)
     {
             if (!isLocalPlayer || characterController == null) return;
