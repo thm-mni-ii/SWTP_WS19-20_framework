@@ -12,6 +12,11 @@ namespace Mirror
         public int index;
 
         /// <summary>
+        /// manage the whole game. Hide and show the components.
+        /// </summary>
+        private GlobalManager globalCanvas;
+        
+        /// <summary>
         /// Player score (helpful for the reward system)
         /// </summary>
         [SyncVar]
@@ -29,10 +34,30 @@ namespace Mirror
         /// </summary>
         Material cachedMaterial;
 
-        // public Input chatInput;
+        /// <summary>
+        /// a reference to the client class which contains all of the client information it is used here to change the scene/canvas of the player,
+        /// and to fix the problem where the player moves automaticly, when he types in the chat
+        /// </summary>
+        /*hier kommt noch was*/
+        private Client clientVar;
+
+
+        void Start()    /*hier kommt noch was*/
+        {
+            //globalCanvas = gameObject.GetComponent<GlobalManager>();
+            
+            GameObject GM = GameObject.FindWithTag("GlobalManager");
+
+            if (GM != null)
+            {
+                globalCanvas = GM.GetComponent<GlobalManager>();
+            }
+            var sphereCollider = gameObject.AddComponent<SphereCollider>();
+            clientVar = globalCanvas.GetComponent<Client>();
+        }
 
         /**
-         * Used from Mirror
+         * Used from Mirror /*hier kommt noch was*
          */
         void SetColor(Color color)
         {
@@ -41,7 +66,7 @@ namespace Mirror
         }
 
         /**
-         * Used from Mirror
+         * Used from Mirror /*hier kommt noch was*
          */
         void OnDisable()
         {
@@ -54,7 +79,7 @@ namespace Mirror
         }
 
         /**
-         * Used from Mirror
+         * Used from Mirror /*hier kommt noch was*
          */
         void OnDestroy()
         {
@@ -76,8 +101,8 @@ namespace Mirror
 
         [Header("Movement Settings")]
         public float moveSpeed = 8f;
-        public float turnSpeedAccel = 5f;
-        public float turnSpeedDecel = 5f;
+        public float turnSpeedAccel = 10f;
+        public float turnSpeedDecel = 10f;
         public float maxTurnSpeed = 150f;
 
         [Header("Jump Settings")]
@@ -92,7 +117,7 @@ namespace Mirror
         public bool isFalling = false;
 
         /**
-         * Update player position 
+         * Update player position /*hier kommt noch was*
          */
         void Update()
         {
@@ -101,8 +126,7 @@ namespace Mirror
             horizontal = Input.GetAxis("Horizontal");
             vertical = Input.GetAxis("Vertical");
 
-            
-            if (Input.GetKey(KeyCode.Q) && (turn > -maxTurnSpeed) /* && !chatInput.Equals("Q") && !chatInput.Equals("Q")*/)
+            if (Input.GetKey(KeyCode.Q) && (turn > -maxTurnSpeed))
                 turn -= turnSpeedAccel;
             else if (Input.GetKey(KeyCode.E) && (turn < maxTurnSpeed))
                 turn += turnSpeedAccel;
@@ -125,11 +149,14 @@ namespace Mirror
         }
 
         /**
-         * Used from Mirror
+         * Used from Mirror /*hier kommt noch was*
          */
         void FixedUpdate()
         {
+            
             if (!isLocalPlayer || characterController == null) return;
+
+            if (clientVar.clientMessageTF.isFocused) return; 
 
             transform.Rotate(0f, turn * Time.fixedDeltaTime, 0f);
 
@@ -148,49 +175,45 @@ namespace Mirror
 
         GameObject controllerColliderHitObject;
 
+
         /**
-         * Used from Mirror
+         * override methode
+         * 
+         * When the player stand on the "Magic Circle" :
+         * 
+         * change the game type of in the client variable accordingly
+         * and show the startgame canvas to allow players to join host a party and start a game
          */
-        void OnControllerColliderHit(ControllerColliderHit hit)
+        private void OnTriggerEnter(Collider other) /*hier kommt noch was*/
         {
-            // If player and prize objects are on their own layer(s) with correct
-            // collision matrix, we wouldn't have to validate the hit.gameobject.
-            // Since this is just an example, project settings aren't included so we check the name.
+            if (!isLocalPlayer || characterController == null) return;
 
-            controllerColliderHitObject = hit.gameObject;
-
-            if (isLocalPlayer && controllerColliderHitObject.name.StartsWith("Class"))
+            if (other.gameObject.tag.Equals("MATH") || other.gameObject.tag.Equals("NTG") || other.gameObject.tag.Equals("OOP"))
             {
-                if (LogFilter.Debug) Debug.LogFormat("OnControllerColliderHit {0}[{1}] with {2}[{3}]", name, netId, controllerColliderHitObject.name, controllerColliderHitObject.GetComponent<NetworkIdentity>().netId);
-
-                // Disable the prize gameobject so it doesn't impede player movement
-                // It's going to be destroyed in a few frames and we don't want to spam CmdClaimPrize.
-                // OnControllerColliderHit will fire many times as the player slides against the object.
-                controllerColliderHitObject.SetActive(false);
-
-                CmdClaimPrize(controllerColliderHitObject);
+                clientVar.setgameType(other.gameObject.tag);
+                globalCanvas.ToggleCanvas("gameOn");
+                clientVar.updateStartGameUI();
             }
         }
 
-        /**
-         * Used from Mirror
+
+        /*
+         * override methode
+         * disable the startgame canvas when the player leave the "Magic Circle"
+         * 
          */
-        [Command]
-        void CmdClaimPrize(GameObject hitObject)
-        {
-            // Null check is required, otherwise close timing of multiple claims could throw a null ref.
-            if (hitObject != null)
+        private void OnTriggerExit(Collider other) /*hier kommt noch was*/
+    {
+            if (!isLocalPlayer || characterController == null) return;
+
+            if (other.gameObject.tag.Equals("MATH") || other.gameObject.tag.Equals("NTG") || other.gameObject.tag.Equals("OOP"))
             {
-               // hitObject.GetComponent<Class>().Methode(gameObject);
+                clientVar.setgameType(null);
+                globalCanvas.ToggleCanvas("gameOff");
             }
         }
-
-        /**
-         * Used from Mirror
-         */
-        void OnGUI()
-        {
-            GUI.Box(new Rect(10f + (index * 110), 10f, 100f, 25f), score.ToString().PadLeft(10));
-        }
-    }
 }
+
+
+    }
+

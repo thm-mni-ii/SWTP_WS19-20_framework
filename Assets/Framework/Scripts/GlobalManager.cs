@@ -25,66 +25,75 @@ public class GlobalManager : MonoBehaviour {
 	/// </summary>
 	public Canvas ChatCanvas;
 	
-	/// <summary>
-	/// PartyCanvas manage party System and his components
-	/// </summary>
-    public Canvas PartyCanvas;
 	
 	/// <summary>
 	/// ForgotCanvas manage Forgot password window
 	/// </summary>
     public Canvas ForgotCanvas;
-	
+
+    /// <summary>
+    /// GameCanvas manage displays the Game
+    /// </summary>
+    public Canvas GameCanvas;
+
     /**
      * Use this for initialization canvases, which we need
+     * canvases are:
+     * 1. RegisterCanvas
+     * 2. LoginCanvas
+     * 3. ChatCanvas
+     * 4. ForgotCanvas
+     * 5. GameCanvas
      */
     void Awake () {
 		RegisterCanvas.enabled = false;
 		LoginCanvas.enabled = true;
 		ChatCanvas.enabled  = false;
-        PartyCanvas.enabled = false;
         ForgotCanvas.enabled = false;
+        GameCanvas.enabled = false;
     }
-	void Start () { }
-	
-	/**
-	 * Update is called once per frame
-	 */
+
+    /**
+     * Update is called once per frame
+     */
 	void Update () { }
 	
 	/**
 	 * change between canvases
 	 */
 	public void ToggleCanvas(string open){
-		if (open == "login") {
-			RegisterCanvas.enabled = false;
-			LoginCanvas.enabled = true;
+        if (open == "login") {
+            RegisterCanvas.enabled = false;
+            LoginCanvas.enabled = true;
             ChatCanvas.enabled = false;
-            PartyCanvas.enabled = false;
             ForgotCanvas.enabled = false;
-		} else if (open == "register") {
-			RegisterCanvas.enabled = true;
-			LoginCanvas.enabled = false;
+            GameCanvas.enabled = false;
+        } else if (open == "register") {
+            RegisterCanvas.enabled = true;
+            LoginCanvas.enabled = false;
             ChatCanvas.enabled = false;
-            PartyCanvas.enabled = false;
             ForgotCanvas.enabled = false;
-		} else if (open == "chat") {
-			RegisterCanvas.enabled = false;
-			LoginCanvas.enabled = false;
-			ChatCanvas.enabled  = true;
-            PartyCanvas.enabled = true;
+        } else if (open == "chat") {
+            RegisterCanvas.enabled = false;
+            LoginCanvas.enabled = false;
+            ChatCanvas.enabled = true;
             ForgotCanvas.enabled = false;
-		}
-        else if (open == "party")
-        {
-            PartyCanvas.enabled = true;
-        } else if (open == "forgot")
+            GameCanvas.enabled = false;
+        }
+        else if (open == "forgot")
         {
             RegisterCanvas.enabled = false;
             LoginCanvas.enabled = false;
             ChatCanvas.enabled = false;
-            PartyCanvas.enabled = false;
             ForgotCanvas.enabled = true;
         }
-	}
+        else if (open == "gameOn") {
+            GameCanvas.enabled = true;
+         }
+        else if (open == "gameOff")
+        {
+            GameCanvas.enabled = false;
+        }
+
+    }
 }
