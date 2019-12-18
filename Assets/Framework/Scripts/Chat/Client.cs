@@ -74,26 +74,59 @@ public class Client : MonoBehaviour
     /// auxiliary variable to make connection between client and server
     /// </summary>
     private bool firstConnect = true;
-    private int clientId = 0;
-    private bool isHost = false;
-    private bool inParty = false;
-    private string partyhostname = "";
+
     /// <summary>
-    /// variable for gameType, it is changed from the class PlayerMovement upon Trigger
+    /// The id of client
+    /// It is used for easier communication with the server
+    /// </summary>
+    private int clientId = 0;
+
+    /// <summary>
+    /// Party variable
+    /// If the client is a party host then isHost = true
+    /// </summary>
+    private bool isHost = false;
+
+    /// <summary>
+    /// party variable
+    /// If the player is in a party then inParty = true
+    /// </summary>
+    private bool inParty = false;
+
+    /// <summary>
+    /// party variable
+    /// used to save the name of the party host when a player joins a party
+    /// </summary>
+    private string partyhostname = "";
+
+    /// <summary>
+    /// The game type that the player is playing
     /// /*hier kommt noch was*/
+    /// It is changed from the class PlayerMovement upon Trigger
     /// </summary>
     private string gameType = null;
+
+    /*
+     *  Get methode of the gameType 
+     */
 
     public string getgameType()    /*hier kommt noch was*/
     {
         return this.gameType;
     }
 
+    /*
+*  Set methode of the gameType 
+*/
     public void setgameType(string type)    /*hier kommt noch was*/
     {
         this.gameType = type;
     }
 
+    /// <summary>
+    /// The scrollRect of the Chat UI 
+    /// It is used to allow auto-scrolling
+    /// </summary>
     public ScrollRect ChatSR;    /*hier kommt noch was*/
    // public GameObject scrollView;
 
@@ -162,6 +195,8 @@ public class Client : MonoBehaviour
 
     /**
      * Connect user (client) with server to open global chat (called after login)
+     * The methode is used from the login methdode 
+     * UserInfo contains user iformation after login, it is then gived to the client to start the connection with the server
      */
     public void EstablishConnection(UserInfo user)
     {
@@ -178,7 +213,8 @@ public class Client : MonoBehaviour
     }
 
     /**
-     * The player leave the game
+     * Send a leave party request to the server 
+     * if the player is the host then the party is cancel and all party players are disconnected 
      */
     public void leaveParty()
     {
@@ -218,6 +254,7 @@ public class Client : MonoBehaviour
 
     /**
      * send a message to all clients or a private message
+     * this methode is used to send messages on the global chat
      */
     public void clientSendMessage()    /*hier kommt noch was*/
     {

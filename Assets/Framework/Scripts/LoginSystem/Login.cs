@@ -131,8 +131,13 @@ public class Login : MonoBehaviour
 
     /**
      * Update is called once per frame
-     * display the answer or check 
-     * display if there are any errors or if every think right
+     * 
+     * The warning text objects of the login/register interfaces are updated here
+     * Unity is not Thread save, therefore it allows the game objects to be updated ONLY from the main thread
+     * upon clicking a button the response is set to the variable "report" and then is read and handled once the frame is called
+     * Also after clicking the login button if the userinformation is correct the connection is established here.
+     * 
+     * 
      * There are many types of answers:
      * case 1: Login Succesful
      * case 10: or case 11: Invalid username or password
@@ -285,8 +290,9 @@ public class Login : MonoBehaviour
         */
     }
     /**
-     * /*hier kommt noch was*
-     * a helping login method to allow login with username instead of email
+     * once LoginMethod finds the email of the users it's given here as a parameter
+     * This Methode logs in the user once the login is succesful it sets report to 1 which then starts the connection on 'update'
+     * after the next frame is called
      */
     public void LoginMethod2(string resEmail)
     {
