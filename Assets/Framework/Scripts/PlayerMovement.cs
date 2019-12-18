@@ -15,8 +15,7 @@ namespace Mirror
         /// manage the whole game. Hide and show the components.
         /// </summary>
         private GlobalManager globalCanvas;
-
-
+        
         /// <summary>
         /// Player score (helpful for the reward system)
         /// </summary>
@@ -34,12 +33,12 @@ namespace Mirror
         /// Cache it here and destroy it in OnDestroy to prevent a memory leak
         /// </summary>
         Material cachedMaterial;
-
-
+        
+        /*hier kommt noch was*/
         private Client clientVar;
 
 
-        void Start()
+        void Start()    /*hier kommt noch was*/
         {
             //globalCanvas = gameObject.GetComponent<GlobalManager>();
             
@@ -54,7 +53,7 @@ namespace Mirror
         }
 
         /**
-         * Used from Mirror
+         * Used from Mirror /*hier kommt noch was*
          */
         void SetColor(Color color)
         {
@@ -63,7 +62,7 @@ namespace Mirror
         }
 
         /**
-         * Used from Mirror
+         * Used from Mirror /*hier kommt noch was*
          */
         void OnDisable()
         {
@@ -76,7 +75,7 @@ namespace Mirror
         }
 
         /**
-         * Used from Mirror
+         * Used from Mirror /*hier kommt noch was*
          */
         void OnDestroy()
         {
@@ -114,7 +113,7 @@ namespace Mirror
         public bool isFalling = false;
 
         /**
-         * Update player position 
+         * Update player position /*hier kommt noch was*
          */
         void Update()
         {
@@ -146,7 +145,7 @@ namespace Mirror
         }
 
         /**
-         * Used from Mirror
+         * Used from Mirror /*hier kommt noch was*
          */
         void FixedUpdate()
         {
@@ -174,7 +173,7 @@ namespace Mirror
 
 
 
-       private void OnTriggerEnter(Collider other)
+       private void OnTriggerEnter(Collider other) /*hier kommt noch was*/
         {
             if (!isLocalPlayer || characterController == null) return;
 
@@ -188,7 +187,7 @@ namespace Mirror
 
 
 
-    private void OnTriggerExit(Collider other)
+    private void OnTriggerExit(Collider other) /*hier kommt noch was*/
     {
             if (!isLocalPlayer || characterController == null) return;
 

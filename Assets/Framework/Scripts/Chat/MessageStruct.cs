@@ -26,7 +26,22 @@ public class MessageStruct
     /// message
     /// </summary>
     public string Text = null;
+    /// <summary>
+    ///  Message types are:
+    /// 0 - Client id is sent from server
+    /// 1 - connection started with this message the user id and data will be sent to server and saved in a list
+    /// 2 - chat message
+    /// 3 - Private Message
+    /// 4 - Host request
+    /// 5 - update list from server
+    /// 6 - join a party
+    /// 7 - party is canceled
+    /// 8 - join party failed
+    /// </summary>
     public int messagetype = 0;
+    /// <summary>
+    /// /*hier kommt noch was*/
+    /// </summary>
     public string reciever = null;
     public int senderId = 0;
     MessageStruct() { }

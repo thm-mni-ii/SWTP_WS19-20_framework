@@ -44,7 +44,7 @@ public class Server : MonoBehaviour
 
 
     /**
-     * PartyPlayer class to manage users before a game starts
+     * PartyPlayer class to manage users before a game starts /*hier kommt noch was*
      */
     public class PartyPlayer
     {
@@ -65,11 +65,11 @@ public class Server : MonoBehaviour
         /// hostname of party
         /// </summary>
         public string hostname;
-
+        /*hier kommt noch was*/
         public bool gameStarted = false;
-
+        /*hier kommt noch was*/
         public uint playersReady = 0;
-        public string gameType;
+        public string gameType;    /*hier kommt noch was*/
 
         /// <summary>
         /// players id and names, which are in the party
@@ -101,7 +101,7 @@ public class Server : MonoBehaviour
             this.gameType = ptype;
         }
 
-        public void PlayerReady(int con)
+        public void PlayerReady(int con)    /*hier kommt noch was*/
         {
             if (!playersList[con].isReady)
             {
@@ -116,7 +116,7 @@ public class Server : MonoBehaviour
 
         }
 
-        public bool allPlayersReady()
+        public bool allPlayersReady()    /*hier kommt noch was*/
         {
             if (playersReady == playersList.Count)
             {
@@ -133,7 +133,7 @@ public class Server : MonoBehaviour
 
     }
 
-    void Awake()
+    void Awake()    /*hier kommt noch was*/
     {
         // update even if window isn't focused, otherwise we don't receive.
         Application.runInBackground = true;
@@ -195,7 +195,7 @@ public class Server : MonoBehaviour
     {
         server.Stop();
     }
-
+    /*hier kommt noch was*/
     class ClientToken
     {
         public TcpClient client;
@@ -208,6 +208,7 @@ public class Server : MonoBehaviour
 
     /**
      * handle the data, send to the server
+     * /*hier kommt noch was*
      * Types of data are:
      * case 1: user information after connection
      * case 2: Global message
@@ -301,7 +302,7 @@ public class Server : MonoBehaviour
 
     /**
      * Update the Party-List only to the Party Members
-     * 
+     * /*hier kommt noch was*
      */
     void UpdateList(party temp)
     {
@@ -327,6 +328,7 @@ public class Server : MonoBehaviour
 
 
     /**
+     * /*hier kommt noch was*
      * Update the Host list for all players on the StartGame Menu
      */
     public void UpdateHostList()

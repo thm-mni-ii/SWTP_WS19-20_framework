@@ -38,6 +38,12 @@ public class GlobalManager : MonoBehaviour {
 
     /**
      * Use this for initialization canvases, which we need
+     * canvases are:
+     * 1. RegisterCanvas
+     * 2. LoginCanvas
+     * 3. ChatCanvas
+     * 4. ForgotCanvas
+     * 5. GameCanvas
      */
     void Awake () {
 		RegisterCanvas.enabled = false;
@@ -46,11 +52,10 @@ public class GlobalManager : MonoBehaviour {
         ForgotCanvas.enabled = false;
         GameCanvas.enabled = false;
     }
-	void Start () { }
-	
-	/**
-	 * Update is called once per frame
-	 */
+
+    /**
+     * Update is called once per frame
+     */
 	void Update () { }
 	
 	/**

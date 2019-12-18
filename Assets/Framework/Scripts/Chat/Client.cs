@@ -30,22 +30,22 @@ public class Client : MonoBehaviour
     public Text content = null;
 
     /// <summary>
-    /// party variable
+    /// party variable /*hier kommt noch was*/
     /// </summary>
     public InputField partyTextField = null;
 
     /// <summary>
-    /// Title
+    /// Title    /*hier kommt noch was*/
     /// </summary>
     public Text startgameTitle = null;
 
     /// <summary>
-    /// party variable
+    /// party variable    /*hier kommt noch was*/
     /// </summary>
     public Text PartycontentField = null;
 
     /// <summary>
-    /// GameHosts Text Field
+    /// GameHosts Text Field    /*hier kommt noch was*/
     /// </summary>
     public Text GameHostsField = null;
 
@@ -78,26 +78,26 @@ public class Client : MonoBehaviour
     private bool isHost = false;
     private bool inParty = false;
     private string partyhostname = "";
-
     /// <summary>
     /// variable for gameType, it is changed from the class PlayerMovement upon Trigger
+    /// /*hier kommt noch was*/
     /// </summary>
     private string gameType = null;
 
-    public string getgameType()
+    public string getgameType()    /*hier kommt noch was*/
     {
         return this.gameType;
     }
 
-    public void setgameType(string type)
+    public void setgameType(string type)    /*hier kommt noch was*/
     {
         this.gameType = type;
     }
 
-    public ScrollRect ChatSR;
+    public ScrollRect ChatSR;    /*hier kommt noch was*/
    // public GameObject scrollView;
 
-    void awake()
+    void awake()    /*hier kommt noch was*/
     {
         // update even if window isn't focused, otherwise we don't receive.
         Application.runInBackground = true;
@@ -116,6 +116,8 @@ public class Client : MonoBehaviour
      * 1. Connected
      * 2. Data: receive message from server
      * 3. Disconnected
+     *
+     * and hide/show logout button by pressed on ESC
      */
     void Update()
     {
@@ -217,7 +219,7 @@ public class Client : MonoBehaviour
     /**
      * send a message to all clients or a private message
      */
-    public void clientSendMessage()
+    public void clientSendMessage()    /*hier kommt noch was*/
     {
         if (clientMessageTF.text != null)
         {
@@ -324,7 +326,7 @@ public class Client : MonoBehaviour
     /**
      * Ready Player
      */
-    public void ReadyButton()
+    public void ReadyButton()    /*hier kommt noch was*/
     {
         if (!inParty)
         {
@@ -337,6 +339,7 @@ public class Client : MonoBehaviour
         byte[] bytes = ObjectToByteArray(Smsg);
         client.Send(bytes);
     }
+    
      /**
      * Start the Game by the Host
      */
@@ -347,14 +350,10 @@ public class Client : MonoBehaviour
             //report error here "Only the a Host can Start a Game"
             return;
         }
-
-
-        
-
-
     }
+    
     /**
-     * Host a party
+     * Host a party    /*hier kommt noch was*
      */
     public void CreatePartyButton()
     {
@@ -370,11 +369,10 @@ public class Client : MonoBehaviour
         partyhostname = userName;
         inParty = true;
         isHost = true;
-
     }
 
     /**
-     * Join an existing Party
+     * Join an existing Party    /*hier kommt noch was*
      */
     public void JoinPartyButton()
     {
@@ -426,9 +424,6 @@ public class Client : MonoBehaviour
         }
     }
 
-
-
-
     /**
      * to update the new incoming messages
      */
@@ -439,7 +434,7 @@ public class Client : MonoBehaviour
     }
 
     /**
-     * to update the party list
+     * to update the party list    /*hier kommt noch was*
      */
     void RenderPartyList(String[] text)
     {
@@ -451,8 +446,8 @@ public class Client : MonoBehaviour
     }
 
     /**
- * to update the Hostlist
- */
+    * to update the Hostlist    /*hier kommt noch was*
+    */
     void RenderHosts(String[] text)
     {
         GameHostsField.text = "\n Type     Host     Players";
@@ -473,7 +468,7 @@ public class Client : MonoBehaviour
     }
 
     /**
-     * client send a message
+     * client send a message by Value change
      */
     public void ValueChanged()
     {

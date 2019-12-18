@@ -24,7 +24,7 @@ public class ServerHUD : MonoBehaviour
    /// <summary>
    /// Whether to show the default control HUD at runtime.
    /// </summary>
-    public bool showGUI = true;
+   public bool showGUI = true;
 
    /// <summary>
    /// The horizontal offset in pixels to draw the HUD runtime GUI at.
@@ -36,14 +36,14 @@ public class ServerHUD : MonoBehaviour
    /// </summary>
    public int offsetY;
    
-   void Awake()
+   void Awake()    /*hier kommt noch was*/
    {
       manager = GetComponent<NetworkManager>();
       cServer = GetComponent<Server>();
    }
 
    /**
-    * handle events in NetworkManager
+    * handle events in NetworkManager    /*hier kommt noch was*
     * events are:
     * LAN Server Only to make and start a new server
     * other events are deleted by us

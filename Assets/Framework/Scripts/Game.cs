@@ -39,7 +39,7 @@ public class Game
     /// game capacity
     /// </summary>
     public ushort capacity;
-    
+    /*hier kommt noch was*/
     public int lastLatency = -1;
 
     /**

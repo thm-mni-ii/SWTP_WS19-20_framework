@@ -102,10 +102,10 @@ public class Login : MonoBehaviour
     private int report = 0;
     
     /// <summary>
-    /// auxiliary variable to rest the password using E-Mail address
+    /// auxiliary variable to rest the password using E-Mail address /*hier kommt noch was*/
     /// </summary>
     private string resEmail = null;
-    private bool connecting = false;
+    private bool connecting = false;    /*hier kommt noch was*/
     
     /**
      * Start is called before the first frame update
@@ -244,6 +244,7 @@ public class Login : MonoBehaviour
     }
 
     /**
+     * /*hier kommt noch was*
      * login methode checks if user is registered on the database and returns the result accordingly 
      */
     public void LoginMethod()
@@ -284,6 +285,7 @@ public class Login : MonoBehaviour
         */
     }
     /**
+     * /*hier kommt noch was*
      * a helping login method to allow login with username instead of email
      */
     public void LoginMethod2(string resEmail)
@@ -332,6 +334,7 @@ public class Login : MonoBehaviour
 
     /**
      * logs out user and disconnects the connection
+     * /*hier kommt noch was*
      */
     public void LogoutMethod()
     {
@@ -345,7 +348,8 @@ public class Login : MonoBehaviour
     }
 
     /**
-     * Registers new user to the Databank and handles the request if the user is already registered
+     * /*hier kommt noch was*
+     * Registers new user to the Database and handles the request if the user is already registered
      */
     public void RegisterMethod()
     {
@@ -387,7 +391,8 @@ public class Login : MonoBehaviour
         }
     }
     /**
-     * helping register method to Registers new user to the Databank and handles the request if the user is already registered
+     * /*hier kommt noch was*
+     * helping register method to Registers new user to the Database and handles the request if the user is already registered
      */
     public void reg2() { 
         if (rUsername.text != null && rUsername.text != "" && rEmail.text != null && rEmail.text != "" && rPass1.text != null && rPass1.text != "" && rPass2.text != null && rPass2.text != "")
@@ -442,7 +447,8 @@ public class Login : MonoBehaviour
     }
     
     /**
-     * Saved the username in the Databank because firebase saves only the email and password
+     * /*hier kommt noch was*
+     * Saved the username in the Database because firebase saves only the email and password
      */
     public void setDisplayName(Firebase.Auth.FirebaseUser newUser)
     {
@@ -528,6 +534,7 @@ public class Login : MonoBehaviour
     }
 
     /**
+     * /*hier kommt noch was*
      * Database for user definition
      */
     public class User
