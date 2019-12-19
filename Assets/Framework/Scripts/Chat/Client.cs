@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System.IO;
@@ -23,114 +21,104 @@ public class Client : MonoBehaviour
     /// Take message text from client
     /// </summary>
     public InputField clientMessageTF = null;
-
     /// <summary>
     /// show received messages 
     /// </summary>
     public Text content = null;
-
     /// <summary>
     /// party variable /*hier kommt noch was*/
     /// </summary>
     public InputField partyTextField = null;
-
     /// <summary>
     /// Title    /*hier kommt noch was*/
     /// </summary>
     public Text startgameTitle = null;
-
     /// <summary>
     /// party variable    /*hier kommt noch was*/
     /// </summary>
     public Text PartycontentField = null;
-
     /// <summary>
     /// GameHosts Text Field    /*hier kommt noch was*/
     /// </summary>
     public Text GameHostsField = null;
-
     /// <summary>
     /// make a new Telepathy.Client (responsible for chat)
     /// </summary>
     Telepathy.Client client = new Telepathy.Client();
-
     /// <summary>
     /// set port of chat client
     /// </summary>
     public int clientport = 7777;
-
     /// <summary>
     /// Server ip address
     /// </summary>
     public string mainServerip = "localhost";
+    /// <summary>
+    /// /*hier kommt noch was*/
+    /// </summary>
     public string userName = "ILLEGAL USER";
-
     /// <summary>
     /// save data information in data struct Cuser
     /// </summary>
     private UserInfo Cuser;
-
     /// <summary>
     /// auxiliary variable to make connection between client and server
     /// </summary>
     private bool firstConnect = true;
-
     /// <summary>
     /// The id of client
     /// It is used for easier communication with the server
     /// </summary>
     private int clientId = 0;
-
     /// <summary>
     /// Party variable
     /// If the client is a party host then isHost = true
     /// </summary>
     private bool isHost = false;
-
     /// <summary>
     /// party variable
     /// If the player is in a party then inParty = true
     /// </summary>
     private bool inParty = false;
-
     /// <summary>
     /// party variable
     /// used to save the name of the party host when a player joins a party
     /// </summary>
     private string partyhostname = "";
-
     /// <summary>
     /// The game type that the player is playing
     /// /*hier kommt noch was*/
     /// It is changed from the class PlayerMovement upon Trigger
     /// </summary>
     private string gameType = null;
-
-    /*
-     *  Get methode of the gameType 
-     */
-
-    public string getgameType()    /*hier kommt noch was*/
-    {
-        return this.gameType;
-    }
-
-    /*
-*  Set methode of the gameType 
-*/
-    public void setgameType(string type)    /*hier kommt noch was*/
-    {
-        this.gameType = type;
-    }
-
     /// <summary>
     /// The scrollRect of the Chat UI 
     /// It is used to allow auto-scrolling
     /// </summary>
-    public ScrollRect ChatSR;    /*hier kommt noch was*/
-   // public GameObject scrollView;
+    public ScrollRect ChatSR;
 
-    void awake()    /*hier kommt noch was*/
+    /// <summary>
+    /// Get methode of the gameType *hier kommt noch was*
+    /// </summary>
+    /// <returns> *hier kommt noch was* </returns>
+    public string getgameType()
+    {
+        return this.gameType;
+    }
+    
+    /// <summary>
+    /// Set methode of the gameType
+    /// </summary>
+    /// <param name="type"> *hier kommt noch was* </param>
+    public void setgameType(string type)    /*hier kommt noch was*/
+    {
+        this.gameType = type;
+    }
+    
+    /// <summary>
+    /// *hier kommt noch was*
+    /// </summary>
+    void awake()
     {
         // update even if window isn't focused, otherwise we don't receive.
         Application.runInBackground = true;
@@ -140,18 +128,17 @@ public class Client : MonoBehaviour
         Telepathy.Logger.LogWarning = Debug.LogWarning;
         Telepathy.Logger.LogError = Debug.LogError;
     }
-
-
-    /**
-     * Update is called once per frame
-     * receive messages from server
-     * There are many types of messages:
-     * 1. Connected
-     * 2. Data: receive message from server
-     * 3. Disconnected
-     *
-     * and hide/show logout button by pressed on ESC
-     */
+    
+    /// <summary>
+    /// Update is called once per frame
+    /// receive messages from server
+    /// There are many types of messages:
+    /// 1. Connected
+    /// 2. Data: receive message from server
+    /// 3. Disconnected
+    ///
+    /// and hide/show logout button by pressed on ESC
+    /// </summary>
     void Update()
     {
         // client
@@ -192,12 +179,13 @@ public class Client : MonoBehaviour
             }
         }
     }
-
-    /**
-     * Connect user (client) with server to open global chat (called after login)
-     * The methode is used from the login methdode 
-     * UserInfo contains user iformation after login, it is then gived to the client to start the connection with the server
-     */
+    
+    /// <summary>
+    /// Connect user (client) with server to open global chat (called after login)
+    /// The methode is used from the login methdode
+    /// UserInfo contains user iformation after login, it is then gived to the client to start the connection with the server
+    /// </summary>
+    /// <param name="user"> *hier kommt noch was* </param>
     public void EstablishConnection(UserInfo user)
     {
         Cuser = user;
@@ -212,24 +200,23 @@ public class Client : MonoBehaviour
         }
     }
 
-    /**
-     * Send a leave party request to the server 
-     * if the player is the host then the party is cancel and all party players are disconnected 
-     */
+    /// <summary>
+    /// Send a leave party request to the server
+    /// if the player is the host then the party is cancel and all party players are disconnected 
+    /// </summary>
     public void leaveParty()
     {
         if (isHost && inParty)
         {
-
             //inform server that host left to close party
             client.Send(ObjectToByteArray(new MessageStruct(userName, null, 7, null)));
 
             isHost = false;
             inParty = false;
-
         }
         else if (inParty)
-        {         //inform serer that client has left
+        {        
+            //inform serer that client has left
             if (partyTextField.text != null && partyTextField.text != "")
             {
                 MessageStruct Smsg = new MessageStruct(userName, null, 8, partyTextField.text);
@@ -240,9 +227,9 @@ public class Client : MonoBehaviour
         }
     }
 
-    /**
-     * disconnect the client socket
-     */
+    /// <summary>
+    /// disconnect the client socket
+    /// </summary>
     public void Disconnection()
     {
         Cuser = null;
@@ -251,16 +238,16 @@ public class Client : MonoBehaviour
         leaveParty();
         client.Disconnect();
     }
-
-    /**
-     * send a message to all clients or a private message
-     * this methode is used to send messages on the global chat
-     */
-    public void clientSendMessage()    /*hier kommt noch was*/
+    
+    /// <summary>
+    /// send a message to all clients or a private message
+    /// this methode is used to send messages on the global chat
+    /// *hier kommt noch was*
+    /// </summary>
+    public void clientSendMessage()
     {
         if (clientMessageTF.text != null)
         {
-
             string[] tokens = clientMessageTF.text.Split(new char[] { ':' }, 2);
             int lenth = 0;
 
@@ -280,7 +267,6 @@ public class Client : MonoBehaviour
             }
             else
             {
-
                 byte[] bytes = ObjectToByteArray(new MessageStruct(userName, clientMessageTF.text, 2, null));
                 clientMessageTF.text = string.Empty;
                 client.Send(bytes);
@@ -288,18 +274,19 @@ public class Client : MonoBehaviour
         }
     }
 
-    /**
-     * handle the data, send from the server
-     * Typs of data are:
-     * case 1: data are only for server should never be used here
-     * case 2: message recieved
-     * case 3: Private Message for special client
-     * case 4: Host a party to create a new party system
-     * case 5: updated list from server
-     * case 6: join a party
-     * case 7: party canceled
-     * case 8: join failed 
-     */
+    /// <summary>
+    /// handle the data, send from the server
+    /// Typs of data are:
+    /// case 1: data are only for server should never be used here
+    /// case 2: message recieved
+    /// case 3: Private Message for special client
+    /// case 4: Host a party to create a new party system
+    /// case 5: updated list from server
+    /// case 6: join a party
+    /// case 7: party canceled
+    /// case 8: join failed 
+    /// </summary>
+    /// <param name="data"> *hier kommt noch was* </param>
     public void HandleData(Byte[] data)
     {
         MessageStruct Smsg = ByteArrayToObject(data);
@@ -310,13 +297,10 @@ public class Client : MonoBehaviour
                 client.Send(ObjectToByteArray(new MessageStruct(userName, Smsg.Text, 1, null)));
                 break;
             case 1: //only for server should never be used here
-
                 break;
-
             case 2: //message recieved
                 UpdateChat(Smsg.Text, Smsg.senderName);
                 break;
-
             case 3:// Private Message
                 UpdateChat(Smsg.Text, "[Private]" + Smsg.senderName + ":");
                 break;
@@ -325,9 +309,7 @@ public class Client : MonoBehaviour
                 break;
             case 5:// updated list from server
                 string[] names = Smsg.Text.Split(new char[] { ';' });
-
                 RenderPartyList(names);
-
                 break;
             case 6://join a party
                 if (partyTextField.text != null && partyTextField.text != "")
@@ -345,24 +327,22 @@ public class Client : MonoBehaviour
                 break;
             case 9://update host list
                 string[] hlist = Smsg.Text.Split(new char[] { ';' });
-
                 RenderHosts(hlist);
                 break;
         }
     }
 
-    /**
-     * update the StartGame UI variables according to the game Module
-     */
+    /// <summary>
+    /// update the StartGame UI variables according to the game Module
+    /// </summary>
     public void updateStartGameUI()
     {
         startgameTitle.text = "Welcome to " + gameType + " Module";
-
     }
-
-    /**
-     * Ready Player
-     */
+    
+    /// <summary>
+    /// Ready Player
+    /// </summary>
     public void ReadyButton()    /*hier kommt noch was*/
     {
         if (!inParty)
@@ -376,10 +356,10 @@ public class Client : MonoBehaviour
         byte[] bytes = ObjectToByteArray(Smsg);
         client.Send(bytes);
     }
-    
-     /**
-     * Start the Game by the Host
-     */
+
+     /// <summary>
+     /// Start the Game by the Host
+     /// </summary>
     public void StartGame()
     {
         if (!isHost)
@@ -388,10 +368,10 @@ public class Client : MonoBehaviour
             return;
         }
     }
-    
-    /**
-     * Host a party    /*hier kommt noch was*
-     */
+     
+    /// <summary>
+    /// Host a party    /*hier kommt noch was*
+    /// </summary>
     public void CreatePartyButton()
     {
         if (inParty && isHost)
@@ -408,9 +388,9 @@ public class Client : MonoBehaviour
         isHost = true;
     }
 
-    /**
-     * Join an existing Party    /*hier kommt noch was*
-     */
+    /// <summary>
+    /// Join an existing Party    /*hier kommt noch was*
+    /// </summary>
     public void JoinPartyButton()
     {
         if (inParty)
@@ -433,9 +413,11 @@ public class Client : MonoBehaviour
         }
     }
 
-    /**
-     * Convert an object to a byte array
-     */
+    /// <summary>
+    /// Convert an object to a byte array
+    /// </summary>
+    /// <param name="obj"> *hier kommt noch was* </param>
+    /// <returns> *hier kommt noch was* </returns>
     public byte[] ObjectToByteArray(MessageStruct obj)
     {
         BinaryFormatter bf = new BinaryFormatter();
@@ -445,10 +427,12 @@ public class Client : MonoBehaviour
             return ms.ToArray();
         }
     }
-
-    /**
-     * Convert a byte array to an object
-     */
+    
+    /// <summary>
+    /// Convert a byte array to an object
+    /// </summary>
+    /// <param name="arrBytes"> *hier kommt noch was* </param>
+    /// <returns> *hier kommt noch was* </returns>
     public MessageStruct ByteArrayToObject(byte[] arrBytes)
     {
         using (var memStream = new MemoryStream())
@@ -461,18 +445,21 @@ public class Client : MonoBehaviour
         }
     }
 
-    /**
-     * to update the new incoming messages
-     */
+    /// <summary>
+    /// to update the new incoming messages
+    /// </summary>
+    /// <param name="text"> *hier kommt noch was* </param>
+    /// <param name="name"> *hier kommt noch was* </param>
     void UpdateChat(String text, String name)
     {
         content.text += "\n" + name + ": " + text;
         ChatSR.verticalNormalizedPosition = 0f;
     }
 
-    /**
-     * to update the party list    /*hier kommt noch was*
-     */
+    /// <summary>
+    /// to update the party list    /*hier kommt noch was*
+    /// </summary>
+    /// <param name="text"> *hier kommt noch was* </param>
     void RenderPartyList(String[] text)
     {
         PartycontentField.text = "";
@@ -482,9 +469,10 @@ public class Client : MonoBehaviour
         }
     }
 
-    /**
-    * to update the Hostlist    /*hier kommt noch was*
-    */
+    /// <summary>
+    /// to update the Hostlist    /*hier kommt noch was*
+    /// </summary>
+    /// <param name="text"> *hier kommt noch was* </param>
     void RenderHosts(String[] text)
     {
         GameHostsField.text = "\n Type     Host     Players";
@@ -495,18 +483,18 @@ public class Client : MonoBehaviour
         }
     }
 
-    /**
-     * Disconnect client
-     */
+    /// <summary>
+    /// Disconnect client
+    /// </summary>
     void OnApplicationQuit()
     {
         content.text = "";
         client.Disconnect();
     }
 
-    /**
-     * client send a message by Value change
-     */
+    /// <summary>
+    /// client send a message by Value change
+    /// </summary>
     public void ValueChanged()
     {
         if (clientMessageTF.text.Contains("\n"))

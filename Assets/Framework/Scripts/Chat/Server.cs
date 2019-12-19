@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net.Sockets;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 
@@ -17,111 +16,107 @@ public class Server : MonoBehaviour
     /// Server variable of type Telepathy
     /// </summary>
     public Telepathy.Server server = new Telepathy.Server();
-
     /// <summary>
     /// set port of chat server
     /// </summary>
     public int port = 7777;
-
     /// <summary>
     /// This list contains all the client ids
     /// </summary>
     private LinkedList<int> clienList = new LinkedList<int>();
-
     /// <summary>
     /// Map to store user connection ID and username
     /// </summary>
     Dictionary<int, string> userList = new Dictionary<int, string>();
-
     /// <summary>
     /// party Map to store information about every current party that is running on the server
     /// </summary>
     Dictionary<string, party> partyList = new Dictionary<string, party>();
-
-
-    /**
-     * PartyPlayer class to manage users before a game starts 
-     * 
-     * it keeps track of the player name and his ready state
-     */
+    
+    /// <summary>
+    /// PartyPlayer class to manage users before a game starts
+    /// it keeps track of the player name and his ready state
+    /// </summary>
     public class PartyPlayer
     {
         public string playername;
         public bool isReady = false;
 
-        /**
-         * constructor to save the player name
-         */
+        /// <summary>
+        /// constructor to save the player name
+        /// </summary>
+        /// <param name="name"> *hier kommt noch was* </param>
         public PartyPlayer(string name)
         {
             this.playername = name;
         }
     }
 
-    /**
-    * Party class
-    * This class contains all the information and methods to manage a party
-    */
+    /// <summary>
+    /// Party class
+    /// This class contains all the information and methods to manage a party
+    /// </summary>
     public class party
     {
         /// <summary>
         /// hostname of party
         /// </summary>
         public string hostname;
-
         /// <summary>
         /// This variable is used to determine if the party is in a game or not
         /// With the help of this variable the game will be started for all party members
+        /// *hier kommt noch was*
         /// </summary>
-        /*hier kommt noch was*/
         public bool gameStarted = false;
-
         /// <summary>
         /// Number of ready players in the party
+        /// *hier kommt noch was*
         /// </summary>
-        /*hier kommt noch was*/
         public uint playersReady = 0;
-
         /// <summary>
         /// Game type { OOP, NTG, MATHE ...}
         /// </summary>
         public string gameType;    /*hier kommt noch was*/
-
         /// <summary>
         /// Map of player ids and names, which are currently in the party
         /// </summary>
         public Dictionary<int, PartyPlayer> playersList = new Dictionary<int, PartyPlayer>();
 
-        /**
-          * add a new player the party
-          */
+        /// <summary>
+        /// add a new player the party
+        /// </summary>
+        /// <param name="con"></param>
+        /// <param name="player"></param>
         public void addPlayer(int con, PartyPlayer player)
         {
             playersList.Add(con, player);
         }
 
-        /**
-        * remove a player from the party
-        */
+        /// <summary>
+        /// remove a player from the party
+        /// </summary>
+        /// <param name="con"></param>
         public void removPlayer(int con)
         {
             playersList.Remove(con);
         }
 
-        /**
-         * constructor
-         * 
-         * Create a new party with hostname and game type
-         */
+        /// <summary>
+        /// constructor
+        /// Create a new party with hostname and game type
+        /// </summary>
+        /// <param name="hostname"></param>
+        /// <param name="ptype"></param>
         public party(string hostname, string ptype)
         {
             this.hostname = hostname;
             this.gameType = ptype;
         }
 
-        /*
-         * check of the player is ready or not
-         */
+        /// <summary>
+        /// check of the player is ready or not
+        /// </summary>
+        /// <param name="con"></param>
         public void PlayerReady(int con)    /*hier kommt noch was*/
         {
             if (!playersList[con].isReady)
@@ -134,16 +129,15 @@ public class Server : MonoBehaviour
                 playersList[con].isReady = false;
                 playersReady--;
             }
-
         }
-
-        /*
-         * check if all party players are ready
-         * 
-         * the return value determines if the party can be started or not
-         * true game can be started
-         * false game canno't be started
-         */
+        
+        /// <summary>
+        /// check if all party players are ready
+        /// the return value determines if the party can be started or not
+        /// true game can be started
+        /// false game canno't be started
+        /// </summary>
+        /// <returns></returns>
         public bool allPlayersReady()    /*hier kommt noch was*/
         {
             if (playersReady == playersList.Count)
@@ -154,13 +148,12 @@ public class Server : MonoBehaviour
             {
                 return false;
             }
-
         }
-
-
-
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     void Awake()    /*hier kommt noch was*/
     {
         // update even if window isn't focused, otherwise we don't receive.
@@ -171,18 +164,17 @@ public class Server : MonoBehaviour
         Telepathy.Logger.LogWarning = Debug.LogWarning;
         Telepathy.Logger.LogError = Debug.LogError;
     }
-
-    /**
-     * Update is called once per frame
-     * receive messages from clients
-     * There are many types of messages:
-     * 1. Connected: add client to the client list
-     * 2. Data: send message to clients
-     * 3. Disconnected: remove client from client list
-     */
+    
+    /// <summary>
+    /// Update is called once per frame
+    /// receive messages from clients
+    /// There are many types of messages:
+    /// 1. Connected: add client to the client list
+    /// 2. Data: send message to clients
+    /// 3. Disconnected: remove client from client list
+    /// </summary>
     void Update()
     {
-
         // server
         if (server.Active)
         {
@@ -202,7 +194,7 @@ public class Server : MonoBehaviour
                         server.Send(msg.connectionId, ObjectToByteArray(new MessageStruct("server", msg.connectionId.ToString(), 0, null)));
                         break;
                     case Telepathy.EventType.Data:
-                     //   Debug.Log(msg.connectionId + " Data: " + BitConverter.ToString(msg.data));
+                        //Debug.Log(msg.connectionId + " Data: " + BitConverter.ToString(msg.data));
                         HandleMessage(msg.data);
                         break;
                     case Telepathy.EventType.Disconnected:
@@ -214,34 +206,31 @@ public class Server : MonoBehaviour
             }
         }
     }
-
-
-    /**
-     * stop server
-     */
+    
+    /// <summary>
+    /// stop server
+    /// </summary>
     void OnApplicationQuit()
     {
         server.Stop();
     }
-    /*hier kommt noch was*/
-   
 
-    /**
-     * handle the data, send to the server
-     * /*hier kommt noch was*
-     * Types of data are:
-     * case 1: user information after connection
-     * case 2: Global message
-     * case 3: Private Message
-     * case 4: handle a host party request
-     * case 5: only for client should never be used here
-     * case 7: cancel party request (sent from host)
-     * case 8: player left a party
-     */
+    /// <summary>
+    /// handle the data, send to the serve
+    /// *hier kommt noch was*
+    /// Types of data are:
+    /// case 1: user information after connection
+    /// case 2: Global message
+    /// case 3: Private Message
+    /// case 4: handle a host party request
+    /// case 5: only for client should never be used here
+    /// case 7: cancel party request (sent from host)
+    /// case 8: player left a party
+    /// </summary>
+    /// <param name="data"></param>
     void HandleMessage(Byte[] data)
     {
         MessageStruct Smsg = ByteArrayToObject(data);
-
         switch (Smsg.messagetype)
         {
             case 1:    //user information after connection
@@ -275,7 +264,6 @@ public class Server : MonoBehaviour
                 break;
             case 5:    // only for client should never be used here
                 break;
-
             case 6://join party request
                 if (!partyList.ContainsKey(Smsg.reciever))
                 {
@@ -283,12 +271,10 @@ public class Server : MonoBehaviour
                     return;
                 }
                 party temp2 = partyList[Smsg.reciever];
-
                 temp2.addPlayer(Smsg.senderId, new PartyPlayer(Smsg.senderName));
                 UpdateList(temp2);
                 UpdateHostList();
                 break;
-
             case 7:    //cancel party request (sent from host)
                 party temp3 = partyList[Smsg.senderName];
                 //inform clients that host has disconnected and delete party
@@ -303,12 +289,10 @@ public class Server : MonoBehaviour
                 party temp4 = partyList[Smsg.reciever];
                 temp4.removPlayer(Smsg.senderId);
                 UpdateList(temp4);
-
                 //clear list for player
                 server.Send(Smsg.senderId, ObjectToByteArray(new MessageStruct("You left the Party", null, 7, null)));
                 UpdateHostList();
                 break;
-
             case 9://ready
                 party temp5 = partyList[Smsg.reciever];
                 temp5.PlayerReady(Smsg.senderId);
@@ -327,6 +311,12 @@ public class Server : MonoBehaviour
      * 
      * /*hier kommt noch was*
      */
+    /// <summary>
+    /// Update the Party-List only to the Party Members
+    /// A list of all player names and thier ready state is sen to all clients in the party
+    /// *hier kommt noch was*
+    /// </summary>
+    /// <param name="temp"></param>
     void UpdateList(party temp)
     {
         String names = "";
@@ -348,30 +338,28 @@ public class Server : MonoBehaviour
             server.Send(entry.Key, data);
         }
     }
-
-
-    /**
-     *  /*hier kommt noch was *
-     * Update the Host list for all players on the StartGame Menu
-     * A list of all host name on the server is sent to all game players
-     */
+    
+    /// <summary>
+    /// *hier kommt noch was *
+    /// Update the Host list for all players on the StartGame Menu
+    /// A list of all host name on the server is sent to all game players
+    /// </summary>
     public void UpdateHostList()
     {
         string hostlist = "";
         foreach (var entry in partyList)
         {
             hostlist += entry.Value.gameType + ";" + entry.Key + ";" + entry.Value.playersList.Count + ";";
-
         }
         Byte[] data = ObjectToByteArray(new MessageStruct("server", hostlist, 9, null));
 
         SendToAll(data);
-
     }
 
-    /**
-     * send a message to all players
-     */
+    /// <summary>
+    /// send a message to all players
+    /// </summary>
+    /// <param name="data"></param>
     void SendToAll(Byte[] data)
     {
         if (clienList.Count > 0)
@@ -381,9 +369,11 @@ public class Server : MonoBehaviour
         }
     }
 
-    /**
-     * Convert an object to a byte array
-     */
+    /// <summary>
+    /// Convert an object to a byte array
+    /// </summary>
+    /// <param name="obj"></param>
+    /// <returns></returns>
     public byte[] ObjectToByteArray(MessageStruct obj)
     {
         BinaryFormatter bf = new BinaryFormatter();
@@ -394,9 +384,11 @@ public class Server : MonoBehaviour
         }
     }
 
-    /**
-     * Convert a byte array to an object
-     */
+    /// <summary>
+    /// Convert a byte array to an object
+    /// </summary>
+    /// <param name="arrBytes"></param>
+    /// <returns></returns>
     public MessageStruct ByteArrayToObject(byte[] arrBytes)
     {
         using (var memStream = new MemoryStream())

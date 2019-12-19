@@ -1,8 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
-using UnityEngine.UI;
-using Firebase;
-using Firebase.Unity.Editor;
 
 /**
  * GlobalManager class to manage the whole game (like: Canvases)
@@ -14,37 +10,32 @@ public class GlobalManager : MonoBehaviour {
 	/// RegisterCanvas manage the Register portal
 	/// </summary>
 	public Canvas RegisterCanvas;
-	
 	/// <summary>
 	/// LoginCanvas manage the login portal
 	/// </summary>
 	public Canvas LoginCanvas;
-	
 	/// <summary>
 	/// ChatCanvas manage Chat window
 	/// </summary>
 	public Canvas ChatCanvas;
-	
-	
 	/// <summary>
 	/// ForgotCanvas manage Forgot password window
 	/// </summary>
     public Canvas ForgotCanvas;
-
-    /// <summary>
+	/// <summary>
     /// GameCanvas manage displays the Game
     /// </summary>
     public Canvas GameCanvas;
 
-    /**
-     * Use this for initialization canvases, which we need
-     * canvases are:
-     * 1. RegisterCanvas
-     * 2. LoginCanvas
-     * 3. ChatCanvas
-     * 4. ForgotCanvas
-     * 5. GameCanvas
-     */
+    /// <summary>
+    /// Use this for initialization canvases, which we need
+    /// canvases are:
+    /// 1. RegisterCanvas
+    /// 2. LoginCanvas
+    /// 3. ChatCanvas
+    /// 4. ForgotCanvas
+    /// 5. GameCanvas
+    /// </summary>
     void Awake () {
 		RegisterCanvas.enabled = false;
 		LoginCanvas.enabled = true;
@@ -53,14 +44,10 @@ public class GlobalManager : MonoBehaviour {
         GameCanvas.enabled = false;
     }
 
-    /**
-     * Update is called once per frame
-     */
-	void Update () { }
-	
-	/**
-	 * change between canvases
-	 */
+    /// <summary>
+    /// change between canvases
+    /// </summary>
+    /// <param name="open"></param>
 	public void ToggleCanvas(string open){
         if (open == "login") {
             RegisterCanvas.enabled = false;
@@ -89,11 +76,10 @@ public class GlobalManager : MonoBehaviour {
         }
         else if (open == "gameOn") {
             GameCanvas.enabled = true;
-         }
+        }
         else if (open == "gameOff")
         {
             GameCanvas.enabled = false;
         }
-
     }
 }
