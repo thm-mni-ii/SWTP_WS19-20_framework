@@ -97,7 +97,7 @@ namespace Mirror
             base.OnStartLocalPlayer();
             characterController = GetComponent<CharacterController>();
             Camera.main.transform.SetParent(transform);
-            Camera.main.transform.localPosition = new Vector3(0f, 3f, -8f);
+            Camera.main.transform.localPosition = new Vector3(0f, 3f, -7f);
             Camera.main.transform.localEulerAngles = new Vector3(10f, 0f, 0f);
         }
 
@@ -236,7 +236,7 @@ namespace Mirror
         {
             if (!isLocalPlayer || characterController == null) return;
 
-            if (other.gameObject.tag.Equals("MATH") || other.gameObject.tag.Equals("NTG") || other.gameObject.tag.Equals("OOP"))
+            if (other.gameObject.tag.Equals("MATH") || other.gameObject.tag.Equals("NTG") || other.gameObject.tag.Equals("OOP") || other.gameObject.tag.Equals("GDI") || other.gameObject.tag.Equals("RNAI"))
             {
                 clientVar.setgameType(null);
                 globalCanvas.ToggleCanvas("gameOff");
