@@ -19,6 +19,11 @@ TagManager:
   - A11
   - NTG
   - GlobalManager
+  - ChatScroll
+  - MATH
+  - GDI
+  - OOP
+  - RNAI
   layers:
   - Default
   - TransparentFX

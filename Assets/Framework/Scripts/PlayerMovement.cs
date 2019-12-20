@@ -219,7 +219,7 @@ namespace Mirror
         private void OnTriggerEnter(Collider other) /*hier kommt noch was*/
         {
             if (!isLocalPlayer || characterController == null) return;
-            if (other.gameObject.tag.Equals("MATH") || other.gameObject.tag.Equals("NTG") || other.gameObject.tag.Equals("OOP"))
+            if (other.gameObject.tag.Equals("MATH") || other.gameObject.tag.Equals("NTG") || other.gameObject.tag.Equals("OOP") || other.gameObject.tag.Equals("GDI") || other.gameObject.tag.Equals("RNAI"))
             {
                 clientVar.setgameType(other.gameObject.tag);
                 globalCanvas.ToggleCanvas("gameOn");
