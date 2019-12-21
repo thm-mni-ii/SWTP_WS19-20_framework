@@ -273,7 +273,7 @@ Transform:
   m_GameObject: {fileID: 1231308336475710}
   m_LocalRotation: {x: -0.50000036, y: 0.4999997, z: 0.4999997, w: 0.50000036}
   m_LocalPosition: {x: -5.960465e-10, y: 0.27992857, z: -0.0037423922}
-  m_LocalScale: {x: 9.999999, y: 9.999999, z: 10}
+  m_LocalScale: {x: 20, y: 20, z: 20}
   m_Children:
   - {fileID: 4381677411552996}
   - {fileID: 4103971337943436}
@@ -977,10 +977,10 @@ GameObject:
   - component: {fileID: 136606663363984694}
   - component: {fileID: 95665039525092722}
   - component: {fileID: 8748688856612009363}
-  - component: {fileID: 7175761322672791585}
-  - component: {fileID: 5910280274245421736}
-  - component: {fileID: 5665830431111048697}
-  - component: {fileID: 7889661001773522881}
+  - component: {fileID: 4630499540636382479}
+  - component: {fileID: 67843486273626019}
+  - component: {fileID: 8598472261267836332}
+  - component: {fileID: 6268212406195989584}
   m_Layer: 0
   m_Name: MaleFreeSimpleMovement1
   m_TagString: Untagged
@@ -1044,16 +1044,18 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1824340380413090}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ba158ff05cf30224f94bfdddec8e7635, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_moveSpeed: 2
+  m_moveSpeed: 8
+  m_turnSpeed: 150
+  m_jumpForce: 4
   m_animator: {fileID: 95665039525092722}
   m_rigidBody: {fileID: 0}
   m_controlMode: 1
---- !u!114 &7175761322672791585
+--- !u!114 &4630499540636382479
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1069,7 +1071,7 @@ MonoBehaviour:
   localPlayerAuthority: 1
   m_AssetId: 
   m_SceneId: 0
---- !u!114 &5910280274245421736
+--- !u!114 &67843486273626019
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1078,26 +1080,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 1824340380413090}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf231f88009f59b40b5d364cb61557f4, type: 3}
+  m_Script: {fileID: 11500000, guid: 2f74aedd71d9a4f55b3ce499326d45fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  index: 0
-  score: 0
-  playerColor: {r: 0, g: 0, b: 0, a: 1}
-  moveSpeed: 8
-  turnSpeedAccel: 10
-  turnSpeedDecel: 10
-  maxTurnSpeed: 150
-  jumpSpeed: 0
-  jumpFactor: 0.025
-  horizontal: 0
-  vertical: 0
-  turn: 0
-  isGrounded: 1
-  isFalling: 0
---- !u!143 &5665830431111048697
+  compressRotation: 1
+--- !u!143 &8598472261267836332
 CharacterController:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1115,7 +1104,7 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &7889661001773522881
+--- !u!114 &6268212406195989584
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1124,12 +1113,27 @@ MonoBehaviour:
   m_GameObject: {fileID: 1824340380413090}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2f74aedd71d9a4f55b3ce499326d45fb, type: 3}
+  m_Script: {fileID: 11500000, guid: bf231f88009f59b40b5d364cb61557f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  compressRotation: 1
+  index: 0
+  score: 0
+  playerColor: {r: 0, g: 0, b: 0, a: 1}
+  m_animator: {fileID: 95665039525092722}
+  moveSpeed: 8
+  turnSpeedAccel: 10
+  turnSpeedDecel: 10
+  maxTurnSpeed: 150
+  jumpSpeed: 0
+  jumpFactor: 0.025
+  wasGrounded: 0
+  horizontal: 0
+  vertical: 0
+  turn: 0
+  isGrounded: 1
+  isFalling: 0
 --- !u!1 &1826566120413068
 GameObject:
   m_ObjectHideFlags: 0

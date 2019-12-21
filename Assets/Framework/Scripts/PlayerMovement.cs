@@ -38,6 +38,9 @@ namespace Mirror
         /// and to fix the problem where the player moves automaticly, when he types in the chat
         /// </summary>
         private Client clientVar;
+        
+        [SerializeField] private Animator m_animator;
+        //[SerializeField] private Rigidbody m_rigidBody;
 
         /// <summary>
         /// *hier kommt noch was*
@@ -52,6 +55,19 @@ namespace Mirror
             }
             var sphereCollider = gameObject.AddComponent<SphereCollider>();
             clientVar = globalCanvas.GetComponent<Client>();
+        }
+        
+        public void Initialize(GameObject character)
+        {
+            m_animator = character.GetComponent<Animator>();
+            //m_rigidBody = character.GetComponent<Rigidbody>();
+        }
+
+        
+        void Awake()
+        {
+            if(!m_animator) { gameObject.GetComponent<Animator>(); }
+            //if(!m_rigidBody) { gameObject.GetComponent<Animator>(); }
         }
 
         /// <summary>
@@ -129,6 +145,8 @@ namespace Mirror
         /// </summary>
         public float jumpFactor = .025F;
 
+        public bool wasGrounded = false;
+
         /// <summary>
         /// 
         /// </summary>
@@ -172,13 +190,29 @@ namespace Mirror
                 turn = 0f;
 
             if (!isFalling && Input.GetKey(KeyCode.Space) && (isGrounded || jumpSpeed < 1))
+            {
                 jumpSpeed += jumpFactor;
+                /*if (!wasGrounded && isGrounded)
+                {
+                    m_animator.SetTrigger("Land");
+                }
+
+                if (!isGrounded && wasGrounded)
+                {
+                    m_animator.SetTrigger("Jump");
+                }*/
+                m_animator.SetTrigger("Jump");
+            }
             else if (isGrounded)
+            {
                 isFalling = false;
+            }
             else
             {
                 isFalling = true;
                 jumpSpeed = 0;
+                m_animator.SetTrigger("Land");
+
             }
         }
 
@@ -189,6 +223,7 @@ namespace Mirror
         {
             if (!isLocalPlayer || characterController == null) return;
             if (clientVar.clientMessageTF.isFocused) return;
+            m_animator.SetBool("Grounded", isGrounded);
             transform.Rotate(0f, turn * Time.fixedDeltaTime, 0f);
             Vector3 direction = new Vector3(horizontal, jumpSpeed, vertical);
             direction = Vector3.ClampMagnitude(direction, 1f);
@@ -198,8 +233,11 @@ namespace Mirror
             if (jumpSpeed > 0)
                 characterController.Move(direction * Time.fixedDeltaTime);
             else
+            {
+                //Vector3 direction = camera.forward * vertical + camera.right * horizontal;
+                m_animator.SetFloat("MoveSpeed", direction.magnitude);
                 characterController.SimpleMove(direction);
-
+            }
             isGrounded = characterController.isGrounded;
         }
         

@@ -14783,7 +14783,7 @@ MonoBehaviour:
   networkAddress: localhost
   maxConnections: 4
   authenticator: {fileID: 0}
-  playerPrefab: {fileID: 1968476592218994, guid: 313ad0ef31f75b84f9f31c0528802fdd,
+  playerPrefab: {fileID: 1824340380413090, guid: c6b9303ae16a61247bef5d055df145b6,
     type: 3}
   autoCreatePlayer: 1
   playerSpawnMethod: 1
@@ -15310,7 +15310,7 @@ PrefabInstance:
     - target: {fileID: 7397413350651825000, guid: bd962f6c094b80b4aa8def43283c6fd9,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.042
+      value: 0.0083
       objectReference: {fileID: 0}
     - target: {fileID: 7397413350651825000, guid: bd962f6c094b80b4aa8def43283c6fd9,
         type: 3}
@@ -15340,7 +15340,7 @@ PrefabInstance:
     - target: {fileID: 7397413350651825000, guid: bd962f6c094b80b4aa8def43283c6fd9,
         type: 3}
       propertyPath: m_RootOrder
-      value: 18
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 7397413350651825000, guid: bd962f6c094b80b4aa8def43283c6fd9,
         type: 3}
@@ -22426,17 +22426,17 @@ Transform:
   - {fileID: 1160369968}
   - {fileID: 1853813613}
   - {fileID: 345244562}
+  - {fileID: 1494893009}
   - {fileID: 133712734}
   - {fileID: 1588626291}
   - {fileID: 1941439732}
   - {fileID: 202063621}
   - {fileID: 1084115872}
   - {fileID: 1696338801}
-  - {fileID: 1494893009}
+  - {fileID: 573375317}
   - {fileID: 1855532671}
   - {fileID: 1664479927}
   - {fileID: 710296769}
-  - {fileID: 573375317}
   - {fileID: 1623138684}
   m_Father: {fileID: 352609470}
   m_RootOrder: 1

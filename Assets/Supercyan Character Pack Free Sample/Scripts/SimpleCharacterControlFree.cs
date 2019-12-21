@@ -22,8 +22,8 @@ public class SimpleCharacterControlFree : MonoBehaviour
     }
 
     [SerializeField] private float m_moveSpeed = 2;
-    //[SerializeField] private float m_turnSpeed = 200;
-    //[SerializeField] private float m_jumpForce = 4;
+    [SerializeField] private float m_turnSpeed = 200;
+    [SerializeField] private float m_jumpForce = 4;
 
     [SerializeField] private Animator m_animator;
     [SerializeField] private Rigidbody m_rigidBody;
@@ -148,7 +148,7 @@ public class SimpleCharacterControlFree : MonoBehaviour
         m_currentH = Mathf.Lerp(m_currentH, h, Time.deltaTime * m_interpolation);
 
         transform.position += transform.forward * m_currentV * m_moveSpeed * Time.deltaTime;
-        //transform.Rotate(0, m_currentH * m_turnSpeed * Time.deltaTime, 0);
+        transform.Rotate(0, m_currentH * m_turnSpeed * Time.deltaTime, 0);
 
         m_animator.SetFloat("MoveSpeed", m_currentV);
 
@@ -197,7 +197,7 @@ public class SimpleCharacterControlFree : MonoBehaviour
         if (jumpCooldownOver && m_isGrounded && Input.GetKey(KeyCode.Space))
         {
             m_jumpTimeStamp = Time.time;
-            //m_rigidBody.AddForce(Vector3.up * m_jumpForce, ForceMode.Impulse);
+            m_rigidBody.AddForce(Vector3.up * m_jumpForce, ForceMode.Impulse);
         }
 
         if (!m_wasGrounded && m_isGrounded)

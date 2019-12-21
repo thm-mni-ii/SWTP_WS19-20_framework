@@ -1372,12 +1372,14 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1968476592218994}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ba158ff05cf30224f94bfdddec8e7635, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_moveSpeed: 2
+  m_turnSpeed: 200
+  m_jumpForce: 4
   m_animator: {fileID: 95612694983450844}
   m_rigidBody: {fileID: 0}
   m_controlMode: 1
@@ -1429,12 +1431,14 @@ MonoBehaviour:
   index: 0
   score: 0
   playerColor: {r: 0, g: 0, b: 0, a: 1}
+  m_animator: {fileID: 0}
   moveSpeed: 8
   turnSpeedAccel: 10
   turnSpeedDecel: 10
   maxTurnSpeed: 150
   jumpSpeed: 0
   jumpFactor: 0.025
+  wasGrounded: 0
   horizontal: 0
   vertical: 0
   turn: 0
