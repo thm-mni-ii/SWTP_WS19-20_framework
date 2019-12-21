@@ -5,6 +5,25 @@ TagManager:
   serializedVersion: 2
   tags:
   - NetworkManager
+  - A21
+  - A22
+  - A14
+  - Plane
+  - A12
+  - A15
+  - C
+  - A13
+  - A16
+  - A10
+  - A20
+  - A11
+  - NTG
+  - GlobalManager
+  - ChatScroll
+  - MATH
+  - GDI
+  - OOP
+  - RNAI
   layers:
   - Default
   - TransparentFX

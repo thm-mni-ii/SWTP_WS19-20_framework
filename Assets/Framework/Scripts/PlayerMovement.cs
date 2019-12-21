@@ -3,27 +3,86 @@
 namespace Mirror
 {
     [RequireComponent(typeof(CharacterController))]
+    /**
+     * PlayerMovement class to set the Movement of the player (class token from mirror)
+     */
     public class PlayerMovement : NetworkBehaviour
     {
+        /// <summary>
+        /// *hier kommt noch was*
+        /// </summary>
         [SyncVar]
         public int index;
-
+        /// <summary>
+        /// manage the whole game. Hide and show the components.
+        /// </summary>
+        private GlobalManager globalCanvas;
+        /// <summary>
+        /// Player score (helpful for the reward system)
+        /// </summary>
         [SyncVar]
         public uint score;
-
+        /// <summary>
+        /// playerColor: to distinguish between player levels
+        /// </summary>
         [SyncVar(hook = nameof(SetColor))]
         public Color playerColor = Color.black;
-
-        // Unity clones the material when GetComponent<Renderer>().material is called
-        // Cache it here and destroy it in OnDestroy to prevent a memory leak
+        /// <summary>
+        /// Unity clones the material when GetComponent<Renderer>().material is called
+        /// Cache it here and destroy it in OnDestroy to prevent a memory leak
+        /// </summary>
         Material cachedMaterial;
+        /// <summary>
+        /// *hier kommt noch was*
+        /// a reference to the client class which contains all of the client information it is used here to change the scene/canvas of the player,
+        /// and to fix the problem where the player moves automaticly, when he types in the chat
+        /// </summary>
+        private Client clientVar;
+        
+        [SerializeField] private Animator m_animator;
+        //[SerializeField] private Rigidbody m_rigidBody;
 
+        /// <summary>
+        /// *hier kommt noch was*
+        /// </summary>
+        void Start()
+        {
+            //globalCanvas = gameObject.GetComponent<GlobalManager>();
+            GameObject GM = GameObject.FindWithTag("GlobalManager");
+            if (GM != null)
+            {
+                globalCanvas = GM.GetComponent<GlobalManager>();
+            }
+            var sphereCollider = gameObject.AddComponent<SphereCollider>();
+            clientVar = globalCanvas.GetComponent<Client>();
+        }
+        
+        public void Initialize(GameObject character)
+        {
+            m_animator = character.GetComponent<Animator>();
+            //m_rigidBody = character.GetComponent<Rigidbody>();
+        }
+
+        
+        void Awake()
+        {
+            if(!m_animator) { gameObject.GetComponent<Animator>(); }
+            //if(!m_rigidBody) { gameObject.GetComponent<Animator>(); }
+        }
+
+        /// <summary>
+        /// Used from Mirror /*hier kommt noch was*
+        /// </summary>
+        /// <param name="color"></param>
         void SetColor(Color color)
         {
             if (cachedMaterial == null) cachedMaterial = GetComponent<Renderer>().material;
             cachedMaterial.color = color;
         }
-
+        
+        /// <summary>
+        /// Used from Mirror /*hier kommt noch was*
+        /// </summary>
         void OnDisable()
         {
             if (isLocalPlayer)
@@ -34,45 +93,88 @@ namespace Mirror
             }
         }
 
+        /// <summary>
+        /// Used from Mirror /*hier kommt noch was*
+        /// </summary>
         void OnDestroy()
         {
             Destroy(cachedMaterial);
         }
-
+        /// <summary>
+        /// *hier kommt noch was*
+        /// </summary>
         CharacterController characterController;
-
+        
+        /// <summary>
+        /// 
+        /// </summary>
         public override void OnStartLocalPlayer()
         {
             base.OnStartLocalPlayer();
-
             characterController = GetComponent<CharacterController>();
-
             Camera.main.transform.SetParent(transform);
-            Camera.main.transform.localPosition = new Vector3(0f, 3f, -8f);
+            Camera.main.transform.localPosition = new Vector3(0f, 3f, -7f);
             Camera.main.transform.localEulerAngles = new Vector3(10f, 0f, 0f);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         [Header("Movement Settings")]
         public float moveSpeed = 8f;
-        public float turnSpeedAccel = 5f;
-        public float turnSpeedDecel = 5f;
+        /// <summary>
+        /// 
+        /// </summary>
+        public float turnSpeedAccel = 10f;
+        /// <summary>
+        /// 
+        /// </summary>
+        public float turnSpeedDecel = 10f;
+        /// <summary>
+        /// 
+        /// </summary>
         public float maxTurnSpeed = 150f;
 
+        /// <summary>
+        /// 
+        /// </summary>
         [Header("Jump Settings")]
         public float jumpSpeed = 0f;
+        /// <summary>
+        /// 
+        /// </summary>
         public float jumpFactor = .025F;
 
+        public bool wasGrounded = false;
+
+        /// <summary>
+        /// 
+        /// </summary>
         [Header("Diagnostics")]
         public float horizontal = 0f;
+        /// <summary>
+        /// 
+        /// </summary>
         public float vertical = 0f;
+        /// <summary>
+        /// 
+        /// </summary>
         public float turn = 0f;
+        /// <summary>
+        /// 
+        /// </summary>
         public bool isGrounded = true;
+        /// <summary>
+        /// 
+        /// </summary>
         public bool isFalling = false;
 
+        /// <summary>
+        /// Update player position /*hier kommt noch was*
+        /// </summary>
         void Update()
         {
             if (!isLocalPlayer) return;
-
             horizontal = Input.GetAxis("Horizontal");
             vertical = Input.GetAxis("Vertical");
 
@@ -88,22 +190,41 @@ namespace Mirror
                 turn = 0f;
 
             if (!isFalling && Input.GetKey(KeyCode.Space) && (isGrounded || jumpSpeed < 1))
+            {
                 jumpSpeed += jumpFactor;
+                /*if (!wasGrounded && isGrounded)
+                {
+                    m_animator.SetTrigger("Land");
+                }
+
+                if (!isGrounded && wasGrounded)
+                {
+                    m_animator.SetTrigger("Jump");
+                }*/
+                m_animator.SetTrigger("Jump");
+            }
             else if (isGrounded)
+            {
                 isFalling = false;
+            }
             else
             {
                 isFalling = true;
                 jumpSpeed = 0;
+                m_animator.SetTrigger("Land");
+
             }
         }
 
+        /// <summary>
+        /// Used from Mirror /*hier kommt noch was*
+        /// </summary>
         void FixedUpdate()
         {
             if (!isLocalPlayer || characterController == null) return;
-
+            if (clientVar.clientMessageTF.isFocused) return;
+            m_animator.SetBool("Grounded", isGrounded);
             transform.Rotate(0f, turn * Time.fixedDeltaTime, 0f);
-
             Vector3 direction = new Vector3(horizontal, jumpSpeed, vertical);
             direction = Vector3.ClampMagnitude(direction, 1f);
             direction = transform.TransformDirection(direction);
@@ -112,47 +233,52 @@ namespace Mirror
             if (jumpSpeed > 0)
                 characterController.Move(direction * Time.fixedDeltaTime);
             else
+            {
+                //Vector3 direction = camera.forward * vertical + camera.right * horizontal;
+                m_animator.SetFloat("MoveSpeed", direction.magnitude);
                 characterController.SimpleMove(direction);
-
+            }
             isGrounded = characterController.isGrounded;
         }
-
+        
+        /// <summary>
+        /// 
+        /// </summary>
         GameObject controllerColliderHitObject;
-
-        void OnControllerColliderHit(ControllerColliderHit hit)
+        
+        /// <summary>
+        /// override methode
+        /// When the player stand on the "Magic Circle" :
+        ///
+        /// change the game type of in the client variable accordingly
+        /// and show the startgame canvas to allow players to join host a party and start a game
+        /// </summary>
+        /// <param name="other"></param>
+        private void OnTriggerEnter(Collider other) /*hier kommt noch was*/
         {
-            // If player and prize objects are on their own layer(s) with correct
-            // collision matrix, we wouldn't have to validate the hit.gameobject.
-            // Since this is just an example, project settings aren't included so we check the name.
-
-            controllerColliderHitObject = hit.gameObject;
-
-            if (isLocalPlayer && controllerColliderHitObject.name.StartsWith("Class"))
+            if (!isLocalPlayer || characterController == null) return;
+            if (other.gameObject.tag.Equals("MATH") || other.gameObject.tag.Equals("NTG") || other.gameObject.tag.Equals("OOP") || other.gameObject.tag.Equals("GDI") || other.gameObject.tag.Equals("RNAI"))
             {
-                if (LogFilter.Debug) Debug.LogFormat("OnControllerColliderHit {0}[{1}] with {2}[{3}]", name, netId, controllerColliderHitObject.name, controllerColliderHitObject.GetComponent<NetworkIdentity>().netId);
-
-                // Disable the prize gameobject so it doesn't impede player movement
-                // It's going to be destroyed in a few frames and we don't want to spam CmdClaimPrize.
-                // OnControllerColliderHit will fire many times as the player slides against the object.
-                controllerColliderHitObject.SetActive(false);
-
-                CmdClaimPrize(controllerColliderHitObject);
+                clientVar.setgameType(other.gameObject.tag);
+                globalCanvas.ToggleCanvas("gameOn");
+                clientVar.updateStartGameUI();
             }
         }
-
-        [Command]
-        void CmdClaimPrize(GameObject hitObject)
+        
+        /// <summary>
+        /// override methode
+        /// disable the startgame canvas when the player leave the "Magic Circle"
+        /// </summary>
+        /// <param name="other"></param>
+        private void OnTriggerExit(Collider other) /*hier kommt noch was*/
         {
-            // Null check is required, otherwise close timing of multiple claims could throw a null ref.
-            if (hitObject != null)
+            if (!isLocalPlayer || characterController == null) return;
+
+            if (other.gameObject.tag.Equals("MATH") || other.gameObject.tag.Equals("NTG") || other.gameObject.tag.Equals("OOP") || other.gameObject.tag.Equals("GDI") || other.gameObject.tag.Equals("RNAI"))
             {
-               // hitObject.GetComponent<Class>().Methode(gameObject);
+                clientVar.setgameType(null);
+                globalCanvas.ToggleCanvas("gameOff");
             }
-        }
-
-        void OnGUI()
-        {
-            GUI.Box(new Rect(10f + (index * 110), 10f, 100f, 25f), score.ToString().PadLeft(10));
         }
     }
 }
