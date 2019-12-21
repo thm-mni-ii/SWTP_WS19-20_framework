@@ -55,6 +55,11 @@
             <e p="ServerHUD.cs" t="Include" />
           </e>
         </e>
+        <e p="Hostlist" t="Include">
+          <e p="HighscoreTable" t="Include">
+            <e p="HighscoreTable.cs" t="Include" />
+          </e>
+        </e>
         <e p="Mirror" t="Include">
           <e p="Authenticators" t="Include">
             <e p="BasicAuthenticator.cs" t="Include" />
