@@ -6,6 +6,8 @@
 [Muhamad Azem](https://github.com/Azem7)  
 [Mohammad Alyasaqi](https://github.com/MAlyasaqi)
 
+Our Dokumentation: [Dokumenation-MMO-Framework](https://thm-mni-ii.github.io/SWTP_WS19-20_framework/)   
+Our Wiki: [Wiki-MMO-Framework](https://github.com/thm-mni-ii/SWTP_WS19-20_framework/wiki)   
 You  can start the game directly from Build Folder 
 
 Best regards!   
