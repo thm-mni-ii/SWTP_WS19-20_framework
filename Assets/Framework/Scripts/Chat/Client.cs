@@ -393,8 +393,8 @@ public class Client : MonoBehaviour
     /// <summary>
     /// Convert an object to a byte array
     /// </summary>
-    /// <param name="obj"> *hier kommt noch was* </param>
-    /// <returns> *hier kommt noch was* </returns>
+    /// <param name="obj"> An object from type MessageStruct wich will be sent to the server </param>
+    /// <returns> A byte array - This is the Data that will be sent to the server </returns>
     public byte[] ObjectToByteArray(MessageStruct obj)
     {
         BinaryFormatter bf = new BinaryFormatter();
@@ -404,12 +404,12 @@ public class Client : MonoBehaviour
             return ms.ToArray();
         }
     }
-    
+
     /// <summary>
     /// Convert a byte array to an object
     /// </summary>
-    /// <param name="arrBytes"> *hier kommt noch was* </param>
-    /// <returns> *hier kommt noch was* </returns>
+    /// <param name="arrBytes"> Byte array -  data sent from the server </param>
+    /// <returns> The original Object format (MessageStruct) </returns>
     public MessageStruct ByteArrayToObject(byte[] arrBytes)
     {
         using (var memStream = new MemoryStream())
@@ -423,10 +423,11 @@ public class Client : MonoBehaviour
     }
 
     /// <summary>
-    /// to update the new incoming messages
+    ///  Update the new incoming messages from all Players
+    ///  The message and the name of the Sender will be displayed in the chat.
     /// </summary>
-    /// <param name="text"> *hier kommt noch was* </param>
-    /// <param name="name"> *hier kommt noch was* </param>
+    /// <param name="text"> string variable - The text message </param>
+    /// <param name="name"> string variable - The name of the Sender </param>
     void UpdateChat(String text, String name)
     {
         content.text += "\n" + name + ": " + text;
@@ -434,9 +435,11 @@ public class Client : MonoBehaviour
     }
 
     /// <summary>
-    /// to update the party list    /*hier kommt noch was*
+    /// This methods updates the party list for the player when a new member joins/ leaves the party,
+    /// also when a Player hosts a Party his list is automaticly updated.
+    /// The List is sent directly from the Server to all Players who are in the Party.
     /// </summary>
-    /// <param name="text"> *hier kommt noch was* </param>
+    /// <param name="text"> string array - List of the Party players </param>
     void RenderPartyList(String[] text)
     {
         PartycontentField.text = "";
@@ -447,9 +450,10 @@ public class Client : MonoBehaviour
     }
 
     /// <summary>
-    /// to update the Hostlist    /*hier kommt noch was*
+    /// This method recieves a List of all hosts fromt the server and displays them in the Host Canvas
+    /// The list elements are the Gametype,Name of the Host and the amount of players in the party.
     /// </summary>
-    /// <param name="text"> *hier kommt noch was* </param>
+    /// <param name="text"> String array List of Hosts </param>
     void RenderHosts(String[] text)
     {
         GameHostsField.text = "\n Type     Host     Players";
