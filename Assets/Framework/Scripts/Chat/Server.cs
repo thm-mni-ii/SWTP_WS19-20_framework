@@ -11,7 +11,6 @@ using UnityEngine;
  */
 public class Server : MonoBehaviour
 {
-
     /// <summary>
     /// Server variable of type Telepathy
     /// </summary>
@@ -49,105 +48,6 @@ public class Server : MonoBehaviour
         public PartyPlayer(string name)
         {
             this.playername = name;
-        }
-    }
-
-    /// <summary>
-    /// Party class
-    /// This class contains all the information and methods to manage a party
-    /// </summary>
-    public class party
-    {
-        /// <summary>
-        /// hostname of party
-        /// </summary>
-        public string hostname;
-        /// <summary>
-        /// This variable is used to determine if the party is in a game or not
-        /// With the help of this variable the game will be started for all party members
-        /// *hier kommt noch was*
-        /// </summary>
-        public bool gameStarted = false;
-        /// <summary>
-        /// Number of ready players in the party
-        /// *hier kommt noch was*
-        /// </summary>
-        public uint playersReady = 0;
-        /// <summary>
-        /// Game type { OOP, NTG, MATHE ...}
-        /// </summary>
-        public string gameType;    /*hier kommt noch was*/
-        /// <summary>
-        /// Map of player ids and names, which are currently in the party
-        /// </summary>
-        public Dictionary<int, PartyPlayer> playersList = new Dictionary<int, PartyPlayer>();
-
-        /// <summary>
-        /// add a new player the party
-        /// </summary>
-        /// <param name="con"></param>
-        /// <param name="player"></param>
-        public void addPlayer(int con, PartyPlayer player)
-        {
-            playersList.Add(con, player);
-        }
-
-        /// <summary>
-        /// remove a player from the party
-        /// </summary>
-        /// <param name="con"></param>
-        public void removPlayer(int con)
-        {
-            playersList.Remove(con);
-        }
-
-        /// <summary>
-        /// constructor
-        /// Create a new party with hostname and game type
-        /// </summary>
-        /// <param name="hostname"></param>
-        /// <param name="ptype"></param>
-        public party(string hostname, string ptype)
-        {
-            this.hostname = hostname;
-            this.gameType = ptype;
-        }
-
-        /// <summary>
-        /// check of the player is ready or not
-        /// </summary>
-        /// <param name="con"></param>
-        public void PlayerReady(int con)    /*hier kommt noch was*/
-        {
-            if (!playersList[con].isReady)
-            {
-                playersList[con].isReady = true;
-                playersReady++;
-            }
-            else
-            {
-                playersList[con].isReady = false;
-                playersReady--;
-            }
-        }
-        
-        /// <summary>
-        /// check if all party players are ready
-        /// the return value determines if the party can be started or not
-        /// true game can be started
-        /// false game canno't be started
-        /// </summary>
-        /// <returns></returns>
-        public bool allPlayersReady()    /*hier kommt noch was*/
-        {
-            if (playersReady == playersList.Count)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
         }
     }
 
@@ -398,6 +298,105 @@ public class Server : MonoBehaviour
             memStream.Seek(0, SeekOrigin.Begin);
             var obj = binForm.Deserialize(memStream);
             return (MessageStruct)obj;
+        }
+    }
+    
+    /// <summary>
+    /// Party class
+    /// This class contains all the information and methods to manage a party
+    /// </summary>
+    public class party
+    {
+        /// <summary>
+        /// hostname of party
+        /// </summary>
+        public string hostname;
+        /// <summary>
+        /// This variable is used to determine if the party is in a game or not
+        /// With the help of this variable the game will be started for all party members
+        /// *hier kommt noch was*
+        /// </summary>
+        public bool gameStarted = false;
+        /// <summary>
+        /// Number of ready players in the party
+        /// *hier kommt noch was*
+        /// </summary>
+        public uint playersReady = 0;
+        /// <summary>
+        /// Game type { OOP, NTG, MATHE ...}
+        /// </summary>
+        public string gameType;    /*hier kommt noch was*/
+        /// <summary>
+        /// Map of player ids and names, which are currently in the party
+        /// </summary>
+        public Dictionary<int, PartyPlayer> playersList = new Dictionary<int, PartyPlayer>();
+
+        /// <summary>
+        /// add a new player the party
+        /// </summary>
+        /// <param name="con"></param>
+        /// <param name="player"></param>
+        public void addPlayer(int con, PartyPlayer player)
+        {
+            playersList.Add(con, player);
+        }
+
+        /// <summary>
+        /// remove a player from the party
+        /// </summary>
+        /// <param name="con"></param>
+        public void removPlayer(int con)
+        {
+            playersList.Remove(con);
+        }
+
+        /// <summary>
+        /// constructor
+        /// Create a new party with hostname and game type
+        /// </summary>
+        /// <param name="hostname"></param>
+        /// <param name="ptype"></param>
+        public party(string hostname, string ptype)
+        {
+            this.hostname = hostname;
+            this.gameType = ptype;
+        }
+
+        /// <summary>
+        /// check of the player is ready or not
+        /// </summary>
+        /// <param name="con"></param>
+        public void PlayerReady(int con)    /*hier kommt noch was*/
+        {
+            if (!playersList[con].isReady)
+            {
+                playersList[con].isReady = true;
+                playersReady++;
+            }
+            else
+            {
+                playersList[con].isReady = false;
+                playersReady--;
+            }
+        }
+        
+        /// <summary>
+        /// check if all party players are ready
+        /// the return value determines if the party can be started or not
+        /// true game can be started
+        /// false game canno't be started
+        /// </summary>
+        /// <returns></returns>
+        public bool allPlayersReady()    /*hier kommt noch was*/
+        {
+            if (playersReady == playersList.Count)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }
