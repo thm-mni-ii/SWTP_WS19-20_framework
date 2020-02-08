@@ -305,7 +305,9 @@ public class Client : MonoBehaviour
             case 9://update host list
                 string[] hlist = Smsg.Text.Split(new char[] { ';' });
                 RenderHosts(hlist);
+                RenderHostsInGameMenu(hlist);
                 break;
+            
         }
     }
 
@@ -316,7 +318,8 @@ public class Client : MonoBehaviour
     {
         startgameTitle.text = "Welcome to " + gameType + " Module";
     }
-    
+
+
     /// <summary>
     /// Ready Player
     /// </summary>
@@ -461,6 +464,21 @@ public class Client : MonoBehaviour
         for (int i = 0; i+3 < text.Length; i += 3)
         {
             GameHostsField.text += "\n" + text[i] + "     " + text[i + 1] + "     " + text[i + 2];
+        }
+    }
+
+    void RenderHostsInGameMenu(String[] text)
+    {
+
+        if (isHost || inParty) { return; }
+
+        PartycontentField.text = "\n Type     Host     Players";
+
+        for (int i = 0; i + 3 < text.Length; i += 3)
+        {
+            if (text[i].Equals(getgameType())) { //Filter
+                PartycontentField.text += "\n" + text[i] + "     " + text[i + 1] + "     " + text[i + 2];
+            }
         }
     }
 

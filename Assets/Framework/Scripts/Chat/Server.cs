@@ -198,19 +198,15 @@ public class Server : MonoBehaviour
                 temp5.PlayerReady(Smsg.senderId);
                 UpdateList(temp5);
                 break;
+            case 10:// update Host List for client in Game Menu
+                UpdateHostList();
+                break;
             default:
                 Debug.Log("msg Error unknown command");
                 break;
         }
     }
 
-    /**
-     * Update the Party-List only to the Party Members
-     * 
-     * A list of all player names and thier ready state is sen to all clients in the party
-     * 
-     * /*hier kommt noch was*
-     */
     /// <summary>
     /// Update the Party-List only to the Party Members
     /// A list of all player names and thier ready state is sen to all clients in the party
@@ -381,13 +377,13 @@ public class Server : MonoBehaviour
         }
         
         /// <summary>
-        /// check if all party players are ready
-        /// the return value determines if the party can be started or not
-        /// true game can be started
-        /// false game canno't be started
+        /// Check if all party players are ready
+        /// The return value determines if the party can be started or not
+        /// True game can be started
+        /// False game canno't be started
         /// </summary>
-        /// <returns></returns>
-        public bool allPlayersReady()    /*hier kommt noch was*/
+        /// <returns> True if all players are ready, False if atleast one player is not ready</returns>
+        public bool allPlayersReady() 
         {
             if (playersReady == playersList.Count)
             {
