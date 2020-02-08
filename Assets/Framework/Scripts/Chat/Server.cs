@@ -44,7 +44,7 @@ public class Server : MonoBehaviour
         /// <summary>
         /// constructor to save the player name
         /// </summary>
-        /// <param name="name"> *hier kommt noch was* </param>
+        /// <param name="name"> The name of the player </param>
         public PartyPlayer(string name)
         {
             this.playername = name;
@@ -52,9 +52,9 @@ public class Server : MonoBehaviour
     }
 
     /// <summary>
-    /// 
+    /// Awake is called when the script instance is being loaded.
     /// </summary>
-    void Awake()    /*hier kommt noch was*/
+    void Awake()  
     {
         // update even if window isn't focused, otherwise we don't receive.
         Application.runInBackground = true;
@@ -78,10 +78,6 @@ public class Server : MonoBehaviour
         // server
         if (server.Active)
         {
-            // if (Input.GetKeyDown(KeyCode.Space)){
-            //   server.Send(1, new byte[]{0x2});
-            //}
-
             // show all new messages
             Telepathy.Message msg;
             while (server.GetNextMessage(out msg))
@@ -116,18 +112,21 @@ public class Server : MonoBehaviour
     }
 
     /// <summary>
-    /// handle the data, send to the serve
-    /// *hier kommt noch was*
-    /// Types of data are:
+    /// handle the data, sent to the serve from the clients
+    /// Each number represents a Request made from the clients
+    /// This Method recieves the data and handles it based on the Request type 
+    /// Types of Requests are:
     /// case 1: user information after connection
     /// case 2: Global message
     /// case 3: Private Message
     /// case 4: handle a host party request
     /// case 5: only for client should never be used here
+    /// case 6: join party request
     /// case 7: cancel party request (sent from host)
     /// case 8: player left a party
+    /// case 9: player is ready
     /// </summary>
-    /// <param name="data"></param>
+    /// <param name="data"> Byte data recieved from the server (Telepathy.EventType.Data) </param>
     void HandleMessage(Byte[] data)
     {
         MessageStruct Smsg = ByteArrayToObject(data);
@@ -198,9 +197,6 @@ public class Server : MonoBehaviour
                 temp5.PlayerReady(Smsg.senderId);
                 UpdateList(temp5);
                 break;
-            case 10:// update Host List for client in Game Menu
-                UpdateHostList();
-                break;
             default:
                 Debug.Log("msg Error unknown command");
                 break;
@@ -209,10 +205,10 @@ public class Server : MonoBehaviour
 
     /// <summary>
     /// Update the Party-List only to the Party Members
-    /// A list of all player names and thier ready state is sen to all clients in the party
-    /// *hier kommt noch was*
+    /// A list of all player names and thier ready state is sent to all clients in the party
+    /// if the player is ready the Text will be Green else the Text will be Red
     /// </summary>
-    /// <param name="temp"></param>
+    /// <param name="temp">object from type party it contains all information about the party to which the player belongs</param>
     void UpdateList(party temp)
     {
         String names = "";
@@ -236,9 +232,10 @@ public class Server : MonoBehaviour
     }
     
     /// <summary>
-    /// *hier kommt noch was *
     /// Update the Host list for all players on the StartGame Menu
     /// A list of all host name on the server is sent to all game players
+    /// on the client this list will be rendered on the Game Hosts Field and it will be filtered on the Partycontent Field 
+    /// depending on which Magic Circle the player is standing on
     /// </summary>
     public void UpdateHostList()
     {
@@ -255,7 +252,7 @@ public class Server : MonoBehaviour
     /// <summary>
     /// send a message to all players
     /// </summary>
-    /// <param name="data"></param>
+    /// <param name="data">Byte data Array</param>
     void SendToAll(Byte[] data)
     {
         if (clienList.Count > 0)
@@ -268,8 +265,8 @@ public class Server : MonoBehaviour
     /// <summary>
     /// Convert an object to a byte array
     /// </summary>
-    /// <param name="obj"></param>
-    /// <returns></returns>
+    /// <param name="obj"> An object from type MessageStruct wich will be sent to the server </param>
+    /// <returns> A byte array - This is the Data that will be sent to the server </returns>
     public byte[] ObjectToByteArray(MessageStruct obj)
     {
         BinaryFormatter bf = new BinaryFormatter();
@@ -283,8 +280,8 @@ public class Server : MonoBehaviour
     /// <summary>
     /// Convert a byte array to an object
     /// </summary>
-    /// <param name="arrBytes"></param>
-    /// <returns></returns>
+    /// <param name="arrBytes"> Byte array -  data sent from the server </param>
+    /// <returns> The original Object format (MessageStruct) </returns>
     public MessageStruct ByteArrayToObject(byte[] arrBytes)
     {
         using (var memStream = new MemoryStream())
@@ -310,18 +307,22 @@ public class Server : MonoBehaviour
         /// <summary>
         /// This variable is used to determine if the party is in a game or not
         /// With the help of this variable the game will be started for all party members
-        /// *hier kommt noch was*
+        /// The value is set to true of all party players are ready and then the game starts
+        /// when the game ends the value is set back to false
         /// </summary>
         public bool gameStarted = false;
         /// <summary>
         /// Number of ready players in the party
-        /// *hier kommt noch was*
+        /// This variable is used to keep track of how many player are ready
+        /// once all players are ready the game can be started
         /// </summary>
         public uint playersReady = 0;
         /// <summary>
         /// Game type { OOP, NTG, MATHE ...}
+        /// It is used to set the Game type
+        /// this variable is set once the Party is Hosted and can not be changed
         /// </summary>
-        public string gameType;    /*hier kommt noch was*/
+        public string gameType;  
         /// <summary>
         /// Map of player ids and names, which are currently in the party
         /// </summary>
@@ -330,8 +331,8 @@ public class Server : MonoBehaviour
         /// <summary>
         /// add a new player the party
         /// </summary>
-        /// <param name="con"></param>
-        /// <param name="player"></param>
+        /// <param name="con">Connection id (client id/number on server)</param>
+        /// <param name="player">PartyPlayer Object contains information about the player in the party</param>
         public void addPlayer(int con, PartyPlayer player)
         {
             playersList.Add(con, player);
@@ -340,7 +341,7 @@ public class Server : MonoBehaviour
         /// <summary>
         /// remove a player from the party
         /// </summary>
-        /// <param name="con"></param>
+        /// <param name="con">Connection id (client id/number on server)</param>
         public void removPlayer(int con)
         {
             playersList.Remove(con);
@@ -349,9 +350,10 @@ public class Server : MonoBehaviour
         /// <summary>
         /// constructor
         /// Create a new party with hostname and game type
+        /// The parameters are recieved from the client
         /// </summary>
-        /// <param name="hostname"></param>
-        /// <param name="ptype"></param>
+        /// <param name="hostname">Hostname</param>
+        /// <param name="ptype">Game Type</param>
         public party(string hostname, string ptype)
         {
             this.hostname = hostname;
@@ -361,8 +363,8 @@ public class Server : MonoBehaviour
         /// <summary>
         /// check of the player is ready or not
         /// </summary>
-        /// <param name="con"></param>
-        public void PlayerReady(int con)    /*hier kommt noch was*/
+        /// <param name="con">connection id (client id/number on the server)</param>
+        public void PlayerReady(int con)
         {
             if (!playersList[con].isReady)
             {

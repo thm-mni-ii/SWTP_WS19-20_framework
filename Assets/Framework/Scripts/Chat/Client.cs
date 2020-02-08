@@ -109,7 +109,7 @@ public class Client : MonoBehaviour
     public ScrollRect ChatSR;
 
     /// <summary>
-    /// Get methode of the gameType *hier kommt noch was*
+    /// Get methode of the gameType
     /// </summary>
     /// <returns> The game type which is the Modules example: OOP,GDI... </returns>
     public string getgameType()
