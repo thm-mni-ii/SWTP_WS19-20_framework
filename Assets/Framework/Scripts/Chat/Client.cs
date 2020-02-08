@@ -13,76 +13,95 @@ public class Client : MonoBehaviour
     /// Take message text from client
     /// </summary>
     public InputField clientMessageTF = null;
+
     /// <summary>
     /// show received messages 
     /// </summary>
     public Text content = null;
+
     /// <summary>
-    /// party variable /*hier kommt noch was*/
+    /// The Input Text Field in the Game Canvas where the Host names are Entered
     /// </summary>
     public InputField partyTextField = null;
+
     /// <summary>
-    /// Title    /*hier kommt noch was*/
+    /// The Title of the Game Canvas it is changed every time a player enters a Magic Circle
     /// </summary>
     public Text startgameTitle = null;
+
     /// <summary>
-    /// party variable    /*hier kommt noch was*/
+    /// The Text Field where on the GameCanvas where the Hosts or the party players are displayed
     /// </summary>
     public Text PartycontentField = null;
+
     /// <summary>
-    /// GameHosts Text Field    /*hier kommt noch was*/
+    /// The GameHosts Field is displayed on the upper left corner of the screen
+    /// It shows the current Hosts of each game this way the player will know which games are being hosted
     /// </summary>
     public Text GameHostsField = null;
+
     /// <summary>
-    /// make a new Telepathy.Client (responsible for chat)
+    /// make a new Telepathy.Client resposible for the communication with the server
     /// </summary>
     Telepathy.Client client = new Telepathy.Client();
+
     /// <summary>
     /// set port of chat client
     /// </summary>
     public int clientport = 7777;
+
     /// <summary>
     /// Server ip address
     /// </summary>
     public string mainServerip = "localhost";
+
     /// <summary>
-    /// /*hier kommt noch was*/
+    /// The name of the user is read from the database and is saved on the client for easier communication with the server
     /// </summary>
-    public string userName = "ILLEGAL USER";
+    public string userName = "";
+
     /// <summary>
     /// save data information in data struct Cuser
     /// </summary>
     private UserInfo Cuser;
+
     /// <summary>
     /// auxiliary variable to make connection between client and server
     /// </summary>
     private bool firstConnect = true;
+
     /// <summary>
     /// The id of client
     /// It is used for easier communication with the server
     /// </summary>
     private int clientId = 0;
+
     /// <summary>
     /// Party variable
     /// If the client is a party host then isHost = true
     /// </summary>
     private bool isHost = false;
+
     /// <summary>
     /// party variable
     /// If the player is in a party then inParty = true
     /// </summary>
     private bool inParty = false;
+
     /// <summary>
     /// party variable
     /// used to save the name of the party host when a player joins a party
     /// </summary>
     private string partyhostname = "";
+
     /// <summary>
     /// The game type that the player is playing
-    /// /*hier kommt noch was*/
+    /// This variable is used once a player Hosts a game, this value will be sent to the server
+    /// to determine which game type is being hosted, also it is used to filter the Hosts list for client on the Game menu
     /// It is changed from the class PlayerMovement upon Trigger
     /// </summary>
     private string gameType = null;
+
     /// <summary>
     /// The scrollRect of the Chat UI 
     /// It is used to allow auto-scrolling
@@ -92,7 +111,7 @@ public class Client : MonoBehaviour
     /// <summary>
     /// Get methode of the gameType *hier kommt noch was*
     /// </summary>
-    /// <returns> *hier kommt noch was* </returns>
+    /// <returns> The game type which is the Modules example: OOP,GDI... </returns>
     public string getgameType()
     {
         return this.gameType;
@@ -101,14 +120,14 @@ public class Client : MonoBehaviour
     /// <summary>
     /// Set methode of the gameType
     /// </summary>
-    /// <param name="type"> *hier kommt noch was* </param>
-    public void setgameType(string type)    /*hier kommt noch was*/
+    /// <param name="type"> The game type example: OOP,GDI... </param>
+    public void setgameType(string type)  
     {
         this.gameType = type;
     }
-    
+
     /// <summary>
-    /// *hier kommt noch was*
+    /// Awake is called when the script instance is being loaded.
     /// </summary>
     void awake()
     {
@@ -128,7 +147,6 @@ public class Client : MonoBehaviour
     /// 1. Connected
     /// 2. Data: receive message from server
     /// 3. Disconnected
-    ///
     /// and hide/show logout button by pressed on ESC
     /// </summary>
     void Update()
@@ -162,7 +180,7 @@ public class Client : MonoBehaviour
     /// The methode is used from the login methdode
     /// UserInfo contains user iformation after login, it is then gived to the client to start the connection with the server
     /// </summary>
-    /// <param name="user"> *hier kommt noch was* </param>
+    /// <param name="user"> The user object from UserInfo class it contains all the information from the database </param>
     public void EstablishConnection(UserInfo user)
     {
         Cuser = user;
@@ -215,11 +233,12 @@ public class Client : MonoBehaviour
         leaveParty();
         client.Disconnect();
     }
-    
+
     /// <summary>
     /// send a message to all clients or a private message
     /// this methode is used to send messages on the global chat
-    /// *hier kommt noch was*
+    /// The Text (from clientMessageTF Field) is sent to the server from the client once the user presses the 'ENTER' button
+    /// 
     /// </summary>
     public void clientSendMessage()
     {
@@ -262,8 +281,9 @@ public class Client : MonoBehaviour
     /// case 6: join a party
     /// case 7: party canceled
     /// case 8: join failed 
+    /// case 9: update host list
     /// </summary>
-    /// <param name="data"> *hier kommt noch was* </param>
+    /// <param name="data"> Byte data recieved from the server (Telepathy.EventType.Data)  </param>
     public void HandleData(Byte[] data)
     {
         MessageStruct Smsg = ByteArrayToObject(data);
@@ -322,8 +342,9 @@ public class Client : MonoBehaviour
 
     /// <summary>
     /// Ready Player
+    /// Once the ready button is clicked, a message will be sent to inform the server that the player is ready
     /// </summary>
-    public void ReadyButton()    /*hier kommt noch was*/
+    public void ReadyButton()
     {
         if (!inParty)
         {
@@ -344,13 +365,20 @@ public class Client : MonoBehaviour
     {
         if (!isHost)
         {
-            //report error here "Only the a Host can Start a Game"
+            PartycontentField.text += "\n Only a Host can Start the game";
             return;
+        }
+        else
+        {
+        // Here comes the Start game code it is yet to be written
         }
     }
      
     /// <summary>
-    /// Host a party    /*hier kommt noch was*
+    /// Host a party
+    /// when the player is not in a party or is not a Host already then a Host party request will be sent to the server
+    /// if succesful the isHost and inParty variables will be set to True
+    /// also the server will respond with the new party list, the list will be rendered in another method 
     /// </summary>
     public void CreatePartyButton()
     {
@@ -369,7 +397,10 @@ public class Client : MonoBehaviour
     }
 
     /// <summary>
-    /// Join an existing Party    /*hier kommt noch was*
+    /// Join an existing Party
+    /// If the Player is not in a party/host a request to create a party will be sent to the server
+    /// if succesful the variable inParty will be set to True and the server will respond with the player list of the Party which will be Rendered in another Method
+    /// if unsuccesful the player will be informed with a message in the chat
     /// </summary>
     public void JoinPartyButton()
     {
