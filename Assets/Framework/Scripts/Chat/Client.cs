@@ -184,7 +184,7 @@ public class Client : MonoBehaviour
     public void EstablishConnection(UserInfo user)
     {
         Cuser = user;
-        userName = Cuser.userN;
+        userName = Cuser.username;
 
         if (firstConnect)
         {

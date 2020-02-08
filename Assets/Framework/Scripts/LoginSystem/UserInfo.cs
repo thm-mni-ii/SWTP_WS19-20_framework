@@ -1,38 +1,35 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using System;
 
 [Serializable]
 /**
- * data struct of user information
+ * Data struct of user information
  */
 public class UserInfo : MonoBehaviour
 {
     /// <summary>
-    /// Username 
+    /// The username of the player. There are unique usernames.
     /// </summary>
-    public string userN;
-    
+    public string username;
     /// <summary>
-    /// User id: auxiliary variable for the database server
+    /// Player id (unique)
     /// </summary>
-    public string Uid;
-    
+    public string id;
     /// <summary>
-    /// User E-Mail
+    /// Email address of player. There are unique emails.
     /// </summary>
     public string email;
-
-   public  UserInfo() { }
-
-   /**
-    * create new user information
-    */
-    public UserInfo(string userN, string Uid, string email)
+    
+    /// <summary>
+    /// User construct to create a new user. 
+    /// </summary>
+    /// <param name="username">The username of the player</param>
+    /// <param name="id">Player id</param>
+    /// <param name="email">Email address of player</param>
+    public UserInfo(string username, string id, string email)
     {
-        this.userN = userN;
-        this.Uid = Uid;
+        this.username = username;
+        this.id = id;
         this.email = email;
     }
 }

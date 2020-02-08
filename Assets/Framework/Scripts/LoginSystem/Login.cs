@@ -18,11 +18,11 @@ public class Login : MonoBehaviour
     /// <summary>
     /// Take username from GUI (login portal)
     /// </summary>
-    [SerializeField] private InputField userName = null;
+    [SerializeField] public InputField inputUserName = null;
     /// <summary>
     /// Take password from GUI (login portal)
     /// </summary>
-    [SerializeField] private InputField passwordField = null;
+    [SerializeField] private InputField inputPassword = null;
     /// <summary>
     /// Take E-Mail address from GUI (register portal)
     /// </summary>
@@ -34,11 +34,11 @@ public class Login : MonoBehaviour
     /// <summary>
     /// Take desired password from GUI (register portal)
     /// </summary>
-    [SerializeField] private InputField rPass1 = null;
+    [SerializeField] private InputField rPassword = null;
     /// <summary>
-    /// confirmation phase: Take desired password from GUI (register portal) 
+    /// verification phase: Take desired password from GUI (register portal) 
     /// </summary>
-    [SerializeField] private InputField rPass2 = null;
+    [SerializeField] private InputField rPasswordVerification = null;
     /// <summary>
     /// manage the whole game. Hide and show the components.
     /// </summary>
@@ -50,17 +50,17 @@ public class Login : MonoBehaviour
     /// <summary>
     /// warning message from forgot password portal
     /// </summary>
-    [SerializeField] private Text ResWarningMsg = null;
+    [SerializeField] private Text ResPassWarningMsg = null;
     /// <summary>
     /// Take E-Mail address from forgot password portal
     /// </summary>
-    [SerializeField] private InputField ResEmail = null;
+    [SerializeField] private InputField ResPassEmail = null;
     /// <summary>
     /// warning message from register portal
     /// </summary>
     [SerializeField] private Text regWarningMsg = null;
     /// <summary>
-    /// data struct of user information
+    /// data struct of user information. The struct include: 
     /// </summary>
     private UserInfo user;
     /// <summary>
@@ -81,17 +81,55 @@ public class Login : MonoBehaviour
     /// </summary>
     NetworkManager manager;
     /// <summary>
-    /// Answer from database server (to know if all thinks right or to do some think)
+    /// response from database server (to know if all thinks right or to do some think)
     /// </summary>
     private int report = 0;
     /// <summary>
-    /// auxiliary variable to rest the password using E-Mail address /*hier kommt noch was*/
+    /// auxiliary variable to take the Email address form checkUserExist() and put it in completeLogin(string resEmail)
     /// </summary>
-    private string resEmail = null;
+    private string responseEmail = null;
     /// <summary>
-    /// 
+    /// Show the connection status after clicking the Login button
     /// </summary>
-    private bool connecting = false;    /*hier kommt noch was*/
+    private bool connecting = false;
+    
+    /// <summary>
+    /// User class have the user struct.
+    /// The class is an auxiliary class to create a new user and to makes it easier to place it in the database.
+    /// </summary>
+    public class User
+    {
+        /// <summary>
+        /// The username of the player. There are unique usernames.
+        /// </summary>
+        public string username;
+        /// <summary>
+        /// Email address of player. There are unique emails.
+        /// </summary>
+        public string email;
+        /// <summary>
+        /// Player id (unique)
+        /// </summary>
+        public string id;
+        /// <summary>
+        /// Score of player. 
+        /// </summary>
+        public int score;
+
+        /// <summary>
+        /// User construct to create a new user. 
+        /// </summary>
+        /// <param name="username">The username of the player</param>
+        /// <param name="email">Email address of player.</param>
+        /// <param name="id">Player id</param>
+        public User(string username, string email,string id)
+        {
+            this.username = username;
+            this.email = email;
+            this.id = id;
+            score = 0;    //Initially the player has 0 points
+        }
+    }
     
     /// <summary>
     /// Start is called before the first frame update
@@ -99,18 +137,14 @@ public class Login : MonoBehaviour
     /// </summary>
     void Start()
     {
+        //setup canvases and gameobjekts
         globalCanvas = gameObject.GetComponent<GlobalManager>();
         user = gameObject.GetComponent<UserInfo>();
         chat = gameObject.GetComponent<Client>();
-
         GameObject NM = GameObject.FindWithTag("NetworkManager");
-
-        if (NM != null)
-        {
-            manager = NM.GetComponent<NetworkManager>();
-        }
-
-        FirebaseApp.DefaultInstance.SetEditorDatabaseUrl("https://mmo-spiel.firebaseio.com/");
+        if (NM != null) manager = NM.GetComponent<NetworkManager>();
+        //Firebase configuration
+        FirebaseApp.DefaultInstance.SetEditorDatabaseUrl("https://mmo-spiel-1920.firebaseio.com"); //setup database url
         reference = FirebaseDatabase.DefaultInstance.RootReference;
         auth = Firebase.Auth.FirebaseAuth.DefaultInstance;
     }
@@ -122,7 +156,7 @@ public class Login : MonoBehaviour
     /// upon clicking a button the response is set to the variable "report" and then is read and handled once the frame is called
     /// Also after clicking the login button if the userinformation is correct the connection is established here.
     ///
-    /// There are many types of answers:
+    /// There are many types of requests/responses:
     /// case 1: Login Succesful
     /// case 10: or case 11: Invalid username or password
     /// case 12: Registration Succesful
@@ -132,9 +166,9 @@ public class Login : MonoBehaviour
     /// case 16: Password reset email sent successfully
     /// case 17: Error Send request was canceled
     /// case 18: Could not send reset E-mail
-    /// case 19: check: username and password (by register)
+    /// case 19: User not found in database (everything OK) -> complete register (by register)
     /// case 20: Username is Taken
-    /// case 21: check: username and password (by login)
+    /// case 21: username was found -> check: if email is Verified (by login)
     /// </summary>
     void Update()
     {
@@ -146,7 +180,6 @@ public class Login : MonoBehaviour
                 connecting = false;
                 chat.EstablishConnection(user);
                 globalCanvas.ToggleCanvas("chat");
-
                 if (NetworkClient.isConnected && !ClientScene.ready)
                 {
                     ClientScene.Ready(NetworkClient.connection);
@@ -195,24 +228,26 @@ public class Login : MonoBehaviour
                     WarningMsg.text = "please confirm your email";
                     break;
                 case 16:
-                    ResWarningMsg.text = "Password reset email sent successfully";
+                    ResPassWarningMsg.text = "Password reset email sent successfully";
                     break;
                 case 17:
-                    ResWarningMsg.text = "Error Send request was canceled";
+                    ResPassWarningMsg.text = "Error Send request was canceled";
                     break;
                 case 18:
-                    ResWarningMsg.text = "Could not send reset E-mail";
+                    ResPassWarningMsg.text = "Could not send reset E-mail";
                     break;
+                // 19: User not found in database (everything OK) -> complete register (by register)
                 case 19:
                     report = 0;
-                    reg2();
+                    registerNewUser();
                     break;
                 case 20:
                     regWarningMsg.text = "Username is Taken";
                     break;
+                // 21: username was found -> check: if email is Verified (by login)
                 case 21:
                     report = 0;
-                    LoginMethod2(resEmail);
+                    completeLogin(responseEmail);
                     break;
                 default:
                     Debug.Log("Error unkown Report (Login.class)");
@@ -221,27 +256,20 @@ public class Login : MonoBehaviour
             report = 0;
         }
     }
-
-    /**
-     * /*hier kommt noch was*
-     * login methode checks if user is registered on the database and returns the result accordingly 
-     */
+    
     /// <summary>
-    /// *hier kommt noch was*
-    /// login methode checks if user is registered on the database and returns the result accordingly  
+    /// login function checks if user is registered on the database and returns the result (response) accordingly.
+    /// The function take the username and check in the database, if this user have an email and save it in the variable responseEmail.
     /// </summary>
-    public void LoginMethod()
+    public void checkUserExist()
     {
-        //user.email = newUser.Email;
-        //user.Uid = newUser.UserId;
-        user.userN = userName.text;
+        user.username = inputUserName.text;
         report = 1;
-        /*
-        if (userName.text != null && userName.text != "" && passwordField.text != null && passwordField.text != "")
+        if (inputUserName.text != null && inputUserName.text != "" && inputPassword.text != null && inputPassword.text != "")
         {
-            resEmail = null;
+            responseEmail = null;
             FirebaseDatabase.DefaultInstance
-          .GetReference("users/" + userName.text + "/email")
+          .GetReference("users/" + inputUserName.text + "/email")
            .GetValueAsync().ContinueWith(task =>
            {
                if (task.IsFaulted)
@@ -252,32 +280,34 @@ public class Login : MonoBehaviour
                else if (task.IsCompleted)
                {
                    DataSnapshot snapshot = task.Result;
-                   resEmail = (string)snapshot.Value;
-                   if (resEmail == null)
+                   responseEmail = (string)snapshot.Value;
+                   if (responseEmail == null)
                    {
+                       //Invalid username
                        report = 11;
-                       Debug.Log("not found");
+                       Debug.Log("username or email not found");
                    } else
                    {
+                       // 21: username was found -> check: if email is Verified
                        report = 21;
                    }
                }
            });
         }
-        */
     }
-
+    
     /// <summary>
-    /// once LoginMethod finds the email of the users it's given here as a parameter
+    /// This function completes the login procedure and checks if the email is verified.
+    /// once checkUserExist() finds the email of the users it's given here as a parameter.
     /// This Methode logs in the user once the login is succesful it sets report to 1 which then starts the connection on 'update'
-    /// after the next frame is called
+    /// after the next frame is called.
     /// </summary>
-    /// <param name="resEmail"></param>
-    public void LoginMethod2(string resEmail)
+    /// <param name="resEmail">response Email from checkUserExist()</param>
+    public void completeLogin(string resEmail)
     {
-        if (resEmail != null && resEmail != "" && passwordField.text != null && passwordField.text != "")
+        if (resEmail != null && resEmail != "" && inputPassword.text != null && inputPassword.text != "")
         {
-            auth.SignInWithEmailAndPasswordAsync(resEmail, passwordField.text).ContinueWith(task => {
+            auth.SignInWithEmailAndPasswordAsync(resEmail, inputPassword.text).ContinueWith(task => {
                 if (task.IsCanceled)
                 {
                     report = 10;
@@ -290,20 +320,19 @@ public class Login : MonoBehaviour
                     Debug.LogError("SignInWithEmailAndPasswordAsync encountered an error: " + task.Exception);
                     return;
                 }
-                
-                Firebase.Auth.FirebaseUser newUser = task.Result;
-                if (newUser.IsEmailVerified)
+                Firebase.Auth.FirebaseUser userInfoFromDatabase = task.Result;
+                if (userInfoFromDatabase.IsEmailVerified)
                 {
-                    user.email = newUser.Email;
-                    user.Uid = newUser.UserId;
-                    user.userN = newUser.DisplayName;
+                    user.email = userInfoFromDatabase.Email;
+                    user.id = userInfoFromDatabase.UserId;
+                    user.username = userInfoFromDatabase.DisplayName;
                     Debug.LogFormat("User signed in successfully: {0} ({1})",
-                        newUser.DisplayName, newUser.UserId);
+                        userInfoFromDatabase.DisplayName, userInfoFromDatabase.UserId);
                     report = 1;
                 }
                 else
                 {
-                    newUser.SendEmailVerificationAsync();
+                    userInfoFromDatabase.SendEmailVerificationAsync();
                     report = 15;
                 }
             });
@@ -315,10 +344,9 @@ public class Login : MonoBehaviour
     }
     
     /// <summary>
-    /// logs out user and disconnects the connection
-    /// *hier kommt noch was*
+    /// logs out user and disconnects the connection between client and server
     /// </summary>
-    public void LogoutMethod()
+    public void logoutAndDisconnect()
     {
         chat.Disconnection();
         if (NetworkClient.active)
@@ -326,25 +354,25 @@ public class Login : MonoBehaviour
             manager.StopClient();
         }
         globalCanvas.ToggleCanvas("login");
-        passwordField.text = "";
+        inputPassword.text = "";
     }
 
     /// <summary>
-    /// *hier kommt noch was*
-    /// Registers new user to the Database and handles the request if the user is already registered
+    /// Registers new user to the Database (send report number 19) or handles the request if the user is already registered.
+    /// User not found in database (everything OK) -> complete register (by register)
     /// </summary>
-    public void RegisterMethod()
+    public void checkIfUserRegister()
     {
-        if (rUsername.text != null && rUsername.text != "" && rEmail.text != null && rEmail.text != "" && rPass1.text != null && rPass1.text != "" && rPass2.text != null && rPass2.text != "")
+        if (rUsername.text != null && rUsername.text != "" && rEmail.text != null && rEmail.text != "" && rPassword.text != null && rPassword.text != "" && rPasswordVerification.text != null && rPasswordVerification.text != "")
         {
             if (!rEmail.text.Contains("@"))
             {
                 regWarningMsg.text = "Please enter your E-mail";
                 return;
             }
-            
+
             string u = null;
-            FirebaseDatabase.DefaultInstance.GetReference("users/" + rUsername.text + "/UserName")
+            FirebaseDatabase.DefaultInstance.GetReference("users/" + rUsername.text + "/username")
                 .GetValueAsync().ContinueWith(task => {
                     if (task.IsFaulted)
                     {
@@ -357,7 +385,8 @@ public class Login : MonoBehaviour
                        u = (string)snapshot.Value;
                        if (u == null)
                        {
-                          Debug.Log("not found");
+                          Debug.Log("User not found: everything OK");
+                          // 19: User not found in database (everything OK) -> complete register (by register)
                           report = 19;
                        }else
                        {
@@ -369,25 +398,22 @@ public class Login : MonoBehaviour
     }
    
     /// <summary>
-    /// *hier kommt noch was*
-    /// helping register method to Registers new user to the Database and handles the request if the user is already registered
+    /// check if every thing okay (like length of the password) an put the new user information in the database (based writeNewUser() function)
     /// </summary>
-    public void reg2() { 
-        if (rUsername.text != null && rUsername.text != "" && rEmail.text != null && rEmail.text != "" && rPass1.text != null && rPass1.text != "" && rPass2.text != null && rPass2.text != "")
+    public void registerNewUser() { 
+        if (rUsername.text != null && rUsername.text != "" && rEmail.text != null && rEmail.text != "" && rPassword.text != null && rPassword.text != "" && rPasswordVerification.text != null && rPasswordVerification.text != "")
         {
-            if (rPass1.text.Length < 6 || rPass2.text.Length < 6)
+            if (rPassword.text.Length < 6 || rPasswordVerification.text.Length < 6)
             {
                 regWarningMsg.text = "Password must contain at least 6 Charachters";
                 return;
             }
-
-            if (string.Compare(rPass1.text, rPass2.text) != 0)
+            if (string.Compare(rPassword.text, rPasswordVerification.text) != 0)
             {
                 regWarningMsg.text = "Passwords don't match";
                 return;
             }
-
-            auth.CreateUserWithEmailAndPasswordAsync(rEmail.text, rPass1.text).ContinueWith(task => {
+            auth.CreateUserWithEmailAndPasswordAsync(rEmail.text, rPassword.text).ContinueWith(task => {
                 if (task.IsCanceled)
                 {
                     report = 13;
@@ -400,7 +426,6 @@ public class Login : MonoBehaviour
                     Debug.LogError("CreateUserWithEmailAndPasswordAsync encountered an error: " + task.Exception);
                     return;
                 }
-
                 // Firebase user has been created.
                 Firebase.Auth.FirebaseUser newUser = task.Result;
                 newUser.SendEmailVerificationAsync();
@@ -417,10 +442,9 @@ public class Login : MonoBehaviour
     }
  
     /// <summary>
-    /// *hier kommt noch was*
     /// Saved the username in the Database because firebase saves only the email and password
     /// </summary>
-    /// <param name="newUser"></param>
+    /// <param name="newUser">Username from login system</param>
     public void setDisplayName(Firebase.Auth.FirebaseUser newUser)
     {
         if (newUser != null)
@@ -472,16 +496,16 @@ public class Login : MonoBehaviour
     /// <summary>
     /// sends a recovery Email to reset password
     /// </summary>
-    public void ResetPass()
+    public void resetPassword()
     {
-        if (ResEmail.text != null && ResEmail.text != "")
+        if (ResPassEmail.text != null && ResPassEmail.text != "")
         {
-            if (!ResEmail.text.Contains("@"))
+            if (!ResPassEmail.text.Contains("@"))
             {
-                ResWarningMsg.text = "Please enter your E-mail to reset password";
+                ResPassWarningMsg.text = "Please enter your E-mail to reset password";
                 return;
             }
-            auth.SendPasswordResetEmailAsync(ResEmail.text).ContinueWith(task => {
+            auth.SendPasswordResetEmailAsync(ResPassEmail.text).ContinueWith(task => {
                 if (task.IsCanceled)
                 {
                     report = 17;
@@ -499,86 +523,20 @@ public class Login : MonoBehaviour
             });
         }else
         {
-            ResWarningMsg.text = "Please enter your E-mail to reset password";
-        }
-    }
-
-    /// <summary>
-    /// *hier kommt noch was*
-    /// Database for user definition
-    /// </summary>
-    public class User
-    {
-        /// <summary>
-        /// *hier kommt noch was*
-        /// </summary>
-        public string UserName;
-        /// <summary>
-        /// *hier kommt noch was*
-        /// </summary>
-        public string email;
-        /// <summary>
-        /// *hier kommt noch was*
-        /// </summary>
-        public int xp;
-        /// <summary>
-        /// *hier kommt noch was*
-        /// </summary>
-        public string id;
-        /// <summary>
-        /// *hier kommt noch was*
-        /// </summary>
-        public User() { }
-        
-        /// <summary>
-        /// *hier kommt noch was*
-        /// </summary>
-        /// <param name="username"></param>
-        /// <param name="email"></param>
-        /// <param name="id"></param>
-        public User(string username, string email,string id)
-        {
-            this.UserName = username;
-            this.email = email;
-            this.xp = 0;
-            this.id = id;
+            ResPassWarningMsg.text = "Please enter your E-mail to reset password";
         }
     }
     
     /// <summary>
     /// after register take the new user and include him in the database
     /// </summary>
-    /// <param name="userId"></param>
-    /// <param name="name"></param>
-    /// <param name="email"></param>
+    /// <param name="userId">id of the new user</param>
+    /// <param name="name">username of the new user</param>
+    /// <param name="email">email of the new user</param>
     private void writeNewUser(string userId, string name, string email)
     {
         User user = new User(name, email, userId);
         string json = JsonUtility.ToJson(user);
-
         reference.Child("users").Child(name).SetRawJsonValueAsync(json);
-    }
-    // Example Method for Data change 
-    // reference.Child("users").Child(userId).Child("UserName").SetValueAsync(name);
-  
-    /// <summary>
-    /// Read Data from Database
-    /// </summary>
-    public void readdata()
-    {
-        FirebaseDatabase.DefaultInstance
-         .GetReference("users")
-          .GetValueAsync().ContinueWith(task =>
-          {
-              if (task.IsFaulted)
-              {
-                  // Handle the error...
-              }
-              else if (task.IsCompleted)
-              {
-                  DataSnapshot snapshot = task.Result;
-                  // Do something with snapshot...
-              }
-          });
     }
 }
