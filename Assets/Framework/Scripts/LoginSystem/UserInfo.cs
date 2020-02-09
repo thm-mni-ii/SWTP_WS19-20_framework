@@ -19,6 +19,10 @@ public class UserInfo : MonoBehaviour
     /// Email address of player. There are unique emails.
     /// </summary>
     public string email;
+    /// <summary>
+    /// Score of player. 
+    /// </summary>
+    public int score;
     
     /// <summary>
     /// User construct to create a new user. 
