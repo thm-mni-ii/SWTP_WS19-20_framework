@@ -1,5 +1,8 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using Firebase.Database;
+using System.Collections.Generic;
+using Object = System.Object;
 
 /**
  * The reward system is a method of realizing the levels based on the score.
@@ -22,6 +25,14 @@ public class BelohnungSystem : MonoBehaviour
     /// instance of the class Login to access on the database
     /// </summary>
     private Login login;
+    /// <summary>
+    /// Create Dictionary of users and scores
+    /// </summary>
+    public Dictionary<string, int> usersScores = new Dictionary<string, int>();
+    /// <summary>
+    /// List of players. it use to find all players, who have any Information in the database
+    /// </summary>
+    public List<string> playerList = new List<string>();
     
     /// <summary>
     /// Start is called before the first frame update
@@ -39,8 +50,9 @@ public class BelohnungSystem : MonoBehaviour
     /// </summary>
     void Update()
     {
-        takeScoreOfPlayer();
-        Debug.Log("Level: " + level);
+        updateUsersScores();
+        //takeScoreOfPlayer();
+        //Debug.Log("Level: " + level);
     }
 
     /// <summary>
@@ -76,16 +88,85 @@ public class BelohnungSystem : MonoBehaviour
     {
         if (userInfo.username != null || userInfo.username != "")
         {
-            //database (Firebase) save data instructions ...
+            //database (Firebase) save data instruction ...
             login.reference.Child("users").Child(userInfo.username).Child("score").SetValueAsync(newScore);
         }
+    }
+
+    /// <summary>
+    /// Scores are updated periodically. The information in the database is retrieved and then stored in the players list.
+    /// </summary>
+    public void updateUsersScores()
+    {
+        FirebaseDatabase.DefaultInstance
+            .GetReference("users")
+            .ValueChanged += HandleValueChanged;
+
+        void HandleValueChanged(object sender, ValueChangedEventArgs args)
+        {
+            if (args.DatabaseError != null)
+            {
+                Debug.LogError(args.DatabaseError.Message);
+                return;
+            }
+
+            // Do something with the data in args.Snapshot
+            // Loop over items in collection of users.
+            foreach (KeyValuePair<string, Object> users in (Dictionary<string, Object>) args.Snapshot.Value)
+            {
+                string tempScore = null; //Save a temporary score for later storage in the list
+                //Debug.Log("KEY: " + users.Key + "   VALUE: " + users.Value);
+                foreach (KeyValuePair<string, Object> userInformation in (Dictionary<string, Object>) users.Value)
+                {
+                    //take score
+                    //be careful, it may be that the username is taken from the database (Firebase) before the score
+                    if (userInformation.Key.Equals("score"))
+                    {
+                        tempScore = userInformation.Value.ToString();
+                    }
+                    //Debug.Log("KEY: " + userInformation.Key + "   VALUE: " + userInformation.Value);
+                    if (userInformation.Key.Equals("username"))
+                    {
+                        bool ifUserExist = false;
+                        //add username just if the user not in the list of players.
+                        foreach (string username in playerList)
+                        {
+                            if (username.Equals(userInformation.Value)) ifUserExist = true;
+                        }
+                        if (!ifUserExist)
+                        {
+                            // Add data to the Dictionary<string, int> usersScores
+                            usersScores.Add((string) userInformation.Value, Convert.ToInt32(tempScore));
+                            playerList.Add((string) userInformation.Value);
+                        }
+                    }
+                }
+            }
+            
+            //Debug: Check if every thing okay in the Dictionary
+            /*foreach (KeyValuePair<string, int> userInMap in usersScores)
+            {
+                Debug.Log("KEY: " + userInMap.Key + "   VALUE: " + userInMap.Value);
+            }*/
+        }
+       
+        // Add some data.
+        // usersScores.Add("pearl", 100);
+
+        // Get value that exists.
+        // int value1 = usersScores["diamond"];
+        // Console.WriteLine("get DIAMOND: " + value1);
+
+        // Get value that does not exist.
+        // usersScores.TryGetValue("coal", out int value2);
+        // Console.WriteLine("get COAL: " + value2);
     }
 
     /// <summary>
     /// Update the player's level according to his score
     /// </summary>
     /// <param name="score">score of player</param>
-    void updateLevel(int score)
+    public void updateLevel(int score)
     {
         if (score < 5 && score > 0)
         {
