@@ -1,34 +1,34 @@
 {
   "project_info": {
-    "project_number": "611410717267",
-    "firebase_url": "https://mmo-spiel.firebaseio.com",
-    "project_id": "mmo-spiel",
-    "storage_bucket": "mmo-spiel.appspot.com"
+    "project_number": "328802429033",
+    "firebase_url": "https://mmo-spiel-1920.firebaseio.com",
+    "project_id": "mmo-spiel-1920",
+    "storage_bucket": "mmo-spiel-1920.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:611410717267:android:52dd338ebd6b10a860f4a6",
+        "mobilesdk_app_id": "1:328802429033:android:0181075ffc9c2260165af8",
         "android_client_info": {
-          "package_name": "com.DefaultCompany.NewUnityProject"
+          "package_name": "com.THM.MMO1920"
         }
       },
       "oauth_client": [
         {
-          "client_id": "611410717267-3c76t63vb58mb1mo91of00akr9apa5vt.apps.googleusercontent.com",
+          "client_id": "328802429033-nm696kqlj89ldgee7vmia9gp6bc7hp16.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBK9MxqcTpKtbpu63Gk-YvP7AgtaxLrRlc"
+          "current_key": "AIzaSyDBYaD9vt4ZTRkjyMbCAyX6Nnk47fSc4Rg"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "611410717267-3c76t63vb58mb1mo91of00akr9apa5vt.apps.googleusercontent.com",
+              "client_id": "328802429033-nm696kqlj89ldgee7vmia9gp6bc7hp16.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
