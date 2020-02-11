@@ -1,89 +1,110 @@
-﻿/* 
-    ------------------- Code Monkey -------------------
-
-    Thank you for downloading this package
-    I hope you find it useful in your projects
-    If you have any questions let me know
-    Cheers!
-
-               unitycodemonkey.com
-    --------------------------------------------------
- */
-
+﻿
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-//using CodeMonkey.Utils;
 
-public class HighscoreTable : MonoBehaviour {
+public class HighscoreTable : MonoBehaviour
+{
 
-    private Transform entryContainer;
-    private Transform entryTemplate;
-    private List<Transform> highscoreEntryTransformList;
-    ScrollRect s;
-    
 
-    private void Awake() {
-        entryContainer = transform.Find("highscoreEntryContainer");
-        entryTemplate = entryContainer.Find("highscoreEntryTemplate");
-        
+
+    public Transform entryContainer; 
+    public Transform entryTemplate;
+    public static List<Transform> highscoreEntryTransformList = new List<Transform>();
+
+    private List<HighscoreEntry> highscoreEntryList;
+    static int counter = 0;
+    static int counter2 = 0;
+    static int count = 0;
+
+    void render()
+    {
+
+
+
+
         entryTemplate.gameObject.SetActive(false);
 
-        string jsonString = PlayerPrefs.GetString("highscoreTable");
-        Highscores highscores = JsonUtility.FromJson<Highscores>(jsonString);
+        // exampel entry
+        highscoreEntryList = new List<HighscoreEntry>();
+        highscoreEntryList.Add(new HighscoreEntry { score = 23, name = "eins" });
+        highscoreEntryList.Add(new HighscoreEntry { score = 232, name = "hh" });
+        highscoreEntryList.Add(new HighscoreEntry { score = 223, name = "asdf" });
+        highscoreEntryList.Add(new HighscoreEntry { score = 657, name = "sadfad" });
+        highscoreEntryList.Add(new HighscoreEntry { score = 23, name = "hallo" });
+        highscoreEntryList.Add(new HighscoreEntry { score = 232, name = "hh" });
+        highscoreEntryList.Add(new HighscoreEntry { score = 223, name = "asdf" });
+        highscoreEntryList.Add(new HighscoreEntry { score = 657, name = "hallowasmachstdu" });
+        highscoreEntryList.Add(new HighscoreEntry { score = 23, name = "Zwei" });
+        highscoreEntryList.Add(new HighscoreEntry { score = 232, name = "qqqqqqq" });
+        highscoreEntryList.Add(new HighscoreEntry { score = 223, name = "tttttt" });
+        highscoreEntryList.Add(new HighscoreEntry { score = 657, name = "eeeeee" });
+        highscoreEntryList.Add(new HighscoreEntry { score = 23, name = "werwerwe" });
+        highscoreEntryList.Add(new HighscoreEntry { score = 232, name = "rrrrrr" });
+        highscoreEntryList.Add(new HighscoreEntry { score = 223, name = "ffff" });
+        highscoreEntryList.Add(new HighscoreEntry { score = 657, name = "mmmm" });
+        highscoreEntryList.Add(new HighscoreEntry { score = 657, name = "mmmm" });
+        Debug.Log(highscoreEntryList.Count);
 
-        
-        if (highscores == null) {
-            // There's no stored table, initialize
-            Debug.Log("Initializing table with default values...");
-            AddHighscoreEntry(1000000, "CMK");
-            AddHighscoreEntry(897621, "JOE");
-            AddHighscoreEntry(872931, "DAV");
-            AddHighscoreEntry(785123, "CAT");
-            AddHighscoreEntry(542024, "MAX");
-            AddHighscoreEntry(68245, "AAA");
-            
 
-            // Reload
-            jsonString = PlayerPrefs.GetString("highscoreTable");
-            highscores = JsonUtility.FromJson<Highscores>(jsonString);
+        foreach (HighscoreEntry highscoreEntry in highscoreEntryList)
+        {
+            if ((counter < (counter2 * 8) + 8))
+            {
+                CreateHighscoreEntryTransform(highscoreEntryList[counter], entryContainer, HighscoreTable.highscoreEntryTransformList);
+                counter++;
+            }
+
         }
 
-        //// Sort entry list by Score
-        //for (int i = 0; i < highscores.highscoreEntryList.Count; i++) {
-        //    for (int j = i + 1; j < highscores.highscoreEntryList.Count; j++) {
-        //        if (highscores.highscoreEntryList[j].score > highscores.highscoreEntryList[i].score) {
-        //            // Swap
-        //            HighscoreEntry tmp = highscores.highscoreEntryList[i];
-        //            highscores.highscoreEntryList[i] = highscores.highscoreEntryList[j];
-        //            highscores.highscoreEntryList[j] = tmp;
-        //        }
-        //    }
-        //}
-
-        highscoreEntryTransformList = new List<Transform>();
-        foreach (HighscoreEntry highscoreEntry in highscores.highscoreEntryList) {
-            CreateHighscoreEntryTransform(highscoreEntry, entryContainer, highscoreEntryTransformList);
-        }
     }
 
-    private void CreateHighscoreEntryTransform(HighscoreEntry highscoreEntry, Transform container, List<Transform> transformList) {
+    //hier kannst du ein Element zu der Tabelle hinzufügen
+    public void addTableElement(string type, int host, int player)
+    {
+        count++;
+        float templateHeight = 31f;
+        Transform entryTransform = Instantiate(entryTemplate, entryContainer);    
+        RectTransform entryRectTransform = entryTransform.GetComponent<RectTransform>();   
+        entryRectTransform.anchoredPosition = new Vector2(0, -templateHeight * count);
+        entryTransform.gameObject.SetActive(true);
+        
+        // hier kannst du auf die Elemente in der Tabellen zugreifen 
+        entryTransform.Find("posText").GetComponent<Text>().text = type;
+        entryTransform.Find("scoreText").GetComponent<Text>().text = host.ToString();
+        entryTransform.Find("nameText").GetComponent<Text>().text = player.ToString();
+        entryTransform.Find("background").gameObject.SetActive(count % 2 == 1);
+
+        // das dient einfach dazu, dass du die Farbe des textes aendern kannst
+        entryTransform.Find("posText").GetComponent<Text>().color = Color.green;
+        entryTransform.Find("scoreText").GetComponent<Text>().color = Color.green;
+        entryTransform.Find("nameText").GetComponent<Text>().color = Color.green;
+        HighscoreTable.highscoreEntryTransformList.Add(entryTransform);
+
+    }
+
+
+    // muss noch programmiert werden 
+    private void CreateHighscoreEntryTransform(HighscoreEntry highscoreEntry, Transform container, List<Transform> transformList)
+    {
+
         float templateHeight = 31f;
         Transform entryTransform = Instantiate(entryTemplate, container);
         RectTransform entryRectTransform = entryTransform.GetComponent<RectTransform>();
-        entryRectTransform.anchoredPosition = new Vector2(0, -templateHeight * transformList.Count);
+        entryRectTransform.anchoredPosition = new Vector2(0, -templateHeight * count);
         entryTransform.gameObject.SetActive(true);
 
-        int rank = transformList.Count + 1;
+        int rank = count + 1;
         string rankString;
-        switch (rank) {
-        default:
-            rankString = rank + "TH"; break;
+        switch (rank)
+        {
+            default:
+                rankString = rank + "TH"; break;
 
-        case 1: rankString = "1ST"; break;
-        case 2: rankString = "2ND"; break;
-        case 3: rankString = "3RD"; break;
+            case 1: rankString = "1ST"; break;
+            case 2: rankString = "2ND"; break;
+            case 3: rankString = "3RD"; break;
         }
 
         entryTransform.Find("posText").GetComponent<Text>().text = rankString;
@@ -97,67 +118,78 @@ public class HighscoreTable : MonoBehaviour {
 
         // Set background visible odds and evens, easier to read
         entryTransform.Find("background").gameObject.SetActive(rank % 2 == 1);
-        
-        // Highlight First
-      //  if (rank == 1) {
-            entryTransform.Find("posText").GetComponent<Text>().color = Color.green;
-            entryTransform.Find("scoreText").GetComponent<Text>().color = Color.green;
-            entryTransform.Find("nameText").GetComponent<Text>().color = Color.green;
-      //  }
+        entryTransform.Find("posText").GetComponent<Text>().color = Color.green;
+        entryTransform.Find("scoreText").GetComponent<Text>().color = Color.green;
+        entryTransform.Find("nameText").GetComponent<Text>().color = Color.green;
 
-        // Set tropy
-        //switch (rank) {
-        //default:
-        //    entryTransform.Find("trophy").gameObject.SetActive(false);
-        //    break;
-        //case 1:
-        //    entryTransform.Find("trophy").GetComponent<Image>().color = UtilsClass.GetColorFromString("FFD200");
-        //    break;
-        //case 2:
-        //    entryTransform.Find("trophy").GetComponent<Image>().color = UtilsClass.GetColorFromString("C6C6C6");
-        //    break;
-        //case 3:
-        //    entryTransform.Find("trophy").GetComponent<Image>().color = UtilsClass.GetColorFromString("B76F56");
-        //    break;
 
-        //}
+        // transformList.Add(entryTransform);
+        HighscoreTable.highscoreEntryTransformList.Add(entryTransform);
+        count++;
+        Debug.Log("highscoreEntryTransformList Count in the Backasdfasdf " + HighscoreTable.highscoreEntryTransformList.Count);
 
-        transformList.Add(entryTransform);
+
     }
 
-    private void AddHighscoreEntry(int score, string name) {
-        // Create HighscoreEntry
-        HighscoreEntry highscoreEntry = new HighscoreEntry { score = score, name = name };
-        
-        // Load saved Highscores
-        string jsonString = PlayerPrefs.GetString("highscoreTable");
-        Highscores highscores = JsonUtility.FromJson<Highscores>(jsonString);
+    //muss noch programmiert werden
 
-        if (highscores == null) {
-            // There's no stored table, initialize
-            highscores = new Highscores() {
-                highscoreEntryList = new List<HighscoreEntry>()
-            };
+    public void showNextElements()
+    {
+        addTableElement("TEST", 23, 234);
+        //count = 0;
+        //cleartransformlist();
+        //Debug.Log("highscoreEntryTransformList Count" + HighscoreTable.highscoreEntryTransformList.Count);
+
+        //render();
+        //counter2++;
+
+
+    }
+    //muss noch programmiert werden
+    public void cleartransformlist()
+    {
+        Debug.Log("halloMthode");
+        foreach (Transform highscoreEntry in HighscoreTable.highscoreEntryTransformList)
+        {
+
+            Destroy(highscoreEntry.gameObject);
+
         }
 
-        // Add new entry to Highscores
-        highscores.highscoreEntryList.Add(highscoreEntry);
-
-        // Save updated Highscores
-        string json = JsonUtility.ToJson(highscores);
-        PlayerPrefs.SetString("highscoreTable", json);
-        PlayerPrefs.Save();
+        Debug.Log("highscoreEntryTransformList Count in the Back hallo mein Lieber" + HighscoreTable.highscoreEntryTransformList.Count);
+        if (highscoreEntryTransformList.Count > 0)
+        {
+            for (int i = 0; i <= count; i++)
+            {
+                if (HighscoreTable.highscoreEntryTransformList[i] != null)
+                {
+                    highscoreEntryTransformList.Remove(HighscoreTable.highscoreEntryTransformList[i]);
+                }
+            }
+        }
     }
 
-    private class Highscores {
+    //muss noch programmiert werden
+    public void showBackElements()
+    {
+
+        cleartransformlist();
+        Debug.Log("highscoreEntryTransformList Count in the Back" + HighscoreTable.highscoreEntryTransformList.Count);
+
+        counter -= 7;
+        counter2--;
+        //render();
+
+    }
+
+    //Das wird spaeter geloescht .
+    private class Highscores
+    {
         public List<HighscoreEntry> highscoreEntryList;
     }
 
-    /*
-     * Represents a single High score entry
-     * */
-    [System.Serializable] 
-    private class HighscoreEntry {
+    private class HighscoreEntry
+    {
         public int score;
         public string name;
     }
