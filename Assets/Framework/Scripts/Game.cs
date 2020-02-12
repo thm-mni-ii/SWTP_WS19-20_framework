@@ -35,11 +35,11 @@ public class Game
     /// <summary>
     /// make a new Game and save the game information (ip, port, title, players, capacity)
     /// </summary>
-    /// <param name="ip"></param>
-    /// <param name="port"></param>
-    /// <param name="title"></param>
-    /// <param name="players"></param>
-    /// <param name="capacity"></param>
+    /// <param name="ip">ip address of the Hosting player</param>
+    /// <param name="port">Hosting port</param>
+    /// <param name="title">game title</param>
+    /// <param name="players">number of players</param>
+    /// <param name="capacity">game capacity</param>
     public Game(string ip, ushort port, string title, ushort players, ushort capacity)
     {
         this.ip = ip;
