@@ -1,8 +1,4 @@
-﻿using System;
-using System.Threading;
-using JetBrains.Annotations;
-using UnityEngine;
-using UnityEngine.Experimental.PlayerLoop;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 /**
@@ -174,7 +170,7 @@ public class GlobalManager : MonoBehaviour {
     /// <summary>
     /// change between canvases
     /// </summary>
-    /// <param name="open"></param>
+    /// <param name="open">name of the canvas, which we want to open</param>
 	public void ToggleCanvas(string open){
         if (open == "login") {
             RegisterCanvas.enabled = false;

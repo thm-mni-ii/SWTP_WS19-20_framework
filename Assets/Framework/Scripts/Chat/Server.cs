@@ -50,6 +50,110 @@ public class Server : MonoBehaviour
             this.playername = name;
         }
     }
+    
+     /// <summary>
+    /// Party class
+    /// This class contains all the information and methods to manage a party
+    /// </summary>
+    public class party
+    {
+        /// <summary>
+        /// hostname of party
+        /// </summary>
+        public string hostname;
+        /// <summary>
+        /// This variable is used to determine if the party is in a game or not
+        /// With the help of this variable the game will be started for all party members
+        /// The value is set to true of all party players are ready and then the game starts
+        /// when the game ends the value is set back to false
+        /// </summary>
+        public bool gameStarted = false;
+        /// <summary>
+        /// Number of ready players in the party
+        /// This variable is used to keep track of how many player are ready
+        /// once all players are ready the game can be started
+        /// </summary>
+        public uint playersReady = 0;
+        /// <summary>
+        /// Game type { OOP, NTG, MATHE ...}
+        /// It is used to set the Game type
+        /// this variable is set once the Party is Hosted and can not be changed
+        /// </summary>
+        public string gameType;  
+        /// <summary>
+        /// Map of player ids and names, which are currently in the party
+        /// </summary>
+        public Dictionary<int, PartyPlayer> playersList = new Dictionary<int, PartyPlayer>();
+
+        /// <summary>
+        /// add a new player the party
+        /// </summary>
+        /// <param name="con">Connection id (client id/number on server)</param>
+        /// <param name="player">PartyPlayer Object contains information about the player in the party</param>
+        public void addPlayer(int con, PartyPlayer player)
+        {
+            playersList.Add(con, player);
+        }
+
+        /// <summary>
+        /// remove a player from the party
+        /// </summary>
+        /// <param name="con">Connection id (client id/number on server)</param>
+        public void removPlayer(int con)
+        {
+            playersList.Remove(con);
+        }
+
+        /// <summary>
+        /// constructor
+        /// Create a new party with hostname and game type
+        /// The parameters are recieved from the client
+        /// </summary>
+        /// <param name="hostname">Hostname</param>
+        /// <param name="ptype">Game Type</param>
+        public party(string hostname, string ptype)
+        {
+            this.hostname = hostname;
+            this.gameType = ptype;
+        }
+
+        /// <summary>
+        /// check of the player is ready or not
+        /// </summary>
+        /// <param name="con">connection id (client id/number on the server)</param>
+        public void PlayerReady(int con)
+        {
+            if (!playersList[con].isReady)
+            {
+                playersList[con].isReady = true;
+                playersReady++;
+            }
+            else
+            {
+                playersList[con].isReady = false;
+                playersReady--;
+            }
+        }
+        
+        /// <summary>
+        /// Check if all party players are ready
+        /// The return value determines if the party can be started or not
+        /// True game can be started
+        /// False game canno't be started
+        /// </summary>
+        /// <returns> True if all players are ready, False if atleast one player is not ready</returns>
+        public bool allPlayersReady() 
+        {
+            if (playersReady == playersList.Count)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+    }
 
     /// <summary>
     /// Awake is called when the script instance is being loaded.
@@ -291,110 +395,6 @@ public class Server : MonoBehaviour
             memStream.Seek(0, SeekOrigin.Begin);
             var obj = binForm.Deserialize(memStream);
             return (MessageStruct)obj;
-        }
-    }
-    
-    /// <summary>
-    /// Party class
-    /// This class contains all the information and methods to manage a party
-    /// </summary>
-    public class party
-    {
-        /// <summary>
-        /// hostname of party
-        /// </summary>
-        public string hostname;
-        /// <summary>
-        /// This variable is used to determine if the party is in a game or not
-        /// With the help of this variable the game will be started for all party members
-        /// The value is set to true of all party players are ready and then the game starts
-        /// when the game ends the value is set back to false
-        /// </summary>
-        public bool gameStarted = false;
-        /// <summary>
-        /// Number of ready players in the party
-        /// This variable is used to keep track of how many player are ready
-        /// once all players are ready the game can be started
-        /// </summary>
-        public uint playersReady = 0;
-        /// <summary>
-        /// Game type { OOP, NTG, MATHE ...}
-        /// It is used to set the Game type
-        /// this variable is set once the Party is Hosted and can not be changed
-        /// </summary>
-        public string gameType;  
-        /// <summary>
-        /// Map of player ids and names, which are currently in the party
-        /// </summary>
-        public Dictionary<int, PartyPlayer> playersList = new Dictionary<int, PartyPlayer>();
-
-        /// <summary>
-        /// add a new player the party
-        /// </summary>
-        /// <param name="con">Connection id (client id/number on server)</param>
-        /// <param name="player">PartyPlayer Object contains information about the player in the party</param>
-        public void addPlayer(int con, PartyPlayer player)
-        {
-            playersList.Add(con, player);
-        }
-
-        /// <summary>
-        /// remove a player from the party
-        /// </summary>
-        /// <param name="con">Connection id (client id/number on server)</param>
-        public void removPlayer(int con)
-        {
-            playersList.Remove(con);
-        }
-
-        /// <summary>
-        /// constructor
-        /// Create a new party with hostname and game type
-        /// The parameters are recieved from the client
-        /// </summary>
-        /// <param name="hostname">Hostname</param>
-        /// <param name="ptype">Game Type</param>
-        public party(string hostname, string ptype)
-        {
-            this.hostname = hostname;
-            this.gameType = ptype;
-        }
-
-        /// <summary>
-        /// check of the player is ready or not
-        /// </summary>
-        /// <param name="con">connection id (client id/number on the server)</param>
-        public void PlayerReady(int con)
-        {
-            if (!playersList[con].isReady)
-            {
-                playersList[con].isReady = true;
-                playersReady++;
-            }
-            else
-            {
-                playersList[con].isReady = false;
-                playersReady--;
-            }
-        }
-        
-        /// <summary>
-        /// Check if all party players are ready
-        /// The return value determines if the party can be started or not
-        /// True game can be started
-        /// False game canno't be started
-        /// </summary>
-        /// <returns> True if all players are ready, False if atleast one player is not ready</returns>
-        public bool allPlayersReady() 
-        {
-            if (playersReady == playersList.Count)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
         }
     }
 }

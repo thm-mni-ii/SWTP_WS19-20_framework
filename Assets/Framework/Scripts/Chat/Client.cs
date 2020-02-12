@@ -327,7 +327,6 @@ public class Client : MonoBehaviour
                 RenderHosts(hlist);
                 RenderHostsInGameMenu(hlist);
                 break;
-            
         }
     }
 
