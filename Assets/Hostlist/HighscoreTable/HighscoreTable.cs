@@ -1,14 +1,9 @@
-﻿
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class HighscoreTable : MonoBehaviour
-{
-
-
-
+{ 
     public Transform entryContainer; 
     public Transform entryTemplate;
     public static List<Transform> highscoreEntryTransformList = new List<Transform>();
@@ -17,13 +12,21 @@ public class HighscoreTable : MonoBehaviour
     static int counter = 0;
     static int counter2 = 0;
     static int count = 0;
+    
+    //Das wird spaeter geloescht .
+    private class Highscores
+    {
+        public List<HighscoreEntry> highscoreEntryList;
+    }
+
+    private class HighscoreEntry
+    {
+        public int score;
+        public string name;
+    }
 
     void render()
     {
-
-
-
-
         entryTemplate.gameObject.SetActive(false);
 
         // exampel entry
@@ -46,8 +49,7 @@ public class HighscoreTable : MonoBehaviour
         highscoreEntryList.Add(new HighscoreEntry { score = 657, name = "mmmm" });
         highscoreEntryList.Add(new HighscoreEntry { score = 657, name = "mmmm" });
         Debug.Log(highscoreEntryList.Count);
-
-
+        
         foreach (HighscoreEntry highscoreEntry in highscoreEntryList)
         {
             if ((counter < (counter2 * 8) + 8))
@@ -55,9 +57,7 @@ public class HighscoreTable : MonoBehaviour
                 CreateHighscoreEntryTransform(highscoreEntryList[counter], entryContainer, HighscoreTable.highscoreEntryTransformList);
                 counter++;
             }
-
         }
-
     }
 
     //hier kannst du ein Element zu der Tabelle hinzufügen
@@ -81,10 +81,8 @@ public class HighscoreTable : MonoBehaviour
         entryTransform.Find("scoreText").GetComponent<Text>().color = Color.green;
         entryTransform.Find("nameText").GetComponent<Text>().color = Color.green;
         HighscoreTable.highscoreEntryTransformList.Add(entryTransform);
-
     }
-
-
+    
     // muss noch programmiert werden 
     private void CreateHighscoreEntryTransform(HighscoreEntry highscoreEntry, Transform container, List<Transform> transformList)
     {
@@ -108,11 +106,8 @@ public class HighscoreTable : MonoBehaviour
         }
 
         entryTransform.Find("posText").GetComponent<Text>().text = rankString;
-
         int score = highscoreEntry.score;
-
         entryTransform.Find("scoreText").GetComponent<Text>().text = score.ToString();
-
         string name = highscoreEntry.name;
         entryTransform.Find("nameText").GetComponent<Text>().text = name;
 
@@ -121,18 +116,14 @@ public class HighscoreTable : MonoBehaviour
         entryTransform.Find("posText").GetComponent<Text>().color = Color.green;
         entryTransform.Find("scoreText").GetComponent<Text>().color = Color.green;
         entryTransform.Find("nameText").GetComponent<Text>().color = Color.green;
-
-
+        
         // transformList.Add(entryTransform);
         HighscoreTable.highscoreEntryTransformList.Add(entryTransform);
         count++;
         Debug.Log("highscoreEntryTransformList Count in the Backasdfasdf " + HighscoreTable.highscoreEntryTransformList.Count);
-
-
     }
 
     //muss noch programmiert werden
-
     public void showNextElements()
     {
         addTableElement("TEST", 23, 234);
@@ -142,18 +133,15 @@ public class HighscoreTable : MonoBehaviour
 
         //render();
         //counter2++;
-
-
     }
+    
     //muss noch programmiert werden
     public void cleartransformlist()
     {
         Debug.Log("halloMthode");
         foreach (Transform highscoreEntry in HighscoreTable.highscoreEntryTransformList)
         {
-
             Destroy(highscoreEntry.gameObject);
-
         }
 
         Debug.Log("highscoreEntryTransformList Count in the Back hallo mein Lieber" + HighscoreTable.highscoreEntryTransformList.Count);
@@ -172,26 +160,11 @@ public class HighscoreTable : MonoBehaviour
     //muss noch programmiert werden
     public void showBackElements()
     {
-
         cleartransformlist();
         Debug.Log("highscoreEntryTransformList Count in the Back" + HighscoreTable.highscoreEntryTransformList.Count);
 
         counter -= 7;
         counter2--;
         //render();
-
     }
-
-    //Das wird spaeter geloescht .
-    private class Highscores
-    {
-        public List<HighscoreEntry> highscoreEntryList;
-    }
-
-    private class HighscoreEntry
-    {
-        public int score;
-        public string name;
-    }
-
 }
