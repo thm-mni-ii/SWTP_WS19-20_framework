@@ -18,25 +18,38 @@ using UnityEngine.UI;
 
 public class HighscoreTable : MonoBehaviour {
 
-    private Transform entryContainer;
-    private Transform entryTemplate;
+    public Transform entryContainer;
+    public Transform entryTemplate;
     private List<Transform> highscoreEntryTransformList;
-    ScrollRect s;
+    ScrollRect scrollRect;
     
 
     private void Awake() {
-        entryContainer = transform.Find("highscoreEntryContainer");
-        entryTemplate = entryContainer.Find("highscoreEntryTemplate");
+        //entryContainer = transform.Find("highscoreEntryContainer");
+        //entryTemplate = entryContainer.Find("highscoreEntryTemplate");
         
         entryTemplate.gameObject.SetActive(false);
 
-        string jsonString = PlayerPrefs.GetString("highscoreTable");
-        Highscores highscores = JsonUtility.FromJson<Highscores>(jsonString);
+        //string jsonString = PlayerPrefs.GetString("highscoreTable");
+        //Highscores highscores = JsonUtility.FromJson<Highscores>(jsonString);
+        
+        string jsonString = null;
+        Highscores highscores = null;
 
         
-        if (highscores == null) {
-            // There's no stored table, initialize
+        //if (highscores == null) {
+            // There'scrollRect no stored table, initialize
             Debug.Log("Initializing table with default values...");
+
+            PlayerPrefs.DeleteKey("highscoreTable");
+            
+            AddHighscoreEntry(100043000, "CdMK");
+            AddHighscoreEntry(89764321, "JOfsE");
+            AddHighscoreEntry(87294331, "DAfsV");
+            AddHighscoreEntry(78543123, "CfsAT");
+            AddHighscoreEntry(54243024, "MAfsX");
+            AddHighscoreEntry(6824345, "AAfsA");
+            
             AddHighscoreEntry(1000000, "CMK");
             AddHighscoreEntry(897621, "JOE");
             AddHighscoreEntry(872931, "DAV");
@@ -44,23 +57,31 @@ public class HighscoreTable : MonoBehaviour {
             AddHighscoreEntry(542024, "MAX");
             AddHighscoreEntry(68245, "AAA");
             
+            AddHighscoreEntry(1000064300, "CM6K");
+            AddHighscoreEntry(897456621, "J6OE");
+            AddHighscoreEntry(87264931, "D4AV");
+            AddHighscoreEntry(786435123, "CA6T");
+            AddHighscoreEntry(546432024, "MA4X");
+            AddHighscoreEntry(6864245, "AA6A");
+            
+            
 
             // Reload
             jsonString = PlayerPrefs.GetString("highscoreTable");
             highscores = JsonUtility.FromJson<Highscores>(jsonString);
-        }
+        //}
 
         //// Sort entry list by Score
-        //for (int i = 0; i < highscores.highscoreEntryList.Count; i++) {
-        //    for (int j = i + 1; j < highscores.highscoreEntryList.Count; j++) {
-        //        if (highscores.highscoreEntryList[j].score > highscores.highscoreEntryList[i].score) {
-        //            // Swap
-        //            HighscoreEntry tmp = highscores.highscoreEntryList[i];
-        //            highscores.highscoreEntryList[i] = highscores.highscoreEntryList[j];
-        //            highscores.highscoreEntryList[j] = tmp;
-        //        }
-        //    }
-        //}
+        for (int i = 0; i < highscores.highscoreEntryList.Count; i++) {
+            for (int j = i + 1; j < highscores.highscoreEntryList.Count; j++) {
+                if (highscores.highscoreEntryList[j].score > highscores.highscoreEntryList[i].score) {
+                    // Swap
+                    HighscoreEntry tmp = highscores.highscoreEntryList[i];
+                    highscores.highscoreEntryList[i] = highscores.highscoreEntryList[j];
+                    highscores.highscoreEntryList[j] = tmp;
+                }
+            }
+        }
 
         highscoreEntryTransformList = new List<Transform>();
         foreach (HighscoreEntry highscoreEntry in highscores.highscoreEntryList) {
@@ -134,7 +155,7 @@ public class HighscoreTable : MonoBehaviour {
         Highscores highscores = JsonUtility.FromJson<Highscores>(jsonString);
 
         if (highscores == null) {
-            // There's no stored table, initialize
+            // There'scrollRect no stored table, initialize
             highscores = new Highscores() {
                 highscoreEntryList = new List<HighscoreEntry>()
             };
