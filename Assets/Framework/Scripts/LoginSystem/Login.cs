@@ -148,7 +148,7 @@ public class Login : MonoBehaviour
             this.username = username;
             this.email = email;
             this.id = id;
-            score = 0; //Initially the player has 0 points
+            score = 1; //Initially the player has 0 points
         }
     }
 
@@ -565,7 +565,7 @@ public class Login : MonoBehaviour
         reference.Child("users").Child(name).Child("username").SetValueAsync(name);
         reference.Child("users").Child(name).Child("email").SetValueAsync(email);
         reference.Child("users").Child(name).Child("id").SetValueAsync(userId);
-        reference.Child("users").Child(name).Child("score").SetValueAsync(0);
+        reference.Child("users").Child(name).Child("score").SetValueAsync(1);
         
         //string json = JsonUtility.ToJson(user);
         //reference.Child("users").Child(name).SetRawJsonValueAsync(json);

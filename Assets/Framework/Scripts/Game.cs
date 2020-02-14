@@ -24,13 +24,9 @@ public class Game
     /// </summary>
     public ushort players;
     /// <summary>
-    /// game capacity
+    /// game capacity (How many player can in one room play)
     /// </summary>
     public ushort capacity;
-    /// <summary>
-    /// 
-    /// </summary>
-    public int lastLatency = -1;
 
     /// <summary>
     /// make a new Game and save the game information (ip, port, title, players, capacity)
