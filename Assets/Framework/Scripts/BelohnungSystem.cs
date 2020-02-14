@@ -71,6 +71,8 @@ public class BelohnungSystem : MonoBehaviour
     /// </summary>
     [SerializeField] private Text levelText = null;
 
+    private bool isScoreToken = false;
+
     /// <summary>
     /// (Token from https://unitycodemonkey.com/video.php?v=iAbaqGYdnyI)
     /// </summary>
@@ -96,6 +98,7 @@ public class BelohnungSystem : MonoBehaviour
         globalCanvas = gameObject.GetComponent<GlobalManager>();
         userInfo = globalCanvas.GetComponent<UserInfo>();
         login = globalCanvas.GetComponent<Login>();
+        updateUsersScores();
     }
     
     /// <summary>
@@ -103,46 +106,39 @@ public class BelohnungSystem : MonoBehaviour
     /// </summary>
      private void Awake() {
          entryTemplate.gameObject.SetActive(false);
-         updateUsersScores();
-     }
+    }
      
      /// <summary>
      /// Update is called once per frame
      /// </summary>
      void Update()
      {
-         if (isTableValChanged)
-         {
-             updateTable();
-             isTableValChanged = false;
-         }
          if (userInfo.username != "")
          {
+             userInfo.score = usersScores[userInfo.username];
+             updateLevel(userInfo.score);
              getPlayerName = true;
          }
-         if (isPlayerScoreChanged && getPlayerName)
+         if (getPlayerName)
          {
-             Debug.Log(isPlayerScoreChanged && getPlayerName);
-
              usernameText.text = userInfo.username;
-             takeScoreOfPlayer();
-             string sscore = userInfo.score.ToString();
-             //Debug.Log(sscore);
-             scoreText.text = sscore; 
-             levelText.text = level.ToString();
-             isPlayerScoreChanged = false;
+             scoreText.text = "Score:" + userInfo.score;
+             levelText.text = "Level:" + level;
          }
      }
 
      public void updateTable()
      {
-         string jsonString;
-         Highscores highscores;
-         PlayerPrefs.DeleteKey("highscoreTable");
+         Debug.Log("updateTable");
+         //string jsonString;
+         //Highscores highscores;
+         //PlayerPrefs.DeleteKey("highscoreTable");
          //Initializing table with player scores
          foreach (KeyValuePair<string, int> userInMap in usersScores)
          {
+             Debug.Log("updateTable1");
              AddHighscoreEntry(userInMap.Value, userInMap.Key);
+             Debug.Log("updateTable2");
          }
          Debug.Log("Initializing table ...");
          
@@ -166,25 +162,25 @@ public class BelohnungSystem : MonoBehaviour
          AddHighscoreEntry(6864245, "AA6A");*/
 
          // Reload
-         jsonString = PlayerPrefs.GetString("highscoreTable");
-         highscores = JsonUtility.FromJson<Highscores>(jsonString);
+         //jsonString = PlayerPrefs.GetString("highscoreTable");
+         //highscores = JsonUtility.FromJson<Highscores>(jsonString);
 
          // Sort entry list by Score (Token from https://unitycodemonkey.com/video.php?v=iAbaqGYdnyI)
-        for (int i = 0; i < highscores.highscoreEntryList.Count; i++) {        //NullpointerExp. !!!
-            for (int j = i + 1; j < highscores.highscoreEntryList.Count; j++) {
-                if (highscores.highscoreEntryList[j].score > highscores.highscoreEntryList[i].score) {
+        for (int i = 0; i < playerList.Count; i++) {        //NullpointerExp. !!!
+            for (int j = i + 1; j < playerList.Count; j++) {
+                if (usersScores[playerList[j]] > usersScores[playerList[i]]) {
                     // Swap
-                    HighscoreEntry tmp = highscores.highscoreEntryList[i];
-                    highscores.highscoreEntryList[i] = highscores.highscoreEntryList[j];
-                    highscores.highscoreEntryList[j] = tmp;
+                    string tmp = playerList[i];
+                    playerList[i] = playerList[j];
+                    playerList[j] = tmp;
                 }
             }
         }
 
         //(Token from https://unitycodemonkey.com/video.php?v=iAbaqGYdnyI)
         highscoreEntryTransformList = new List<Transform>();
-        foreach (HighscoreEntry highscoreEntry in highscores.highscoreEntryList) {
-            CreateHighscoreEntryTransform(highscoreEntry, entryContainer, highscoreEntryTransformList);
+        foreach (string playername in playerList) {
+            CreateHighscoreEntryTransform(playername, entryContainer, highscoreEntryTransformList);
         }
      }
 
@@ -192,8 +188,9 @@ public class BelohnungSystem : MonoBehaviour
     /// Read Data from Database.
     /// Take the score of the player from database.
     /// </summary>
-    public void takeScoreOfPlayer()
-    {
+    public int takeScoreOfPlayer()
+     { 
+         int score = -1;
         FirebaseDatabase.DefaultInstance
             .GetReference("users/" + userInfo.username + "/score")
             .GetValueAsync().ContinueWith(task =>
@@ -207,11 +204,15 @@ public class BelohnungSystem : MonoBehaviour
                 else if (task.IsCompleted)
                 {
                     DataSnapshot snapshot = task.Result;
-                    userInfo.score = (int) snapshot.Value;
-                    updateLevel(userInfo.score);
+                    Debug.Log(snapshot.Value);
+                    userInfo.score = Convert.ToInt32(snapshot.Value);
+                    score = userInfo.score;
+                    Debug.Log("userInfo.score:" + userInfo.score);
+                    //updateLevel(userInfo.score);
                 }
             });
-    }
+        return userInfo.score;
+     }
     
     /// <summary>
     /// put new score of the player on database
@@ -279,6 +280,8 @@ public class BelohnungSystem : MonoBehaviour
             {
                 Debug.Log("KEY: " + userInMap.Key + "   VALUE: " + userInMap.Value);
             }
+            
+            updateTable();
         }
        
         // Add some data.
@@ -353,7 +356,7 @@ public class BelohnungSystem : MonoBehaviour
     /// <param name="highscoreEntry"></param>
     /// <param name="container"></param>
     /// <param name="transformList"></param>
-     private void CreateHighscoreEntryTransform(HighscoreEntry highscoreEntry, Transform container, List<Transform> transformList) {
+     private void CreateHighscoreEntryTransform(string playername, Transform container, List<Transform> transformList) {
         float templateHeight = 31f;
         Transform entryTransform = Instantiate(entryTemplate, container);
         RectTransform entryRectTransform = entryTransform.GetComponent<RectTransform>();
@@ -372,9 +375,9 @@ public class BelohnungSystem : MonoBehaviour
         }
 
         entryTransform.Find("posText").GetComponent<Text>().text = rankString;
-        int score = highscoreEntry.score;
+        int score = usersScores[playername];
         entryTransform.Find("scoreText").GetComponent<Text>().text = score.ToString();
-        string name = highscoreEntry.name;
+        string name = playername;
         entryTransform.Find("nameText").GetComponent<Text>().text = name;
         // Set background visible odds and evens, easier to read
         entryTransform.Find("background").gameObject.SetActive(rank % 2 == 1);
@@ -413,20 +416,20 @@ public class BelohnungSystem : MonoBehaviour
         // Create HighscoreEntry
         HighscoreEntry highscoreEntry = new HighscoreEntry { score = score, name = name };
         // Load saved Highscores
-        string jsonString = PlayerPrefs.GetString("highscoreTable");
-        Highscores highscores = JsonUtility.FromJson<Highscores>(jsonString);
+        //string jsonString = PlayerPrefs.GetString("highscoreTable");
+        //Highscores highscores = JsonUtility.FromJson<Highscores>(jsonString);
 
-        if (highscores == null) {
+        //if (highscores == null) {
             // There'scrollRect no stored table, initialize
-            highscores = new Highscores() {
-                highscoreEntryList = new List<HighscoreEntry>()
-            };
-        }
+          //  highscores = new Highscores() {
+            //    highscoreEntryList = new List<HighscoreEntry>()
+            //};
+        //}
         // Add new entry to Highscores
-        highscores.highscoreEntryList.Add(highscoreEntry);
+        //highscores.highscoreEntryList.Add(highscoreEntry);
         // Save updated Highscores
-        string json = JsonUtility.ToJson(highscores);
-        PlayerPrefs.SetString("highscoreTable", json);
-        PlayerPrefs.Save();
+        //string json = JsonUtility.ToJson(highscores);
+        //PlayerPrefs.SetString("highscoreTable", json);
+        //PlayerPrefs.Save();
     }
 }
