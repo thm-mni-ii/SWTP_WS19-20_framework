@@ -39,16 +39,14 @@ public class MessageStruct
     /// </summary>
     public int messagetype = 0;
     /// <summary>
-    /// /*hier kommt noch was*/
+    /// Massage reciever
     /// </summary>
     public string reciever = null;
     /// <summary>
-    /// /*hier kommt noch was*/
+    /// Sender id to know, who sent the Massage
     /// </summary>
     public int senderId = 0;
-    /// <summary>
-    /// *hier kommt noch was* Warum?
-    /// </summary>
+
     MessageStruct() { }
 
     /// <summary>
@@ -64,10 +62,10 @@ public class MessageStruct
     /// 7 - party is canceled
     /// 8 - join party failed
     /// </summary>
-    /// <param name="sender"> *hier kommt noch was* </param>
-    /// <param name="text"> *hier kommt noch was* </param>
-    /// <param name="typ"> *hier kommt noch was* </param>
-    /// <param name="rec"> *hier kommt noch was* </param>
+    /// <param name="sender">sender username</param>
+    /// <param name="text">message</param>
+    /// <param name="typ">Message type</param>
+    /// <param name="rec">Massage reciever</param>
    public MessageStruct(String sender,String text , int typ, string rec)
     {
         this.senderName = sender;

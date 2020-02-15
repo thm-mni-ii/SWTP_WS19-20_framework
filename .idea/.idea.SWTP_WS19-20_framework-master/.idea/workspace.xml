@@ -2,12 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5395afef-9a8b-49c0-b09b-05ebccef7121" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.SWTP_WS19-20_framework-master/.idea/contentModel.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SWTP_WS19-20_framework-master/.idea/contentModel.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.SWTP_WS19-20_framework-master/.idea/indexLayout.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SWTP_WS19-20_framework-master/.idea/indexLayout.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.SWTP_WS19-20_framework-master/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SWTP_WS19-20_framework-master/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Framework/Scenes/MultiplayerMenu.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Framework/Scenes/MultiplayerMenu.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Hostlist/HighscoreTable/HighscoreTable.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Hostlist/HighscoreTable/HighscoreTable.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectSettings/ProjectSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/ProjectSettings.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Framework/Scripts/Chat/MessageStruct.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Framework/Scripts/Chat/MessageStruct.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Framework/Scripts/PlayerMovement.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Framework/Scripts/PlayerMovement.cs" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -19,8 +16,13 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/Assets/Framework/Scripts/Game.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/1C38ED63-E2B0-458D-B550-AAC9ECFFF97D/cc/8333f2b5/NativeHeaderAttribute.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Framework/Scripts/BelohnungSystem.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Framework/Scripts/Chat/Client.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/4CD14385-55E6-4C0E-AEDA-2393D3C9CF4A/e5/540528ca/PlayerPrefs.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Framework/Scripts/Chat/MessageStruct.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Framework/Scripts/Chat/Server.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Framework/Scripts/GlobalManager.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Framework/Scripts/PlayerMovement.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Framework/Scripts/ServerHUD.cs" root0="FORCE_HIGHLIGHTING" />
@@ -31,6 +33,8 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/Assets/Hostlist/HighscoreTable/HighscoreTable.cs" />
+        <option value="$PROJECT_DIR$/Assets/Framework/Scripts/PlayerMovement.cs" />
+        <option value="$PROJECT_DIR$/Assets/Framework/Scripts/Chat/MessageStruct.cs" />
       </list>
     </option>
   </component>
@@ -81,7 +85,8 @@
       <updated>1580722048798</updated>
       <workItem from="1580722054658" duration="243000" />
       <workItem from="1581624134274" duration="4453000" />
-      <workItem from="1581629849566" duration="1431000" />
+      <workItem from="1581629849566" duration="1725000" />
+      <workItem from="1581726020482" duration="1309000" />
     </task>
     <servers />
   </component>
