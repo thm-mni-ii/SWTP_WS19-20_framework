@@ -1,4 +1,12 @@
 ﻿using UnityEngine;
+using Firebase;
+using Firebase.Database;
+using Firebase.Unity.Editor;
+using System;
+using System.Collections.Generic;
+using UnityEngine.UI;
+
+
 
 namespace Mirror
 {
@@ -51,7 +59,7 @@ namespace Mirror
         /// </summary>
         [SerializeField] private Animator m_animator;
         //[SerializeField] private Rigidbody m_rigidBody;
-        
+
         /****** MovementVariables *******/
         /// <summary>
         /// Token from Mirror: https://mirror-networking.com/docs/ 
@@ -104,12 +112,62 @@ namespace Mirror
         /// Token from Mirror: https://mirror-networking.com/docs/ 
         /// </summary>
         public bool isFalling = false;
+        /// <summary>
+        /// Reference to the Database
+        /// It is needed to get the name of the Modules
+        /// </summary>
+        public DatabaseReference reference;
+        
+        /// <summary>
+        ///List of all the Modules 
+        /// The List is read from Database
+        /// </summary>
+        List<String> Modules = new List<String>();
 
         /// <summary>
         /// Start is called before the first frame update
         /// </summary>
         void Start()
         {
+
+                // Set up the Editor before calling into the realtime database.
+                FirebaseApp.DefaultInstance.SetEditorDatabaseUrl("https://mmo-spiel-1920.firebaseio.com");
+
+                // Get the root reference location of the database.
+                 reference = FirebaseDatabase.DefaultInstance.RootReference;
+
+
+            FirebaseDatabase.DefaultInstance
+    .GetReference("Modules")
+    .GetValueAsync().ContinueWith(task => {
+        if (task.IsFaulted)
+        {
+              // Handle the error...
+          }
+        else if (task.IsCompleted)
+        {
+            DataSnapshot snapshot = task.Result;
+
+            if (snapshot != null)
+            {
+                foreach (KeyValuePair<string, object> Module in (Dictionary<string, object>) snapshot.Value)
+                {
+                   Modules.Add((String)Module.Key);
+                }
+
+               /* foreach (String val in Modules)
+                {
+                    Debug.Log("Module " + val);
+                }*/
+            }
+            else
+            {
+                Debug.Log("Data was not found (NULL)");
+            }
+
+        }
+    });
+
             GameObject GM = GameObject.FindWithTag("GlobalManager");
             if (GM != null)
             {
@@ -118,19 +176,19 @@ namespace Mirror
             var sphereCollider = gameObject.AddComponent<SphereCollider>();
             clientVar = globalCanvas.GetComponent<Client>();
         }
-        
+
         public void Initialize(GameObject character)
         {
             m_animator = character.GetComponent<Animator>();
             //m_rigidBody = character.GetComponent<Rigidbody>();
         }
-        
+
         void Awake()
         {
-            if(!m_animator) { gameObject.GetComponent<Animator>(); }
+            if (!m_animator) { gameObject.GetComponent<Animator>(); }
             //if(!m_rigidBody) { gameObject.GetComponent<Animator>(); }
         }
-        
+
         /// <summary>
         /// Update player position - Token from Mirror: https://mirror-networking.com/docs/
         /// </summary>
@@ -150,7 +208,7 @@ namespace Mirror
                 turn += turnSpeedDecel;
             else
                 turn = 0f;
-            
+
             if (!isFalling && Input.GetKey(KeyCode.Space) && (isGrounded || jumpSpeed < 1))
             {
                 jumpSpeed += jumpFactor;
@@ -252,14 +310,27 @@ namespace Mirror
         private void OnTriggerEnter(Collider other)
         {
             if (!isLocalPlayer || characterController == null) return;
-            if (other.gameObject.tag.Equals("MATH") || other.gameObject.tag.Equals("NTG") || other.gameObject.tag.Equals("OOP") || other.gameObject.tag.Equals("GDI") || other.gameObject.tag.Equals("RNAI"))
+            if (isAvaiableModule(other.gameObject.tag))
             {
                 clientVar.setgameType(other.gameObject.tag);
                 globalCanvas.ToggleCanvas("gameOn");
                 clientVar.updateStartGameUI();
             }
         }
-        
+
+        /// <summary>
+        /// Check if the Module exists on the Database this Methode is needed to find out which Magic circle the player is standing on
+        /// </summary>
+        private bool isAvaiableModule(string moduleName) {
+
+            if (Modules.Contains(moduleName))
+            {   
+                return true;
+            }
+
+            return false;
+        }
+
         /// <summary>
         /// override methode
         /// disable the startgame canvas when the player leave the "Magic Circle"
@@ -268,7 +339,7 @@ namespace Mirror
         private void OnTriggerExit(Collider other)
         {
             if (!isLocalPlayer || characterController == null) return;
-            if (other.gameObject.tag.Equals("MATH") || other.gameObject.tag.Equals("NTG") || other.gameObject.tag.Equals("OOP") || other.gameObject.tag.Equals("GDI") || other.gameObject.tag.Equals("RNAI"))
+            if (isAvaiableModule(other.gameObject.tag))
             {
                 clientVar.setgameType(null);
                 globalCanvas.ToggleCanvas("gameOff");
