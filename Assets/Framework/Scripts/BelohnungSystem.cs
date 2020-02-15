@@ -122,7 +122,7 @@ public class BelohnungSystem : MonoBehaviour
         }
      }
      
-     /// <summary>
+    /// <summary>
     /// (Token from https://unitycodemonkey.com/video.php?v=iAbaqGYdnyI)
     /// </summary>
     /// <param name="highscoreEntry"></param>
@@ -220,7 +220,7 @@ public class BelohnungSystem : MonoBehaviour
                         }
                         if (!ifUserExist)
                         {
-                            // Add data to the Dictionary<string, int> usersScores
+                            // Add data to the Dictionary<string, int> partyMap
                             usersScores.Add((string) userInformation.Value, Convert.ToInt32(tempScore));
                             playerList.Add((string) userInformation.Value);
                         }
