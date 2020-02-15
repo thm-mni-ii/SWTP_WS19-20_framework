@@ -47,15 +47,7 @@ public class BelohnungSystem : MonoBehaviour
     /// </summary>
     private List<Transform> highscoreEntryTransformList;
     /// <summary>
-    /// check if the there are any value (score) changes. If true -> put the new scores
-    /// </summary>
-    public bool isTableValChanged = true;
-    /// <summary>
-    /// is player score changed? (when the player has a new score) -> true (Initially, true to read information from the database)
-    /// </summary>
-    public bool isPlayerScoreChanged = true;
-    /// <summary>
-    /// 
+    /// if playername exist -> getPlayerName = true
     /// </summary>
     private bool getPlayerName = false;
     /// <summary>
@@ -70,24 +62,6 @@ public class BelohnungSystem : MonoBehaviour
     /// Score of player will be show on the window
     /// </summary>
     [SerializeField] private Text levelText = null;
-
-    private bool isScoreToken = false;
-
-    /// <summary>
-    /// (Token from https://unitycodemonkey.com/video.php?v=iAbaqGYdnyI)
-    /// </summary>
-    private class Highscores {
-        public List<HighscoreEntry> highscoreEntryList;
-    }
-
-    /*
-     * Represents a single High score entry
-     * */
-    [System.Serializable] 
-    private class HighscoreEntry {
-        public int score;
-        public string name;
-    }
     
     /// <summary>
     /// Start is called before the first frame update
@@ -129,44 +103,9 @@ public class BelohnungSystem : MonoBehaviour
 
      public void updateTable()
      {
-         Debug.Log("updateTable");
-         //string jsonString;
-         //Highscores highscores;
-         //PlayerPrefs.DeleteKey("highscoreTable");
-         //Initializing table with player scores
-         foreach (KeyValuePair<string, int> userInMap in usersScores)
-         {
-             Debug.Log("updateTable1");
-             AddHighscoreEntry(userInMap.Value, userInMap.Key);
-             Debug.Log("updateTable2");
-         }
          Debug.Log("Initializing table ...");
-         
-         /*AddHighscoreEntry(100043000, "CdMK");
-         AddHighscoreEntry(89764321, "JOfsE");
-         AddHighscoreEntry(87294331, "DAfsV");
-         AddHighscoreEntry(78543123, "CfsAT");
-         AddHighscoreEntry(54243024, "MAfsX");
-         AddHighscoreEntry(6824345, "AAfsA");
-         AddHighscoreEntry(1000000, "CMK");
-         AddHighscoreEntry(897621, "JOE");
-         AddHighscoreEntry(872931, "DAV");
-         AddHighscoreEntry(785123, "CAT");
-         AddHighscoreEntry(542024, "MAX");
-         AddHighscoreEntry(68245, "AAA");
-         AddHighscoreEntry(1000064300, "CM6K");
-         AddHighscoreEntry(897456621, "J6OE");
-         AddHighscoreEntry(87264931, "D4AV");
-         AddHighscoreEntry(786435123, "CA6T");
-         AddHighscoreEntry(546432024, "MA4X");
-         AddHighscoreEntry(6864245, "AA6A");*/
-
-         // Reload
-         //jsonString = PlayerPrefs.GetString("highscoreTable");
-         //highscores = JsonUtility.FromJson<Highscores>(jsonString);
-
-         // Sort entry list by Score (Token from https://unitycodemonkey.com/video.php?v=iAbaqGYdnyI)
-        for (int i = 0; i < playerList.Count; i++) {        //NullpointerExp. !!!
+         // Sort entry list by Score
+        for (int i = 0; i < playerList.Count; i++) {
             for (int j = i + 1; j < playerList.Count; j++) {
                 if (usersScores[playerList[j]] > usersScores[playerList[i]]) {
                     // Swap
@@ -176,57 +115,70 @@ public class BelohnungSystem : MonoBehaviour
                 }
             }
         }
-
         //(Token from https://unitycodemonkey.com/video.php?v=iAbaqGYdnyI)
         highscoreEntryTransformList = new List<Transform>();
         foreach (string playername in playerList) {
             CreateHighscoreEntryTransform(playername, entryContainer, highscoreEntryTransformList);
         }
      }
-
+     
      /// <summary>
-    /// Read Data from Database.
-    /// Take the score of the player from database.
+    /// (Token from https://unitycodemonkey.com/video.php?v=iAbaqGYdnyI)
     /// </summary>
-    public int takeScoreOfPlayer()
-     { 
-         int score = -1;
-        FirebaseDatabase.DefaultInstance
-            .GetReference("users/" + userInfo.username + "/score")
-            .GetValueAsync().ContinueWith(task =>
-            {
-                if (task.IsFaulted)
-                {
-                    // Handle the error...
-                    Debug.Log("score of player " + userInfo.username +" not found");
-                    return;
-                }
-                else if (task.IsCompleted)
-                {
-                    DataSnapshot snapshot = task.Result;
-                    Debug.Log(snapshot.Value);
-                    userInfo.score = Convert.ToInt32(snapshot.Value);
-                    score = userInfo.score;
-                    Debug.Log("userInfo.score:" + userInfo.score);
-                    //updateLevel(userInfo.score);
-                }
-            });
-        return userInfo.score;
-     }
-    
-    /// <summary>
-    /// put new score of the player on database
-    /// </summary>
-    /// <param name="newScore">new score, which the player have</param>
-    void putNewScore(int newScore)
-    {
-        if (userInfo.username != null || userInfo.username != "")
-        {
-            //database (Firebase) save data instruction ...
-            login.reference.Child("users").Child(userInfo.username).Child("score").SetValueAsync(newScore);
-        }
-    }
+    /// <param name="highscoreEntry"></param>
+    /// <param name="container"></param>
+    /// <param name="transformList"></param>
+     private void CreateHighscoreEntryTransform(string playername, Transform container, List<Transform> transformList) {
+        float templateHeight = 31f;
+        Transform entryTransform = Instantiate(entryTemplate, container);
+        RectTransform entryRectTransform = entryTransform.GetComponent<RectTransform>();
+        entryRectTransform.anchoredPosition = new Vector2(0, -templateHeight * transformList.Count);
+        entryTransform.gameObject.SetActive(true);
 
+        int rank = transformList.Count + 1;
+        string rankString;
+        switch (rank) {
+        default:
+            rankString = rank + "TH"; break;
+
+        case 1: rankString = "1ST"; break;
+        case 2: rankString = "2ND"; break;
+        case 3: rankString = "3RD"; break;
+        }
+
+        entryTransform.Find("posText").GetComponent<Text>().text = rankString;
+        int score = usersScores[playername];
+        entryTransform.Find("scoreText").GetComponent<Text>().text = score.ToString();
+        string name = playername;
+        entryTransform.Find("nameText").GetComponent<Text>().text = name;
+        // Set background visible odds and evens, easier to read
+        entryTransform.Find("background").gameObject.SetActive(rank % 2 == 1);
+        
+        // Highlight First
+      //  if (rank == 1) {
+            entryTransform.Find("posText").GetComponent<Text>().color = Color.green;
+            entryTransform.Find("scoreText").GetComponent<Text>().color = Color.green;
+            entryTransform.Find("nameText").GetComponent<Text>().color = Color.green;
+      //  }
+
+        // Set tropy
+        switch (rank) {
+        default:
+            entryTransform.Find("trophy").gameObject.SetActive(false);
+            break;
+        case 1:
+            entryTransform.Find("trophy").GetComponent<Image>().color = new Color(0,0,1,1);
+            break;
+        case 2:
+            entryTransform.Find("trophy").GetComponent<Image>().color = new Color(0,1,0,1);
+            break;
+        case 3:
+            entryTransform.Find("trophy").GetComponent<Image>().color = new Color(1,0,0,1);
+            break;
+        }
+        transformList.Add(entryTransform);
+    }
+     
     /// <summary>
     /// Scores are updated periodically. The information in the database is retrieved and then stored in the players list.
     /// </summary>
@@ -280,20 +232,50 @@ public class BelohnungSystem : MonoBehaviour
             {
                 Debug.Log("KEY: " + userInMap.Key + "   VALUE: " + userInMap.Value);
             }
-            
             updateTable();
         }
-       
-        // Add some data.
-        // usersScores.Add("pearl", 100);
+    }
 
-        // Get value that exists.
-        // int value1 = usersScores["diamond"];
-        // Console.WriteLine("get DIAMOND: " + value1);
-
-        // Get value that does not exist.
-        // usersScores.TryGetValue("coal", out int value2);
-        // Console.WriteLine("get COAL: " + value2);
+     /// <summary>
+    /// Read Data from Database.
+    /// Take the score of the player from database.
+    /// </summary>
+    public int takeScoreOfPlayer()
+     { 
+         int score = -1;
+        FirebaseDatabase.DefaultInstance
+            .GetReference("users/" + userInfo.username + "/score")
+            .GetValueAsync().ContinueWith(task =>
+            {
+                if (task.IsFaulted)
+                {
+                    // Handle the error...
+                    Debug.Log("score of player " + userInfo.username +" not found");
+                    return;
+                }
+                else if (task.IsCompleted)
+                {
+                    DataSnapshot snapshot = task.Result;
+                    Debug.Log(snapshot.Value);
+                    userInfo.score = Convert.ToInt32(snapshot.Value);
+                    score = userInfo.score;
+                    Debug.Log("userInfo.score:" + userInfo.score);
+                }
+            });
+        return userInfo.score;
+     }
+    
+    /// <summary>
+    /// put new score of the player on database
+    /// </summary>
+    /// <param name="newScore">new score, which the player have</param>
+    void putNewScore(int newScore)
+    {
+        if (userInfo.username != "")
+        {
+            //database (Firebase) save data instruction ...
+            login.reference.Child("users").Child(userInfo.username).Child("score").SetValueAsync(newScore);
+        }
     }
 
     /// <summary>
@@ -348,88 +330,5 @@ public class BelohnungSystem : MonoBehaviour
         {
             level = 15;
         }
-    }
-    
-    /// <summary>
-    /// (Token from https://unitycodemonkey.com/video.php?v=iAbaqGYdnyI)
-    /// </summary>
-    /// <param name="highscoreEntry"></param>
-    /// <param name="container"></param>
-    /// <param name="transformList"></param>
-     private void CreateHighscoreEntryTransform(string playername, Transform container, List<Transform> transformList) {
-        float templateHeight = 31f;
-        Transform entryTransform = Instantiate(entryTemplate, container);
-        RectTransform entryRectTransform = entryTransform.GetComponent<RectTransform>();
-        entryRectTransform.anchoredPosition = new Vector2(0, -templateHeight * transformList.Count);
-        entryTransform.gameObject.SetActive(true);
-
-        int rank = transformList.Count + 1;
-        string rankString;
-        switch (rank) {
-        default:
-            rankString = rank + "TH"; break;
-
-        case 1: rankString = "1ST"; break;
-        case 2: rankString = "2ND"; break;
-        case 3: rankString = "3RD"; break;
-        }
-
-        entryTransform.Find("posText").GetComponent<Text>().text = rankString;
-        int score = usersScores[playername];
-        entryTransform.Find("scoreText").GetComponent<Text>().text = score.ToString();
-        string name = playername;
-        entryTransform.Find("nameText").GetComponent<Text>().text = name;
-        // Set background visible odds and evens, easier to read
-        entryTransform.Find("background").gameObject.SetActive(rank % 2 == 1);
-        
-        // Highlight First
-      //  if (rank == 1) {
-            entryTransform.Find("posText").GetComponent<Text>().color = Color.green;
-            entryTransform.Find("scoreText").GetComponent<Text>().color = Color.green;
-            entryTransform.Find("nameText").GetComponent<Text>().color = Color.green;
-      //  }
-
-        // Set tropy
-        //switch (rank) {
-        //default:
-        //    entryTransform.Find("trophy").gameObject.SetActive(false);
-        //    break;
-        //case 1:
-        //    entryTransform.Find("trophy").GetComponent<Image>().color = UtilsClass.GetColorFromString("FFD200");
-        //    break;
-        //case 2:
-        //    entryTransform.Find("trophy").GetComponent<Image>().color = UtilsClass.GetColorFromString("C6C6C6");
-        //    break;
-        //case 3:
-        //    entryTransform.Find("trophy").GetComponent<Image>().color = UtilsClass.GetColorFromString("B76F56");
-        //    break;
-        //}
-        transformList.Add(entryTransform);
-    }
-
-    /// <summary>
-    /// (Token from https://unitycodemonkey.com/video.php?v=iAbaqGYdnyI)
-    /// </summary>
-    /// <param name="score"></param>
-    /// <param name="name"></param>
-    private void AddHighscoreEntry(int score, string name) {
-        // Create HighscoreEntry
-        HighscoreEntry highscoreEntry = new HighscoreEntry { score = score, name = name };
-        // Load saved Highscores
-        //string jsonString = PlayerPrefs.GetString("highscoreTable");
-        //Highscores highscores = JsonUtility.FromJson<Highscores>(jsonString);
-
-        //if (highscores == null) {
-            // There'scrollRect no stored table, initialize
-          //  highscores = new Highscores() {
-            //    highscoreEntryList = new List<HighscoreEntry>()
-            //};
-        //}
-        // Add new entry to Highscores
-        //highscores.highscoreEntryList.Add(highscoreEntry);
-        // Save updated Highscores
-        //string json = JsonUtility.ToJson(highscores);
-        //PlayerPrefs.SetString("highscoreTable", json);
-        //PlayerPrefs.Save();
     }
 }
