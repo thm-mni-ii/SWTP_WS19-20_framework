@@ -2,6 +2,7 @@
 using UnityEngine;
 using Firebase.Database;
 using System.Collections.Generic;
+using UnityEngine.UI;
 using Object = System.Object;
 
 /**
@@ -33,6 +34,34 @@ public class BelohnungSystem : MonoBehaviour
     /// List of players. it use to find all players, who have any Information in the database
     /// </summary>
     public List<string> playerList = new List<string>();
+    /// <summary>
+    /// (Token from https://unitycodemonkey.com/video.php?v=iAbaqGYdnyI)
+    /// </summary>
+    public Transform entryContainer;
+    /// <summary>
+    /// (Token from https://unitycodemonkey.com/video.php?v=iAbaqGYdnyI)
+    /// </summary>
+    public Transform entryTemplate;
+    /// <summary>
+    /// (Token from https://unitycodemonkey.com/video.php?v=iAbaqGYdnyI)
+    /// </summary>
+    private List<Transform> highscoreEntryTransformList;
+    /// <summary>
+    /// if playername exist -> getPlayerName = true
+    /// </summary>
+    private bool getPlayerName = false;
+    /// <summary>
+    /// Username of player will be show on the window
+    /// </summary>
+    [SerializeField] private Text usernameText = null;
+    /// <summary>
+    /// Score of player will be show on the window
+    /// </summary>
+    [SerializeField] private Text scoreText = null;
+    /// <summary>
+    /// Score of player will be show on the window
+    /// </summary>
+    [SerializeField] private Text levelText = null;
     
     /// <summary>
     /// Start is called before the first frame update
@@ -43,56 +72,113 @@ public class BelohnungSystem : MonoBehaviour
         globalCanvas = gameObject.GetComponent<GlobalManager>();
         userInfo = globalCanvas.GetComponent<UserInfo>();
         login = globalCanvas.GetComponent<Login>();
-    }
-    
-    /// <summary>
-    /// Update is called once per frame
-    /// </summary>
-    void Update()
-    {
         updateUsersScores();
-        //takeScoreOfPlayer();
-        //Debug.Log("Level: " + level);
-    }
-
-    /// <summary>
-    /// Read Data from Database.
-    /// Take the score of the player from database.
-    /// </summary>
-    public void takeScoreOfPlayer()
-    {
-        FirebaseDatabase.DefaultInstance
-            .GetReference("users/" + userInfo.username + "/score")
-            .GetValueAsync().ContinueWith(task =>
-            {
-                if (task.IsFaulted)
-                {
-                    // Handle the error...
-                    Debug.Log("score of player " + userInfo.username +" not found");
-                    return;
-                }
-                else if (task.IsCompleted)
-                {
-                    DataSnapshot snapshot = task.Result;
-                    userInfo.score = (int) snapshot.Value;
-                    updateLevel(userInfo.score);
-                }
-            });
     }
     
     /// <summary>
-    /// put new score of the player on database
+    /// Awake is called when the script instance is being loaded
     /// </summary>
-    /// <param name="newScore">new score, which the player have</param>
-    void putNewScore(int newScore)
-    {
-        if (userInfo.username != null || userInfo.username != "")
-        {
-            //database (Firebase) save data instruction ...
-            login.reference.Child("users").Child(userInfo.username).Child("score").SetValueAsync(newScore);
-        }
+     private void Awake() {
+         entryTemplate.gameObject.SetActive(false);
     }
+     
+     /// <summary>
+     /// Update is called once per frame
+     /// </summary>
+     void Update()
+     {
+         if (userInfo.username != "")
+         {
+             userInfo.score = usersScores[userInfo.username];
+             updateLevel(userInfo.score);
+             getPlayerName = true;
+         }
+         if (getPlayerName)
+         {
+             usernameText.text = userInfo.username;
+             scoreText.text = "Score:" + userInfo.score;
+             levelText.text = "Level:" + level;
+         }
+     }
 
+     public void updateTable()
+     {
+         Debug.Log("Initializing table ...");
+         // Sort entry list by Score
+        for (int i = 0; i < playerList.Count; i++) {
+            for (int j = i + 1; j < playerList.Count; j++) {
+                if (usersScores[playerList[j]] > usersScores[playerList[i]]) {
+                    // Swap
+                    string tmp = playerList[i];
+                    playerList[i] = playerList[j];
+                    playerList[j] = tmp;
+                }
+            }
+        }
+        //(Token from https://unitycodemonkey.com/video.php?v=iAbaqGYdnyI)
+        highscoreEntryTransformList = new List<Transform>();
+        foreach (string playername in playerList) {
+            CreateHighscoreEntryTransform(playername, entryContainer, highscoreEntryTransformList);
+        }
+     }
+     
+     /// <summary>
+    /// (Token from https://unitycodemonkey.com/video.php?v=iAbaqGYdnyI)
+    /// </summary>
+    /// <param name="highscoreEntry"></param>
+    /// <param name="container"></param>
+    /// <param name="transformList"></param>
+     private void CreateHighscoreEntryTransform(string playername, Transform container, List<Transform> transformList) {
+        float templateHeight = 31f;
+        Transform entryTransform = Instantiate(entryTemplate, container);
+        RectTransform entryRectTransform = entryTransform.GetComponent<RectTransform>();
+        entryRectTransform.anchoredPosition = new Vector2(0, -templateHeight * transformList.Count);
+        entryTransform.gameObject.SetActive(true);
+
+        int rank = transformList.Count + 1;
+        string rankString;
+        switch (rank) {
+        default:
+            rankString = rank + "TH"; break;
+
+        case 1: rankString = "1ST"; break;
+        case 2: rankString = "2ND"; break;
+        case 3: rankString = "3RD"; break;
+        }
+
+        entryTransform.Find("posText").GetComponent<Text>().text = rankString;
+        int score = usersScores[playername];
+        entryTransform.Find("scoreText").GetComponent<Text>().text = score.ToString();
+        string name = playername;
+        entryTransform.Find("nameText").GetComponent<Text>().text = name;
+        // Set background visible odds and evens, easier to read
+        entryTransform.Find("background").gameObject.SetActive(rank % 2 == 1);
+        
+        // Highlight First
+      //  if (rank == 1) {
+            entryTransform.Find("posText").GetComponent<Text>().color = Color.green;
+            entryTransform.Find("scoreText").GetComponent<Text>().color = Color.green;
+            entryTransform.Find("nameText").GetComponent<Text>().color = Color.green;
+      //  }
+
+        // Set tropy
+        switch (rank) {
+        default:
+            entryTransform.Find("trophy").gameObject.SetActive(false);
+            break;
+        case 1:
+            entryTransform.Find("trophy").GetComponent<Image>().color = new Color(0,0,1,1);
+            break;
+        case 2:
+            entryTransform.Find("trophy").GetComponent<Image>().color = new Color(0,1,0,1);
+            break;
+        case 3:
+            entryTransform.Find("trophy").GetComponent<Image>().color = new Color(1,0,0,1);
+            break;
+        }
+        transformList.Add(entryTransform);
+    }
+     
     /// <summary>
     /// Scores are updated periodically. The information in the database is retrieved and then stored in the players list.
     /// </summary>
@@ -109,7 +195,6 @@ public class BelohnungSystem : MonoBehaviour
                 Debug.LogError(args.DatabaseError.Message);
                 return;
             }
-
             // Do something with the data in args.Snapshot
             // Loop over items in collection of users.
             foreach (KeyValuePair<string, Object> users in (Dictionary<string, Object>) args.Snapshot.Value)
@@ -142,24 +227,55 @@ public class BelohnungSystem : MonoBehaviour
                     }
                 }
             }
-            
             //Debug: Check if every thing okay in the Dictionary
-            /*foreach (KeyValuePair<string, int> userInMap in usersScores)
+            foreach (KeyValuePair<string, int> userInMap in usersScores)
             {
                 Debug.Log("KEY: " + userInMap.Key + "   VALUE: " + userInMap.Value);
-            }*/
+            }
+            updateTable();
         }
-       
-        // Add some data.
-        // usersScores.Add("pearl", 100);
+    }
 
-        // Get value that exists.
-        // int value1 = usersScores["diamond"];
-        // Console.WriteLine("get DIAMOND: " + value1);
-
-        // Get value that does not exist.
-        // usersScores.TryGetValue("coal", out int value2);
-        // Console.WriteLine("get COAL: " + value2);
+     /// <summary>
+    /// Read Data from Database.
+    /// Take the score of the player from database.
+    /// </summary>
+    public int takeScoreOfPlayer()
+     { 
+         int score = -1;
+        FirebaseDatabase.DefaultInstance
+            .GetReference("users/" + userInfo.username + "/score")
+            .GetValueAsync().ContinueWith(task =>
+            {
+                if (task.IsFaulted)
+                {
+                    // Handle the error...
+                    Debug.Log("score of player " + userInfo.username +" not found");
+                    return;
+                }
+                else if (task.IsCompleted)
+                {
+                    DataSnapshot snapshot = task.Result;
+                    Debug.Log(snapshot.Value);
+                    userInfo.score = Convert.ToInt32(snapshot.Value);
+                    score = userInfo.score;
+                    Debug.Log("userInfo.score:" + userInfo.score);
+                }
+            });
+        return userInfo.score;
+     }
+    
+    /// <summary>
+    /// put new score of the player on database
+    /// </summary>
+    /// <param name="newScore">new score, which the player have</param>
+    void putNewScore(int newScore)
+    {
+        if (userInfo.username != "")
+        {
+            //database (Firebase) save data instruction ...
+            login.reference.Child("users").Child(userInfo.username).Child("score").SetValueAsync(newScore);
+        }
     }
 
     /// <summary>

@@ -31,16 +31,16 @@ public class ServerHUD : MonoBehaviour
    public int offsetY;
    
    /// <summary>
-   /// 
+   /// Get NetworkManager and Server from Mirror
    /// </summary>
-   void Awake()    /*hier kommt noch was*/
+   void Awake()
    {
       manager = GetComponent<NetworkManager>();
       cServer = GetComponent<Server>();
    }
    
    /// <summary>
-   /// handle events in NetworkManager    /*hier kommt noch was*
+   /// handle events in NetworkManager
    /// events are:
    /// LAN Server Only to make and start a new server
    /// other events are deleted by us
