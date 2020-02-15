@@ -500,7 +500,7 @@ public class Client : MonoBehaviour
 
     void RenderHostsInGameMenu(String[] text)
     {
-
+        Debug.Log(text);
         if (isHost || inParty) { return; }
 
         PartycontentField.text = "\n Type     Host     Players";
@@ -508,6 +508,7 @@ public class Client : MonoBehaviour
         for (int i = 0; i + 3 < text.Length; i += 3)
         {
             if (text[i].Equals(getgameType())) { //Filter
+                CreateHighscoreEntryTransform(text[i], text[i + 1], text[i + 2], entryContainer, EntryTransformList);
                 PartycontentField.text += "\n" + text[i] + "     " + text[i + 1] + "     " + text[i + 2];
             }
         }
@@ -559,7 +560,7 @@ public class Client : MonoBehaviour
     /// </summary>
     private List<Transform> EntryTransformList;
     
-    public void updateTable()
+    /*public void updateTable()
     {
         Debug.Log("Initializing table Hostlist...");
         //(Token from https://unitycodemonkey.com/video.php?v=iAbaqGYdnyI)
@@ -567,7 +568,7 @@ public class Client : MonoBehaviour
         foreach (string host in hostsList) {
             CreateHighscoreEntryTransform(host, entryContainer, EntryTransformList);
         }
-    }
+    }*/
     
     /// <summary>
     /// (Token from https://unitycodemonkey.com/video.php?v=iAbaqGYdnyI)
@@ -575,7 +576,7 @@ public class Client : MonoBehaviour
     /// <param name="host"></param>
     /// <param name="container"></param>
     /// <param name="transformList"></param>
-     private void CreateHighscoreEntryTransform(string host, Transform container, List<Transform> transformList) {
+     private void CreateHighscoreEntryTransform(string type, string host, string players, Transform container, List<Transform> transformList) {
         float templateHeight = 31f;
         Transform entryTransform = Instantiate(entryTemplate, container);
         RectTransform entryRectTransform = entryTransform.GetComponent<RectTransform>();
@@ -593,10 +594,9 @@ public class Client : MonoBehaviour
         case 3: rankString = "3RD"; break;
         }*/
         string game = gameMap[host];
-        entryTransform.Find("GameText").GetComponent<Text>().text = game;
+        entryTransform.Find("GameText").GetComponent<Text>().text = type;
         entryTransform.Find("HostText").GetComponent<Text>().text = host;
-        int players = partyMap[host];
-        entryTransform.Find("PlayersText").GetComponent<Text>().text = players.ToString();
+        entryTransform.Find("PlayersText").GetComponent<Text>().text = players;
         // Set background visible odds and evens, easier to read
         entryTransform.Find("background").gameObject.SetActive(rank % 2 == 1);
         
