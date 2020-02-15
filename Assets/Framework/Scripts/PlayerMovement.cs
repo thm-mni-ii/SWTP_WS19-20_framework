@@ -125,48 +125,58 @@ namespace Mirror
         List<String> Modules = new List<String>();
 
         /// <summary>
+        /// List of All Game 
+        /// It's read form the Database
+        /// </summary>
+        List<String> Games = new List<String>();
+
+
+
+        /// <summary>
         /// Start is called before the first frame update
         /// </summary>
         void Start()
         {
 
-                // Set up the Editor before calling into the realtime database.
-                FirebaseApp.DefaultInstance.SetEditorDatabaseUrl("https://mmo-spiel-1920.firebaseio.com");
+        // Set up the Editor before calling into the realtime database.
+        FirebaseApp.DefaultInstance.SetEditorDatabaseUrl("https://mmo-spiel-1920.firebaseio.com");
 
-                // Get the root reference location of the database.
-                 reference = FirebaseDatabase.DefaultInstance.RootReference;
+        // Get the root reference location of the database.
+            reference = FirebaseDatabase.DefaultInstance.RootReference;
 
-
-            FirebaseDatabase.DefaultInstance
-    .GetReference("Modules")
-    .GetValueAsync().ContinueWith(task => {
-        if (task.IsFaulted)
-        {
-              // Handle the error...
-          }
-        else if (task.IsCompleted)
-        {
-            DataSnapshot snapshot = task.Result;
-
-            if (snapshot != null)
-            {
-                foreach (KeyValuePair<string, object> Module in (Dictionary<string, object>) snapshot.Value)
+            FirebaseDatabase.DefaultInstance.GetReference("Modules").GetValueAsync().ContinueWith(task => {
+                if (task.IsFaulted)
                 {
-                   Modules.Add((String)Module.Key);
+                    // Handle the error...
                 }
-
-               /* foreach (String val in Modules)
+                else if (task.IsCompleted)
                 {
-                    Debug.Log("Module " + val);
-                }*/
-            }
-            else
-            {
-                Debug.Log("Data was not found (NULL)");
-            }
+                    DataSnapshot snapshot = task.Result;
 
-        }
-    });
+                    foreach (KeyValuePair<string, object> Module in (Dictionary<string, object>)snapshot.Value)
+                    {
+                        Modules.Add((String)Module.Key);
+                    }
+
+                }
+            });
+
+            FirebaseDatabase.DefaultInstance.GetReference("Games").GetValueAsync().ContinueWith(task => {
+                if (task.IsFaulted)
+                {
+                    // Handle the error...
+                }
+                else if (task.IsCompleted)
+                {
+                    DataSnapshot snapshot = task.Result;
+
+                    foreach (KeyValuePair<string, object> GameName in (Dictionary<string, object>)snapshot.Value)
+                    {
+                        Games.Add((String)GameName.Key);
+                    }
+
+                }
+            });
 
             GameObject GM = GameObject.FindWithTag("GlobalManager");
             if (GM != null)
@@ -175,6 +185,7 @@ namespace Mirror
             }
             var sphereCollider = gameObject.AddComponent<SphereCollider>();
             clientVar = globalCanvas.GetComponent<Client>();
+
         }
 
         public void Initialize(GameObject character)
@@ -310,6 +321,8 @@ namespace Mirror
         private void OnTriggerEnter(Collider other)
         {
             if (!isLocalPlayer || characterController == null) return;
+
+            clientVar.setGamesRef(this.Games);
             if (isAvaiableModule(other.gameObject.tag))
             {
                 clientVar.setgameType(other.gameObject.tag);

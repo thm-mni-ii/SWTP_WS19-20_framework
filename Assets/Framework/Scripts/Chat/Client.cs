@@ -110,6 +110,36 @@ public class Client : MonoBehaviour
     public ScrollRect ChatSR;
 
     /// <summary>
+    /// Game type Selection like: Dexit..
+    /// </summary>
+    public Dropdown GameSelect = null;
+
+
+    /// <summary>
+    /// List of All Game 
+    /// It References the Games list from PlayerMovement Class
+    /// Games Contains the name of all Game types that are avaiable like Dexit..
+    /// </summary>
+    List<String> Games;
+
+    /// <summary>
+    /// Method to set the Games Reference from the PlayerMovement Class
+    /// It also fills the Game types in the GameSelect Dropdown object
+    /// </summary>
+    /// <param name="list"></param>
+    public void setGamesRef(List<String> list)
+    {
+        this.Games = list;
+
+        foreach (String game in this.Games)
+        {
+            Dropdown.OptionData m_NewData = new Dropdown.OptionData();
+            m_NewData.text = game;
+            GameSelect.options.Add(m_NewData);
+        }
+    }
+
+    /// <summary>
     /// Get methode of the gameType
     /// </summary>
     /// <returns> The game type which is the Modules example: OOP,GDI... </returns>
@@ -498,17 +528,21 @@ public class Client : MonoBehaviour
         }
     }
 
+
+
     void RenderHostsInGameMenu(String[] text)
     {
-        Debug.Log(text);
-        if (isHost || inParty) { return; }
+     
+        if (isHost || inParty || (getgameType() == null)) {
+            return;
+        }
 
         PartycontentField.text = "\n Type     Host     Players";
 
         for (int i = 0; i + 3 < text.Length; i += 3)
         {
             if (text[i].Equals(getgameType())) { //Filter
-                CreateHighscoreEntryTransform(text[i], text[i + 1], text[i + 2], entryContainer, EntryTransformList);
+              //  CreateHighscoreEntryTransform(text[i], text[i + 1], text[i + 2], entryContainer, EntryTransformList);
                 PartycontentField.text += "\n" + text[i] + "     " + text[i + 1] + "     " + text[i + 2];
             }
         }
