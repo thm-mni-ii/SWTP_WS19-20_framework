@@ -4,12 +4,13 @@ namespace Mirror
 {
     [RequireComponent(typeof(CharacterController))]
     /**
-     * PlayerMovement class to set the Movement of the player (class token from mirror)
+     * PlayerMovement class to set the Movement of the player 
+     * (class token from mirror: https://mirror-networking.com/docs/)
      */
     public class PlayerMovement : NetworkBehaviour
     {
         /// <summary>
-        /// *hier kommt noch was*
+        /// Token from Mirror: https://mirror-networking.com/docs/ 
         /// </summary>
         [SyncVar]
         public int index;
@@ -33,21 +34,82 @@ namespace Mirror
         /// </summary>
         Material cachedMaterial;
         /// <summary>
-        /// *hier kommt noch was*
         /// a reference to the client class which contains all of the client information it is used here to change the scene/canvas of the player,
         /// and to fix the problem where the player moves automaticly, when he types in the chat
         /// </summary>
         private Client clientVar;
-        
+        /// <summary>
+        /// 
+        /// </summary>
+        CharacterController characterController;
+        /// <summary>
+        /// 
+        /// </summary>
+        GameObject controllerColliderHitObject;
+        /// <summary>
+        /// 
+        /// </summary>
         [SerializeField] private Animator m_animator;
         //[SerializeField] private Rigidbody m_rigidBody;
+        
+        /****** MovementVariables *******/
+        /// <summary>
+        /// Token from Mirror: https://mirror-networking.com/docs/ 
+        /// </summary>
+        [Header("Movement Settings")]
+        public float moveSpeed = 8f;
+        /// <summary>
+        /// Token from Mirror: https://mirror-networking.com/docs/ 
+        /// </summary>
+        public float turnSpeedAccel = 10f;
+        /// <summary>
+        /// Token from Mirror: https://mirror-networking.com/docs/ 
+        /// </summary>
+        public float turnSpeedDecel = 10f;
+        /// <summary>
+        /// Token from Mirror: https://mirror-networking.com/docs/ 
+        /// </summary>
+        public float maxTurnSpeed = 150f;
+        /// <summary>
+        /// Token from Mirror: https://mirror-networking.com/docs/ 
+        /// </summary>
+        [Header("Jump Settings")]
+        public float jumpSpeed = 0f;
+        /// <summary>
+        /// Token from Mirror: https://mirror-networking.com/docs/ 
+        /// </summary>
+        public float jumpFactor = .025F;
+        /// <summary>
+        /// Token from Mirror: https://mirror-networking.com/docs/ 
+        /// </summary>
+        public bool wasGrounded = false;
+        /// <summary>
+        /// Token from Mirror: https://mirror-networking.com/docs/ 
+        /// </summary>
+        [Header("Diagnostics")]
+        public float horizontal = 0f;
+        /// <summary>
+        /// Token from Mirror: https://mirror-networking.com/docs/ 
+        /// </summary>
+        public float vertical = 0f;
+        /// <summary>
+        /// Token from Mirror: https://mirror-networking.com/docs/ 
+        /// </summary>
+        public float turn = 0f;
+        /// <summary>
+        /// Token from Mirror: https://mirror-networking.com/docs/ 
+        /// </summary>
+        public bool isGrounded = true;
+        /// <summary>
+        /// Token from Mirror: https://mirror-networking.com/docs/ 
+        /// </summary>
+        public bool isFalling = false;
 
         /// <summary>
-        /// *hier kommt noch was*
+        /// Start is called before the first frame update
         /// </summary>
         void Start()
         {
-            //globalCanvas = gameObject.GetComponent<GlobalManager>();
             GameObject GM = GameObject.FindWithTag("GlobalManager");
             if (GM != null)
             {
@@ -62,115 +124,15 @@ namespace Mirror
             m_animator = character.GetComponent<Animator>();
             //m_rigidBody = character.GetComponent<Rigidbody>();
         }
-
         
         void Awake()
         {
             if(!m_animator) { gameObject.GetComponent<Animator>(); }
             //if(!m_rigidBody) { gameObject.GetComponent<Animator>(); }
         }
-
-        /// <summary>
-        /// Used from Mirror /*hier kommt noch was*
-        /// </summary>
-        /// <param name="color"></param>
-        void SetColor(Color color)
-        {
-            if (cachedMaterial == null) cachedMaterial = GetComponent<Renderer>().material;
-            cachedMaterial.color = color;
-        }
         
         /// <summary>
-        /// Used from Mirror /*hier kommt noch was*
-        /// </summary>
-        void OnDisable()
-        {
-            if (isLocalPlayer)
-            {
-                Camera.main.transform.SetParent(null);
-                Camera.main.transform.localPosition = new Vector3(0f, 50f, 0f);
-                Camera.main.transform.localEulerAngles = new Vector3(90f, 0f, 0f);
-            }
-        }
-
-        /// <summary>
-        /// Used from Mirror /*hier kommt noch was*
-        /// </summary>
-        void OnDestroy()
-        {
-            Destroy(cachedMaterial);
-        }
-        /// <summary>
-        /// *hier kommt noch was*
-        /// </summary>
-        CharacterController characterController;
-        
-        /// <summary>
-        /// 
-        /// </summary>
-        public override void OnStartLocalPlayer()
-        {
-            base.OnStartLocalPlayer();
-            characterController = GetComponent<CharacterController>();
-            Camera.main.transform.SetParent(transform);
-            Camera.main.transform.localPosition = new Vector3(0f, 3f, -7f);
-            Camera.main.transform.localEulerAngles = new Vector3(10f, 0f, 0f);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        [Header("Movement Settings")]
-        public float moveSpeed = 8f;
-        /// <summary>
-        /// 
-        /// </summary>
-        public float turnSpeedAccel = 10f;
-        /// <summary>
-        /// 
-        /// </summary>
-        public float turnSpeedDecel = 10f;
-        /// <summary>
-        /// 
-        /// </summary>
-        public float maxTurnSpeed = 150f;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        [Header("Jump Settings")]
-        public float jumpSpeed = 0f;
-        /// <summary>
-        /// 
-        /// </summary>
-        public float jumpFactor = .025F;
-
-        public bool wasGrounded = false;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        [Header("Diagnostics")]
-        public float horizontal = 0f;
-        /// <summary>
-        /// 
-        /// </summary>
-        public float vertical = 0f;
-        /// <summary>
-        /// 
-        /// </summary>
-        public float turn = 0f;
-        /// <summary>
-        /// 
-        /// </summary>
-        public bool isGrounded = true;
-        /// <summary>
-        /// 
-        /// </summary>
-        public bool isFalling = false;
-
-        /// <summary>
-        /// Update player position /*hier kommt noch was*
+        /// Update player position - Token from Mirror: https://mirror-networking.com/docs/
         /// </summary>
         void Update()
         {
@@ -188,7 +150,7 @@ namespace Mirror
                 turn += turnSpeedDecel;
             else
                 turn = 0f;
-
+            
             if (!isFalling && Input.GetKey(KeyCode.Space) && (isGrounded || jumpSpeed < 1))
             {
                 jumpSpeed += jumpFactor;
@@ -196,7 +158,6 @@ namespace Mirror
                 {
                     m_animator.SetTrigger("Land");
                 }
-
                 if (!isGrounded && wasGrounded)
                 {
                     m_animator.SetTrigger("Jump");
@@ -212,12 +173,11 @@ namespace Mirror
                 isFalling = true;
                 jumpSpeed = 0;
                 m_animator.SetTrigger("Land");
-
             }
         }
 
         /// <summary>
-        /// Used from Mirror /*hier kommt noch was*
+        /// Used from Mirror - Token from Mirror: https://mirror-networking.com/docs/ 
         /// </summary>
         void FixedUpdate()
         {
@@ -240,12 +200,47 @@ namespace Mirror
             }
             isGrounded = characterController.isGrounded;
         }
-        
+
         /// <summary>
-        /// 
+        /// Token from Mirror: https://mirror-networking.com/docs/ 
         /// </summary>
-        GameObject controllerColliderHitObject;
-        
+        /// <param name="color"></param>
+        void SetColor(Color color)
+        {
+            if (cachedMaterial == null) cachedMaterial = GetComponent<Renderer>().material;
+            cachedMaterial.color = color;
+        }
+        /// <summary>
+        /// Token from Mirror: https://mirror-networking.com/docs/ 
+        /// </summary>
+        void OnDisable()
+        {
+            if (isLocalPlayer)
+            {
+                Camera.main.transform.SetParent(null);
+                Camera.main.transform.localPosition = new Vector3(0f, 50f, 0f);
+                Camera.main.transform.localEulerAngles = new Vector3(90f, 0f, 0f);
+            }
+        }
+        /// <summary>
+        /// Token from Mirror: https://mirror-networking.com/docs/ 
+        /// </summary>
+        void OnDestroy()
+        {
+            Destroy(cachedMaterial);
+        }
+        /// <summary>
+        /// Token from Mirror: https://mirror-networking.com/docs/ 
+        /// </summary>
+        public override void OnStartLocalPlayer()
+        {
+            base.OnStartLocalPlayer();
+            characterController = GetComponent<CharacterController>();
+            Camera.main.transform.SetParent(transform);
+            Camera.main.transform.localPosition = new Vector3(0f, 3f, -7f);
+            Camera.main.transform.localEulerAngles = new Vector3(10f, 0f, 0f);
+        }
+
         /// <summary>
         /// override methode
         /// When the player stand on the "Magic Circle" :
@@ -254,7 +249,7 @@ namespace Mirror
         /// and show the startgame canvas to allow players to join host a party and start a game
         /// </summary>
         /// <param name="other"></param>
-        private void OnTriggerEnter(Collider other) /*hier kommt noch was*/
+        private void OnTriggerEnter(Collider other)
         {
             if (!isLocalPlayer || characterController == null) return;
             if (other.gameObject.tag.Equals("MATH") || other.gameObject.tag.Equals("NTG") || other.gameObject.tag.Equals("OOP") || other.gameObject.tag.Equals("GDI") || other.gameObject.tag.Equals("RNAI"))
@@ -270,10 +265,9 @@ namespace Mirror
         /// disable the startgame canvas when the player leave the "Magic Circle"
         /// </summary>
         /// <param name="other"></param>
-        private void OnTriggerExit(Collider other) /*hier kommt noch was*/
+        private void OnTriggerExit(Collider other)
         {
             if (!isLocalPlayer || characterController == null) return;
-
             if (other.gameObject.tag.Equals("MATH") || other.gameObject.tag.Equals("NTG") || other.gameObject.tag.Equals("OOP") || other.gameObject.tag.Equals("GDI") || other.gameObject.tag.Equals("RNAI"))
             {
                 clientVar.setgameType(null);
