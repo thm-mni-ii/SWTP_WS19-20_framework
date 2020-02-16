@@ -287,8 +287,7 @@ public class Login : MonoBehaviour
     /// </summary>
     public void checkUserExist()
     {
-        user.username = inputUserName.text;
-        report = 1;
+
         if (inputUserName.text != null && inputUserName.text != "" && inputPassword.text != null &&
             inputPassword.text != "")
         {
