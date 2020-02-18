@@ -175,6 +175,21 @@ public class BelohnungSystem : MonoBehaviour
         case 3:
             entryTransform.Find("trophy").GetComponent<Image>().color = new Color(1,0,0,1);
             break;
+        case 4:
+            entryTransform.Find("trophy").GetComponent<Image>().color = new Color(0,1,1,1);
+            break;
+        case 5:
+            entryTransform.Find("trophy").GetComponent<Image>().color = new Color(1,0,1,1);
+            break;
+        case 6:
+            entryTransform.Find("trophy").GetComponent<Image>().color = new Color(1,1,0,1);
+            break;
+        case 7:
+            entryTransform.Find("trophy").GetComponent<Image>().color = new Color(1,1,1,1);
+            break;
+        case 8:
+            entryTransform.Find("trophy").GetComponent<Image>().color = new Color(0,0,0, 1);
+            break;
         }
         transformList.Add(entryTransform);
     }

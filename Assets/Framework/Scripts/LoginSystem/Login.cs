@@ -193,6 +193,11 @@ public class Login : MonoBehaviour
     /// </summary>
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Return) && !connecting && globalCanvas.LoginCanvas.enabled)
+        {
+            checkUserExist();
+        }
+
         /* Show the connection status after clicking the Login button */
         if (connecting)
         {
@@ -201,6 +206,7 @@ public class Login : MonoBehaviour
                 connecting = false;
                 chat.EstablishConnection(user);
                 globalCanvas.ToggleCanvas("chat");
+                globalCanvas.ToggleCanvas("toplist");
                 if (NetworkClient.isConnected && !ClientScene.ready)
                 {
                     ClientScene.Ready(NetworkClient.connection);

@@ -45,7 +45,7 @@
           </e>
           <e p="Scripts" t="Include">
             <e p="BelohnungSystem.cs" t="Include" />
-            <e p="Chat" t="Include">
+            <e p="Chat-PartySystem" t="Include">
               <e p="Client.cs" t="Include" />
               <e p="MessageStruct.cs" t="Include" />
               <e p="Server.cs" t="Include" />
@@ -58,11 +58,7 @@
             </e>
             <e p="PlayerMovement.cs" t="Include" />
             <e p="ServerHUD.cs" t="Include" />
-          </e>
-        </e>
-        <e p="Hostlist" t="Include">
-          <e p="HighscoreTable" t="Include">
-            <e p="HighscoreTable.cs" t="Include" />
+            <e p="Table.cs" t="Include" />
           </e>
         </e>
         <e p="Materials" t="Include">
