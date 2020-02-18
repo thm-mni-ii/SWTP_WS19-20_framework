@@ -207,6 +207,7 @@ public class Login : MonoBehaviour
                 chat.EstablishConnection(user);
                 globalCanvas.ToggleCanvas("chat");
                 globalCanvas.ToggleCanvas("toplist");
+                globalCanvas.ToggleCanvas("partylist");
                 if (NetworkClient.isConnected && !ClientScene.ready)
                 {
                     ClientScene.Ready(NetworkClient.connection);

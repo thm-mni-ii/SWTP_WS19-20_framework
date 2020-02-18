@@ -42,7 +42,7 @@ public class Table : MonoBehaviour
         EntryTransformList = new List<Transform>();
         foreach (string Element in text)
         {
-            CreateHighscoreEntryTransform(Element, entryContainer, EntryTransformList);
+            CreateEntryTransform(Element, entryContainer, EntryTransformList);
         }
     }
 
@@ -52,7 +52,7 @@ public class Table : MonoBehaviour
     /// <param name="host"></param>
     /// <param name="container"></param>
     /// <param name="transformList"></param>
-    private void CreateHighscoreEntryTransform(string host, Transform container, List<Transform> transformList)
+    private void CreateEntryTransform(string host, Transform container, List<Transform> transformList)
     {
         float templateHeight = 31f;
         Transform entryTransform = Instantiate(entryTemplate, container);

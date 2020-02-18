@@ -24,13 +24,17 @@ public class GlobalManager : MonoBehaviour {
 	/// </summary>
     public Canvas ForgotCanvas;
 	/// <summary>
-    /// GameCanvas manage displays the Game
+    /// GameCanvas manage Start of Game (like: making partys)
     /// </summary>
     public Canvas GameCanvas;
 	/// <summary>
-	/// TOPPlayerCanvas manage displays the Game
+	/// TOPPlayerCanvas show TOP player
 	/// </summary>
 	public Canvas TOPPlayerCanvas;
+	/// <summary>
+	/// TOPPlayerCanvas show, which partys are open
+	/// </summary>
+	public Canvas PartysListCanvas;
 	/// <summary>
 	/// logout Button to sign out from the game
 	/// </summary>
@@ -47,6 +51,10 @@ public class GlobalManager : MonoBehaviour {
 	/// auxiliary variable to know if the TOP10 Canvas has been hidden
 	/// </summary>
 	public bool hideTOP10Canvas = false;
+	/// <summary>
+	/// auxiliary variable to know if the PartysList Canvas has been hidden
+	/// </summary>
+	public bool hidePartysListCanvas = false;
 	/// <summary>
 	/// auxiliary variable to hide all windows on lobby
 	/// </summary>
@@ -68,6 +76,7 @@ public class GlobalManager : MonoBehaviour {
         ForgotCanvas.enabled = false;
         GameCanvas.enabled = false;
         TOPPlayerCanvas.enabled = false;
+        PartysListCanvas.enabled = false;
     }
 
     /// <summary>
@@ -113,6 +122,21 @@ public class GlobalManager : MonoBehaviour {
 		    }
 	    }
 	    
+	    // hide/show PartysList canvas by pressed on p
+	    if (Input.GetKeyDown(KeyCode.P))
+	    {
+		    if (hidePartysListCanvas)
+		    {
+			    PartysListCanvas.gameObject.SetActive(true);
+			    hidePartysListCanvas = false;
+		    }
+		    else
+		    {
+			    PartysListCanvas.gameObject.SetActive(false);
+			    hidePartysListCanvas = true;
+		    }
+	    }
+	    
 	    // hide/show TOP10 Canvas by pressed on t
 	    if (Input.GetKeyDown(KeyCode.T))
 	    {
@@ -139,6 +163,8 @@ public class GlobalManager : MonoBehaviour {
 			    hideChatCanvas = false;
 			    TOPPlayerCanvas.gameObject.SetActive(true);
 			    hideTOP10Canvas = false;
+			    PartysListCanvas.gameObject.SetActive(true);
+			    hidePartysListCanvas = false;
 			    hideall = false;
 		    }
 		    else
@@ -149,6 +175,8 @@ public class GlobalManager : MonoBehaviour {
 			    hideChatCanvas = true;
 			    TOPPlayerCanvas.gameObject.SetActive(false);
 			    hideTOP10Canvas = true;
+			    PartysListCanvas.gameObject.SetActive(false);
+			    hidePartysListCanvas = true;
 			    hideall = true;
 		    }
 	    }
@@ -166,12 +194,14 @@ public class GlobalManager : MonoBehaviour {
             ForgotCanvas.enabled = false;
             GameCanvas.enabled = false;
             TOPPlayerCanvas.enabled = false;
+            PartysListCanvas.enabled = false;
         } else if (open == "register") {
             RegisterCanvas.enabled = true;
             LoginCanvas.enabled = false;
             ChatCanvas.enabled = false;
             ForgotCanvas.enabled = false;
             TOPPlayerCanvas.enabled = false;
+            PartysListCanvas.enabled = false;
         } else if (open == "chat") {
             RegisterCanvas.enabled = false;
             LoginCanvas.enabled = false;
@@ -189,6 +219,9 @@ public class GlobalManager : MonoBehaviour {
         } else if (open == "toplist")
         {
 	        TOPPlayerCanvas.enabled = true;
+        } else if (open == "partylist")
+        {
+	        PartysListCanvas.enabled = true;
         }
         else if (open == "gameOn") {
             GameCanvas.enabled = true;
