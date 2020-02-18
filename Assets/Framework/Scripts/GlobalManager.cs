@@ -28,9 +28,9 @@ public class GlobalManager : MonoBehaviour {
     /// </summary>
     public Canvas GameCanvas;
 	/// <summary>
-	/// TOP10Canvas manage displays the Game
+	/// TOPPlayerCanvas manage displays the Game
 	/// </summary>
-	public Canvas TOP10Canvas;
+	public Canvas TOPPlayerCanvas;
 	/// <summary>
 	/// logout Button to sign out from the game
 	/// </summary>
@@ -67,106 +67,93 @@ public class GlobalManager : MonoBehaviour {
 		ChatCanvas.enabled  = false;
         ForgotCanvas.enabled = false;
         GameCanvas.enabled = false;
-        //TOP10Canvas.enabled = false;
+        TOPPlayerCanvas.enabled = false;
     }
 
+    /// <summary>
+    /// Update is called once per frame
+    /// </summary>
     private void Update()
     {
+	    hideShowObjects();
+    }
+
+    /// <summary>
+    /// hide/show Gameobjects
+    /// </summary>
+    private void hideShowObjects()
+    {
 	    // hide/show logout button by pressed on ESC
-	    if (Input.GetKey(KeyCode.Escape))
+	    if (Input.GetKeyDown(KeyCode.Escape))
 	    {
 		    if (hideLogoutButton)
 		    {
-			    for (int i = 0; i < 1000; i++)
-			    {
-				    logout.gameObject.SetActive(true);
-				    hideLogoutButton = false;
-			    }
+			    logout.gameObject.SetActive(true);
+			    hideLogoutButton = false;
 		    }
 		    else
 		    {
-			    for (int i = 0; i < 1000; i++)
-			    {
-				    logout.gameObject.SetActive(false);
-				    hideLogoutButton = true;
-			    }
+			    logout.gameObject.SetActive(false);
+			    hideLogoutButton = true;
 		    }
 	    }
 	    
 	    // hide/show chat canvas by pressed on c
-	    if (Input.GetKey(KeyCode.C))
+	    if (Input.GetKeyDown(KeyCode.C))
 	    {
 		    if (hideChatCanvas)
 		    {
-			    for (int i = 0; i < 1000; i++)
-			    {
-				    ChatCanvas.gameObject.SetActive(true);
-				    hideChatCanvas = false;
-			    }
+			    ChatCanvas.gameObject.SetActive(true);
+			    hideChatCanvas = false;
 		    }
 		    else
 		    {
-			    for (int i = 0; i < 1000; i++)
-			    {
-				    ChatCanvas.gameObject.SetActive(false);
-				    hideChatCanvas = true;
-			    }
+			    ChatCanvas.gameObject.SetActive(false);
+			    hideChatCanvas = true;
 		    }
 	    }
 	    
 	    // hide/show TOP10 Canvas by pressed on t
-	    if (Input.GetKey(KeyCode.T))
+	    if (Input.GetKeyDown(KeyCode.T))
 	    {
 		    if (hideTOP10Canvas)
 		    {
-			    for (int i = 0; i < 1000; i++)
-			    {
-				    TOP10Canvas.gameObject.SetActive(true);
-				    hideTOP10Canvas = false;
-			    }
+			    TOPPlayerCanvas.gameObject.SetActive(true);
+			    hideTOP10Canvas = false;
 		    }
 		    else
 		    {
-			    for (int i = 0; i < 1000; i++)
-			    {
-				    TOP10Canvas.gameObject.SetActive(false);
-				    hideTOP10Canvas = true;
-			    }
+			    TOPPlayerCanvas.gameObject.SetActive(false);
+			    hideTOP10Canvas = true;
 		    }
 	    }
 	    
 	    // hide/show by pressed on h
-	    if (Input.GetKey(KeyCode.H))
+	    if (Input.GetKeyDown(KeyCode.H))
 	    {
 		    if (hideall)
 		    {
-			    for (int i = 0; i < 1000; i++)
-			    {
-				    logout.gameObject.SetActive(true);
-				    hideLogoutButton = false;
-				    ChatCanvas.gameObject.SetActive(true);
-				    hideChatCanvas = false;
-				    TOP10Canvas.gameObject.SetActive(true);
-				    hideTOP10Canvas = false;
-				    hideall = false;
-			    }
+			    logout.gameObject.SetActive(true);
+			    hideLogoutButton = false;
+			    ChatCanvas.gameObject.SetActive(true);
+			    hideChatCanvas = false;
+			    TOPPlayerCanvas.gameObject.SetActive(true);
+			    hideTOP10Canvas = false;
+			    hideall = false;
 		    }
 		    else
 		    {
-			    for (int i = 0; i < 1000; i++)
-			    {
-				    logout.gameObject.SetActive(false);
-				    hideLogoutButton = true;
-				    ChatCanvas.gameObject.SetActive(false);
-				    hideChatCanvas = true;
-				    TOP10Canvas.gameObject.SetActive(false);
-				    hideTOP10Canvas = true;
-				    hideall = true;
-			    }
+			    logout.gameObject.SetActive(false);
+			    hideLogoutButton = true;
+			    ChatCanvas.gameObject.SetActive(false);
+			    hideChatCanvas = true;
+			    TOPPlayerCanvas.gameObject.SetActive(false);
+			    hideTOP10Canvas = true;
+			    hideall = true;
 		    }
 	    }
     }
-
+    
     /// <summary>
     /// change between canvases
     /// </summary>
@@ -178,11 +165,13 @@ public class GlobalManager : MonoBehaviour {
             ChatCanvas.enabled = false;
             ForgotCanvas.enabled = false;
             GameCanvas.enabled = false;
+            TOPPlayerCanvas.enabled = false;
         } else if (open == "register") {
             RegisterCanvas.enabled = true;
             LoginCanvas.enabled = false;
             ChatCanvas.enabled = false;
             ForgotCanvas.enabled = false;
+            TOPPlayerCanvas.enabled = false;
         } else if (open == "chat") {
             RegisterCanvas.enabled = false;
             LoginCanvas.enabled = false;
@@ -196,6 +185,10 @@ public class GlobalManager : MonoBehaviour {
             LoginCanvas.enabled = false;
             ChatCanvas.enabled = false;
             ForgotCanvas.enabled = true;
+            TOPPlayerCanvas.enabled = false;
+        } else if (open == "toplist")
+        {
+	        TOPPlayerCanvas.enabled = true;
         }
         else if (open == "gameOn") {
             GameCanvas.enabled = true;
