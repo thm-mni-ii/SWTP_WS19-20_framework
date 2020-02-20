@@ -252,8 +252,8 @@ namespace Mirror
         {
             if (!isLocalPlayer || characterController == null) return;
             if (clientVar.clientMessageTF.isFocused) return;
-            if (clientVar.partyTextField.isFocused && (globalCanvas.GameCanvas == true)) return;
-            
+            if (clientVar.partyTextField.isFocused && globalCanvas.GameCanvas.enabled ) return;
+
 m_animator.SetBool("Grounded", isGrounded);
             transform.Rotate(0f, turn * Time.fixedDeltaTime, 0f);
             Vector3 direction = new Vector3(horizontal, jumpSpeed, vertical);
@@ -330,6 +330,7 @@ m_animator.SetBool("Grounded", isGrounded);
                 clientVar.setgameType(other.gameObject.tag);
                 globalCanvas.ToggleCanvas("gameOn");
                 clientVar.updateStartGameUI();
+                clientVar.partyTextField.DeactivateInputField();
             }
         }
 
@@ -358,6 +359,7 @@ m_animator.SetBool("Grounded", isGrounded);
             {
                 clientVar.setgameType(null);
                 globalCanvas.ToggleCanvas("gameOff");
+
             }
         }
     }
