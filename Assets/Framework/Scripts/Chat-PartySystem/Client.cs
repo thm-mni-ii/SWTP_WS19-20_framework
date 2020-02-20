@@ -114,6 +114,12 @@ public class Client : MonoBehaviour
     /// </summary>
     public Dropdown GameSelect = null;
 
+    /// <summary>
+    /// Variable to avoid Reading the Gamelist  multiple times
+    /// It is set to true, in the Method setGamesRef.
+    /// </summary>
+    private bool isGamesRefset = false;
+
 
     /// <summary>
     /// List of All Game 
@@ -156,6 +162,7 @@ public class Client : MonoBehaviour
     /// <param name="list"></param>
     public void setGamesRef(List<String> list)
     {
+        if(isGamesRefset) { return; }
         this.Games = list;
 
         foreach (String game in this.Games)
@@ -164,6 +171,7 @@ public class Client : MonoBehaviour
             m_NewData.text = game;
             GameSelect.options.Add(m_NewData);
         }
+        isGamesRefset = true;
     }
 
     /// <summary>
@@ -389,6 +397,12 @@ public class Client : MonoBehaviour
                 RenderHosts(hlist);
                 RenderHostsInGameMenu(hlist);
                 break;
+            case 10://start game for client
+                InstanceStarter.RunFile(Smsg.Text);
+                break;
+            case 11://failed start game request
+                PartycontentField.text += Smsg.senderName;
+                break;
 
         }
     }
@@ -443,9 +457,17 @@ public class Client : MonoBehaviour
             PartycontentField.text += "\n Only a Host can Start the game";
             return;
         }
+        else if(GameSelect.options[GameSelect.value].text == null || GameSelect.options[GameSelect.value].text == "")
+        {
+            PartycontentField.text += "\n please Select a game type";
+            return;
+        }
         else
         {
-            // Here comes the Start game code it is yet to be written
+            MessageStruct Smsg = new MessageStruct(userName, GameSelect.options[GameSelect.value].text, 11, null);
+            Smsg.senderId = clientId;
+            byte[] bytes = ObjectToByteArray(Smsg);
+            client.Send(bytes);
         }
     }
      

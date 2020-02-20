@@ -304,6 +304,25 @@ public class Server : MonoBehaviour
             case 10:// Update Partylist for Client
                 UpdateHostListforOneClient(Smsg.senderId);
                 break;
+            case 11://Start game Request, sent from Host
+                party GameSelected = partyList[Smsg.senderName];
+                if (GameSelected.allPlayersReady())
+                {
+                    //startgame
+                    foreach (var entry in GameSelected.playersList)
+                    {
+                        server.Send(entry.Key, ObjectToByteArray(new MessageStruct("server", Smsg.Text, 10, null)));
+                    }
+                }
+                else
+                {
+                    //start failed
+                    foreach (var entry in GameSelected.playersList)
+                    {
+                        server.Send(entry.Key, ObjectToByteArray(new MessageStruct("server: Cannot start game until all players are ready", null, 11, null)));
+                    }
+                }
+                break;
             default:
                 Debug.Log("msg Error unknown command");
                 break;
