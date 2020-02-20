@@ -174,6 +174,7 @@ public class Client : MonoBehaviour
     {
         return this.gameType;
     }
+
     
     /// <summary>
     /// Set methode of the gameType
@@ -388,6 +389,7 @@ public class Client : MonoBehaviour
                 RenderHosts(hlist);
                 RenderHostsInGameMenu(hlist);
                 break;
+
         }
     }
 
@@ -397,6 +399,20 @@ public class Client : MonoBehaviour
     public void updateStartGameUI()
     {
         startgameTitle.text = "Welcome to " + gameType + " Module";
+        updatePartyList();
+    }
+
+
+    /// <summary>
+    /// Send a request to the server to update the Partylist for the Client only.
+    /// This Methode is called when the client stands on a Magic-circle.
+    /// </summary>
+    public void updatePartyList()
+    {
+
+        MessageStruct listReq = new MessageStruct(userName, null, 10, null);
+        listReq.senderId = this.clientId;
+        client.Send(ObjectToByteArray(listReq));
     }
 
     /// <summary>

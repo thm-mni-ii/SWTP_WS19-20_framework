@@ -252,7 +252,9 @@ namespace Mirror
         {
             if (!isLocalPlayer || characterController == null) return;
             if (clientVar.clientMessageTF.isFocused) return;
-            m_animator.SetBool("Grounded", isGrounded);
+            if (clientVar.partyTextField.isFocused && (globalCanvas.GameCanvas == true)) return;
+            
+m_animator.SetBool("Grounded", isGrounded);
             transform.Rotate(0f, turn * Time.fixedDeltaTime, 0f);
             Vector3 direction = new Vector3(horizontal, jumpSpeed, vertical);
             direction = Vector3.ClampMagnitude(direction, 1f);

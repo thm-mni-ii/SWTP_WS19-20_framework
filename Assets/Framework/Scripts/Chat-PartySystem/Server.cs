@@ -301,6 +301,9 @@ public class Server : MonoBehaviour
                 temp5.PlayerReady(Smsg.senderId);
                 UpdateList(temp5);
                 break;
+            case 10:// Update Partylist for Client
+                UpdateHostListforOneClient(Smsg.senderId);
+                break;
             default:
                 Debug.Log("msg Error unknown command");
                 break;
@@ -351,6 +354,18 @@ public class Server : MonoBehaviour
         Byte[] data = ObjectToByteArray(new MessageStruct("server", hostlist, 9, null));
 
         SendToAll(data);
+    }
+
+    public void UpdateHostListforOneClient(int id)
+    {
+        string hostlist = "";
+        foreach (var entry in partyList)
+        {
+            hostlist += entry.Value.gameType + ";" + entry.Key + ";" + entry.Value.playersList.Count + ";";
+        }
+        Byte[] data = ObjectToByteArray(new MessageStruct("server", hostlist, 9, null));
+
+        server.Send(id, data);
     }
 
     /// <summary>
