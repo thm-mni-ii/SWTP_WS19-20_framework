@@ -341,15 +341,9 @@ public class Server : MonoBehaviour
         foreach (var entry in temp.playersList)
         {
             if (entry.Value.playername != "")
-                if (entry.Value.isReady)
-                {
-                    names += "<color=#00ff00ff>" + entry.Value.playername + "</color>;";//Color Green if player is ready
-                }
-                else
-                {
-                    names += "<color=#ff0000ff>" + entry.Value.playername + "</color>;";//Color Red if player is not ready
-                }
+                names += entry.Value.playername + ":" + entry.Value.isReady;
         }
+    
         Byte[] data = ObjectToByteArray(new MessageStruct("server", names, 5, null));
         foreach (var entry in temp.playersList)
         {

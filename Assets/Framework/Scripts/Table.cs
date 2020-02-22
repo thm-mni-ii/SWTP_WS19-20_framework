@@ -6,22 +6,12 @@ using UnityEngine.UI;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 
+/// <summary>
+/// Table definition class
+/// </summary>
 public class Table : MonoBehaviour
 {
 
-    /* Variablen u. Methoden für die Tabelle */
-    /// <summary>
-    /// Create Dictionary of hosts and players
-    /// </summary>
-    public Dictionary<string, int> partyMap = new Dictionary<string, int>();
-    /// <summary>
-    /// Create Dictionary of hosts and games
-    /// </summary>
-    public Dictionary<string, string> gameMap = new Dictionary<string, string>();
-    /// <summary>
-    /// List of players. it use to find all players, who host a party
-    /// </summary>
-    public List<string> hostsList = new List<string>();
     /// <summary>
     /// (Token from https://unitycodemonkey.com/video.php?v=iAbaqGYdnyI)
     /// </summary>
@@ -35,8 +25,10 @@ public class Table : MonoBehaviour
     /// </summary>
     private List<Transform> EntryTransformList;
 
-    public void updateTable(String[] text)
+    public void updateTable(String[] text, Transform container, Transform template)
     {
+        this.entryContainer = container;
+        this.entryTemplate = template;
         Debug.Log("Initializing table Hostlist...");
         //(Token from https://unitycodemonkey.com/video.php?v=iAbaqGYdnyI)
         EntryTransformList = new List<Transform>();
@@ -60,30 +52,20 @@ public class Table : MonoBehaviour
         entryRectTransform.anchoredPosition = new Vector2(0, -templateHeight * transformList.Count);
         entryTransform.gameObject.SetActive(true);
 
-        int rank = transformList.Count + 1;
-        /*string rankString;
-        switch (rank) {
-        default:
-            rankString = rank + "TH"; break;
+       // int rank = transformList.Count + 1;
 
-        case 1: rankString = "1ST"; break;
-        case 2: rankString = "2ND"; break;
-        case 3: rankString = "3RD"; break;
-        }*/
-        string game = gameMap[host];
-        entryTransform.Find("GameText").GetComponent<Text>().text = game;
+      //  string game = gameMap[host];
+        entryTransform.Find("GameText").GetComponent<Text>().text = host;
         entryTransform.Find("HostText").GetComponent<Text>().text = host;
-        int players = partyMap[host];
-        entryTransform.Find("PlayersText").GetComponent<Text>().text = players.ToString();
+        //int players = partyMap[host];
+        entryTransform.Find("PlayersText").GetComponent<Text>().text = host;
         // Set background visible odds and evens, easier to read
-        entryTransform.Find("background").gameObject.SetActive(rank % 2 == 1);
+        entryTransform.Find("background").gameObject.SetActive(false);
 
-        // Highlight First
-        //  if (rank == 1) {
         entryTransform.Find("GameText").GetComponent<Text>().color = Color.green;
         entryTransform.Find("HostText").GetComponent<Text>().color = Color.green;
         entryTransform.Find("PlayersText").GetComponent<Text>().color = Color.green;
-        //  }
+
         transformList.Add(entryTransform);
     }
 

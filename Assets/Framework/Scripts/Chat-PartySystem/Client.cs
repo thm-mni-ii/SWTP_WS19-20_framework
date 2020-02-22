@@ -19,6 +19,12 @@ public class Client : MonoBehaviour
     /// show received messages 
     /// </summary>
     public Text content = null;
+    
+    /// <summary>
+    /// A Text Object used for Error Messages
+    /// Error Messages are cloned from this Object in the Methode ShowErrorMessage(...)
+    /// </summary>
+    public Text ErrorTextField = null;
 
     /// <summary>
     /// The Input Text Field in the Game Canvas where the Host names are Entered
@@ -29,17 +35,6 @@ public class Client : MonoBehaviour
     /// The Title of the Game Canvas it is changed every time a player enters a Magic Circle
     /// </summary>
     public Text startgameTitle = null;
-
-    /// <summary>
-    /// The Text Field where on the GameCanvas where the Hosts or the party players are displayed
-    /// </summary>
-    public Text PartycontentField = null;
-
-    /// <summary>
-    /// The GameHosts Field is displayed on the upper left corner of the screen
-    /// It shows the current Hosts of each game this way the player will know which games are being hosted
-    /// </summary>
-    public Text GameHostsField = null;
 
     /// <summary>
     /// make a new Telepathy.Client resposible for the communication with the server
@@ -127,8 +122,10 @@ public class Client : MonoBehaviour
     /// Games Contains the name of all Game types that are avaiable like Dexit..
     /// </summary>
     List<String> Games;
-    
-    /* Variablen für die Tabelle */
+
+    /* Table Definitions */
+
+    /// The Text Field where on the GameCanvas where the Hosts or the party players are displayed
     /// <summary>
     /// (Token from https://unitycodemonkey.com/video.php?v=iAbaqGYdnyI)
     /// </summary>
@@ -141,19 +138,22 @@ public class Client : MonoBehaviour
     /// (Token from https://unitycodemonkey.com/video.php?v=iAbaqGYdnyI)
     /// </summary>
     private List<Transform> EntryTransformListInGame = new List<Transform>();
-    
+
+
+    ///The GameHosts Field is displayed on the upper left corner of the screen
+    /// It shows the current Hosts of each game this way the player will know which games are being hosted
     /// <summary>
     /// (Token from https://unitycodemonkey.com/video.php?v=iAbaqGYdnyI)
     /// </summary>
-    public Transform entryContainer;
+    public Transform entryContainerHosts;
     /// <summary>
     /// (Token from https://unitycodemonkey.com/video.php?v=iAbaqGYdnyI)
     /// </summary>
-    public Transform entryTemplate;
+    public Transform entryTemplateHosts;
     /// <summary>
     /// (Token from https://unitycodemonkey.com/video.php?v=iAbaqGYdnyI)
     /// </summary>
-    private List<Transform> EntryTransformList = new List<Transform>();
+    private List<Transform> EntryTransformListHosts = new List<Transform>();
 
     /// <summary>
     /// Method to set the Games Reference from the PlayerMovement Class
@@ -198,7 +198,7 @@ public class Client : MonoBehaviour
     /// </summary>
     void Awake()
     {
-        entryTemplate.gameObject.SetActive(false);
+        entryTemplateHosts.gameObject.SetActive(false);
         entryTemplateInGame.gameObject.SetActive(false);
         
         // update even if window isn't focused, otherwise we don't receive.
@@ -385,11 +385,11 @@ public class Client : MonoBehaviour
                 }
                 break;
             case 7://party canceled
-                PartycontentField.text = Smsg.senderName;
+                ShowErrorMessage(Smsg.senderName);
                 inParty = false;
                 break;
             case 8://join failed
-                PartycontentField.text = Smsg.senderName;
+                ShowErrorMessage(Smsg.senderName);
                 inParty = false;
                 break;
             case 9://update host list
@@ -401,7 +401,7 @@ public class Client : MonoBehaviour
                 InstanceStarter.RunFile(Smsg.Text);
                 break;
             case 11://failed start game request
-                PartycontentField.text += Smsg.senderName;
+                ShowErrorMessage(Smsg.senderName);
                 break;
 
         }
@@ -437,7 +437,7 @@ public class Client : MonoBehaviour
     {
         if (!inParty)
         {
-            PartycontentField.text += "\n you are Not in Party";
+            ShowErrorMessage("you are Not in Party");
             return;
         }
 
@@ -454,12 +454,12 @@ public class Client : MonoBehaviour
     {
         if (!isHost)
         {
-            PartycontentField.text += "\n Only a Host can Start the game";
+            ShowErrorMessage("Only a Host can Start the game");
             return;
         }
         else if(GameSelect.options[GameSelect.value].text == null || GameSelect.options[GameSelect.value].text == "")
         {
-            PartycontentField.text += "\n please Select a game type";
+            ShowErrorMessage("please Select a game type");
             return;
         }
         else
@@ -481,7 +481,7 @@ public class Client : MonoBehaviour
     {
         if (inParty && isHost)
         {
-            PartycontentField.text += "\n you are already in a party please leave in order to create a new one";
+            ShowErrorMessage("You are already in a party please leave in order to create a new one");
             return;
         }
         MessageStruct Smsg = new MessageStruct(userName, gameType, 4, null);
@@ -503,7 +503,7 @@ public class Client : MonoBehaviour
     {
         if (inParty)
         {
-            PartycontentField.text += "\n you are already in a party please leave in order to join a new one";
+            ShowErrorMessage("You are already in a party please leave in order to join a new one");
             return;
         }
 
@@ -517,7 +517,7 @@ public class Client : MonoBehaviour
         }
         else
         {
-            PartycontentField.text = "Enter the Host name";
+            ShowErrorMessage("Please enter the Hosts name");
         }
     }
 
@@ -573,10 +573,23 @@ public class Client : MonoBehaviour
     /// <param name="text"> string array - List of the Party players </param>
     void RenderPartyList(String[] text)
     {
-        PartycontentField.text = "";
-        for (int i = 0; i < text.Length - 1; i++)
+        foreach (string ss in text) {
+            Debug.Log(ss);
+        }
+        ClearEntryList(EntryTransformListInGame);
+        int i = 1;
+        foreach (string player in text)
         {
-            PartycontentField.text += "\n" + "Player[" + i + 1 + "]:" + text[i];
+            string[] playerStatus = player.Split(new char[] { ':' });
+
+            if (playerStatus[1].Equals("True"))
+            {
+                CreateEntryTransform(playerStatus[0], i.ToString(), "Ready", entryContainerInGame, entryTemplateInGame, EntryTransformListInGame, Color.green);
+            }
+            else
+            {
+                CreateEntryTransform(playerStatus[0], i.ToString(), "Not Ready", entryContainerInGame, entryTemplateInGame, EntryTransformListInGame, Color.red) ;
+            }
         }
     }
 
@@ -587,17 +600,25 @@ public class Client : MonoBehaviour
     /// <param name="text"> String array List of Hosts </param>
     void RenderHosts(String[] text)
     {
-        GameHostsField.text = "\n Type     Host     Players";
-
-        //EntryTransformList = new List<Transform>();
+        ClearEntryList(EntryTransformListHosts);
         for (int i = 0; i+3 < text.Length; i += 3)
         {
-            CreateEntryTransform(text[i], text[i + 1], text[i + 2], entryContainer, entryTemplate, EntryTransformList);
-            GameHostsField.text += "\n" + text[i] + "     " + text[i + 1] + "     " + text[i + 2];
+            CreateEntryTransform(text[i], text[i + 1], text[i + 2], entryContainerHosts, entryTemplateHosts, EntryTransformListHosts,Color.green);
         }
     }
 
-
+    /// <summary>
+    /// This methode recieves Message and diplays the Message on the screen.
+    /// The Message cloned from the "ErrorTextField" Object and is displayed for 3 seconds before it is destroyed.
+    /// </summary>
+    /// <param name="ErrorTextField"> The Error Message as string</param>
+    public void ShowErrorMessage(string textMessage)
+    {
+        Transform ErorrMessage = Instantiate(ErrorTextField.GetComponent<RectTransform>(), ErrorTextField.GetComponent<RectTransform>());
+        ErorrMessage.gameObject.GetComponent<Text>().text = textMessage;
+        ErorrMessage.gameObject.SetActive(true);
+        Destroy(ErorrMessage.gameObject,3); //display time
+    }
 
     void RenderHostsInGameMenu(String[] text)
     {
@@ -606,14 +627,12 @@ public class Client : MonoBehaviour
             return;
         }
 
-        PartycontentField.text = "\n Type     Host     Players";
+        ClearEntryList(EntryTransformListInGame);
 
-        //EntryTransformListInGame = new List<Transform>();
         for (int i = 0; i + 3 < text.Length; i += 3)
         {
             if (text[i].Equals(getgameType())) { //Filter
-                CreateEntryTransform(text[i], text[i + 1], text[i + 2], entryContainerInGame, entryTemplateInGame, EntryTransformListInGame);
-                PartycontentField.text += "\n" + text[i] + "     " + text[i + 1] + "     " + text[i + 2];
+                CreateEntryTransform(text[i], text[i + 1], text[i + 2], entryContainerInGame, entryTemplateInGame, EntryTransformListInGame, Color.green);
             }
         }
     }
@@ -638,57 +657,44 @@ public class Client : MonoBehaviour
         }
     }
 
-    /* Methoden für die Tabelle */
+
     /// <summary>
+    /// Adds a new Entry to the Table
+    /// Used by the HostsTable and PartyTable
     /// (Token from https://unitycodemonkey.com/video.php?v=iAbaqGYdnyI)
     /// </summary>
     /// <param name="host"></param>
     /// <param name="container"></param>
     /// <param name="transformList"></param>
-     private void CreateEntryTransform(string type, string host, string players, Transform container, Transform entryTemplate, List<Transform> transformList) {
+     private void CreateEntryTransform(string type, string host, string players, Transform container, Transform entryTemplate, List<Transform> transformList,Color color) {
         float templateHeight = 31f;
         Transform entryTransform = Instantiate(entryTemplate, container);
         RectTransform entryRectTransform = entryTransform.GetComponent<RectTransform>();
         entryRectTransform.anchoredPosition = new Vector2(0, -templateHeight * transformList.Count);
         entryTransform.gameObject.SetActive(true);
-        int rank = transformList.Count + 1;
         
         entryTransform.Find("gameText").GetComponent<Text>().text = type;
         entryTransform.Find("hostText").GetComponent<Text>().text = host;
         entryTransform.Find("playersText").GetComponent<Text>().text = players;
-        // Set background visible odds and evens, easier to read
-        //entryTransform.Find("background").gameObject.SetActive(rank % 2 == 1);
-        
-        // Highlight First
-      //  if (rank == 1) {
-            entryTransform.Find("gameText").GetComponent<Text>().color = Color.green;
-            entryTransform.Find("hostText").GetComponent<Text>().color = Color.green;
-            entryTransform.Find("playersText").GetComponent<Text>().color = Color.green;
-      //  }
+
+            entryTransform.Find("gameText").GetComponent<Text>().color = color;
+            entryTransform.Find("hostText").GetComponent<Text>().color = color;
+            entryTransform.Find("playersText").GetComponent<Text>().color = color;
+
         transformList.Add(entryTransform);
     }
     
-    //Noch nicht Programmiert!!!
-    private void DeleteEntryTransform(string type, string host, string players, Transform container, Transform entryTemplate, List<Transform> transformList) {
-        float templateHeight = 31f;
-        Transform entryTransform = Instantiate(entryTemplate, container);
-        RectTransform entryRectTransform = entryTransform.GetComponent<RectTransform>();
-        entryRectTransform.anchoredPosition = new Vector2(0, -templateHeight * transformList.Count);
-        entryTransform.gameObject.SetActive(true);
-        int rank = transformList.Count + 1;
-        
-        entryTransform.Find("gameText").GetComponent<Text>().text = type;
-        entryTransform.Find("hostText").GetComponent<Text>().text = host;
-        entryTransform.Find("playersText").GetComponent<Text>().text = players;
-        // Set background visible odds and evens, easier to read
-        //entryTransform.Find("background").gameObject.SetActive(rank % 2 == 1);
-        
-        // Highlight First
-        //  if (rank == 1) {
-        entryTransform.Find("gameText").GetComponent<Text>().color = Color.green;
-        entryTransform.Find("hostText").GetComponent<Text>().color = Color.green;
-        entryTransform.Find("playersText").GetComponent<Text>().color = Color.green;
-        //  }
-        transformList.Add(entryTransform);
+    /// <summary>
+    /// This Method should be called every time a Table is updated
+    /// It cleans the Transform List and deletes each Entry/Object created on the Client
+    /// </summary>
+    /// <param name="transformList"></param>
+    private void ClearEntryList(List<Transform> transformList) {
+        foreach (Transform transform in transformList)
+        {
+            Destroy(transform.gameObject);
+            
+        }
+        transformList.Clear();
     }
 }
