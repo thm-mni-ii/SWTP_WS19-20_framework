@@ -341,7 +341,7 @@ public class Server : MonoBehaviour
         foreach (var entry in temp.playersList)
         {
             if (entry.Value.playername != "")
-                names += entry.Value.playername + ":" + entry.Value.isReady;
+                names += entry.Value.playername + ":" + entry.Value.isReady+ ";";
         }
     
         Byte[] data = ObjectToByteArray(new MessageStruct("server", names, 5, null));

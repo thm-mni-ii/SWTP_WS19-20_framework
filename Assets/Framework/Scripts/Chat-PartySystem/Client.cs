@@ -578,17 +578,21 @@ public class Client : MonoBehaviour
         }
         ClearEntryList(EntryTransformListInGame);
         int i = 1;
+
         foreach (string player in text)
         {
-            string[] playerStatus = player.Split(new char[] { ':' });
+            if (player != "" && player != null)
+            {
 
-            if (playerStatus[1].Equals("True"))
-            {
-                CreateEntryTransform(playerStatus[0], i.ToString(), "Ready", entryContainerInGame, entryTemplateInGame, EntryTransformListInGame, Color.green);
-            }
-            else
-            {
-                CreateEntryTransform(playerStatus[0], i.ToString(), "Not Ready", entryContainerInGame, entryTemplateInGame, EntryTransformListInGame, Color.red) ;
+                string[] playerStatus = player.Split(new char[] { ':' });
+                if (playerStatus[1].Equals("True"))
+                {
+                    CreateEntryTransform(playerStatus[0], i.ToString(), "Ready", entryContainerInGame, entryTemplateInGame, EntryTransformListInGame, Color.green);
+                }
+                else if (playerStatus[1].Equals("False"))
+                {
+                    CreateEntryTransform(playerStatus[0], i.ToString(), "Not Ready", entryContainerInGame, entryTemplateInGame, EntryTransformListInGame, Color.red);
+                }
             }
         }
     }
