@@ -28,132 +28,10 @@ public class Server : MonoBehaviour
     /// </summary>
     Dictionary<int, string> userList = new Dictionary<int, string>();
     /// <summary>
-    /// party Map to store information about every current party that is running on the server
+    /// Party Map to store information about every current Party that is running on the server
     /// </summary>
-    Dictionary<string, party> partyList = new Dictionary<string, party>();
+    Dictionary<string, Party> partyList = new Dictionary<string, Party>();
     
-    /// <summary>
-    /// PartyPlayer class to manage users before a game starts
-    /// it keeps track of the player name and his ready state
-    /// </summary>
-    public class PartyPlayer
-    {
-        public string playername;
-        public bool isReady = false;
-
-        /// <summary>
-        /// constructor to save the player name
-        /// </summary>
-        /// <param name="name"> The name of the player </param>
-        public PartyPlayer(string name)
-        {
-            this.playername = name;
-        }
-    }
-    
-     /// <summary>
-    /// Party class
-    /// This class contains all the information and methods to manage a party
-    /// </summary>
-    public class party
-    {
-        /// <summary>
-        /// hostname of party
-        /// </summary>
-        public string hostname;
-        /// <summary>
-        /// This variable is used to determine if the party is in a game or not
-        /// With the help of this variable the game will be started for all party members
-        /// The value is set to true of all party players are ready and then the game starts
-        /// when the game ends the value is set back to false
-        /// </summary>
-        public bool gameStarted = false;
-        /// <summary>
-        /// Number of ready players in the party
-        /// This variable is used to keep track of how many player are ready
-        /// once all players are ready the game can be started
-        /// </summary>
-        public uint playersReady = 0;
-        /// <summary>
-        /// Game type { OOP, NTG, MATHE ...}
-        /// It is used to set the Game type
-        /// this variable is set once the Party is Hosted and can not be changed
-        /// </summary>
-        public string gameType;  
-        /// <summary>
-        /// Map of player ids and names, which are currently in the party
-        /// </summary>
-        public Dictionary<int, PartyPlayer> playersList = new Dictionary<int, PartyPlayer>();
-
-        /// <summary>
-        /// add a new player the party
-        /// </summary>
-        /// <param name="con">Connection id (client id/number on server)</param>
-        /// <param name="player">PartyPlayer Object contains information about the player in the party</param>
-        public void addPlayer(int con, PartyPlayer player)
-        {
-            playersList.Add(con, player);
-        }
-
-        /// <summary>
-        /// remove a player from the party
-        /// </summary>
-        /// <param name="con">Connection id (client id/number on server)</param>
-        public void removPlayer(int con)
-        {
-            playersList.Remove(con);
-        }
-
-        /// <summary>
-        /// constructor
-        /// Create a new party with hostname and game type
-        /// The parameters are recieved from the client
-        /// </summary>
-        /// <param name="hostname">Hostname</param>
-        /// <param name="ptype">Game Type</param>
-        public party(string hostname, string ptype)
-        {
-            this.hostname = hostname;
-            this.gameType = ptype;
-        }
-
-        /// <summary>
-        /// check of the player is ready or not
-        /// </summary>
-        /// <param name="con">connection id (client id/number on the server)</param>
-        public void PlayerReady(int con)
-        {
-            if (!playersList[con].isReady)
-            {
-                playersList[con].isReady = true;
-                playersReady++;
-            }
-            else
-            {
-                playersList[con].isReady = false;
-                playersReady--;
-            }
-        }
-        
-        /// <summary>
-        /// Check if all party players are ready
-        /// The return value determines if the party can be started or not
-        /// True game can be started
-        /// False game canno't be started
-        /// </summary>
-        /// <returns> True if all players are ready, False if atleast one player is not ready</returns>
-        public bool allPlayersReady() 
-        {
-            if (playersReady == playersList.Count)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-    }
 
     /// <summary>
     /// Awake is called when the script instance is being loaded.
@@ -223,11 +101,11 @@ public class Server : MonoBehaviour
     /// case 1: user information after connection
     /// case 2: Global message
     /// case 3: Private Message
-    /// case 4: handle a host party request
+    /// case 4: handle a host Party request
     /// case 5: only for client should never be used here
-    /// case 6: join party request
-    /// case 7: cancel party request (sent from host)
-    /// case 8: player left a party
+    /// case 6: join Party request
+    /// case 7: cancel Party request (sent from host)
+    /// case 8: player left a Party
     /// case 9: player is ready
     /// </summary>
     /// <param name="data"> Byte data recieved from the server (Telepathy.EventType.Data) </param>
@@ -258,29 +136,29 @@ public class Server : MonoBehaviour
                     server.Send(Smsg.senderId, ObjectToByteArray(new MessageStruct("Server:", "User unknown/offline", 2, null)));
                 }
                 break;
-            case 4:    //handle a host party request
-                partyList.Add(Smsg.senderName, new party(Smsg.senderName, Smsg.Text));
-                party temp = partyList[Smsg.senderName];
+            case 4:    //handle a host Party request
+                partyList.Add(Smsg.senderName, new Party(Smsg.senderName, Smsg.Text,Smsg.reciever));
+                Party temp = partyList[Smsg.senderName];
                 temp.addPlayer(Smsg.senderId, new PartyPlayer(Smsg.senderName));
                 UpdateList(temp);
                 UpdateHostList();
                 break;
             case 5:    // only for client should never be used here
                 break;
-            case 6://join party request
+            case 6://join Party request
                 if (!partyList.ContainsKey(Smsg.reciever))
                 {
                     server.Send(Smsg.senderId, ObjectToByteArray(new MessageStruct("server: Host not found", null, 8, null)));
                     return;
                 }
-                party temp2 = partyList[Smsg.reciever];
+                Party temp2 = partyList[Smsg.reciever];
                 temp2.addPlayer(Smsg.senderId, new PartyPlayer(Smsg.senderName));
                 UpdateList(temp2);
                 UpdateHostList();
                 break;
-            case 7:    //cancel party request (sent from host)
-                party temp3 = partyList[Smsg.senderName];
-                //inform clients that host has disconnected and delete party
+            case 7:    //cancel Party request (sent from host)
+                Party temp3 = partyList[Smsg.senderName];
+                //inform clients that host has disconnected and delete Party
                 foreach (var entry in temp3.playersList)
                 {
                     server.Send(entry.Key, ObjectToByteArray(new MessageStruct("server: Host has Disconnected", null, 7, null)));
@@ -288,8 +166,8 @@ public class Server : MonoBehaviour
                 partyList.Remove(Smsg.senderName);
                 UpdateHostList();
                 break;
-            case 8:    // player left a party
-                party temp4 = partyList[Smsg.reciever];
+            case 8:    // player left a Party
+                Party temp4 = partyList[Smsg.reciever];
                 temp4.removPlayer(Smsg.senderId);
                 UpdateList(temp4);
                 //clear list for player
@@ -297,7 +175,7 @@ public class Server : MonoBehaviour
                 UpdateHostList();
                 break;
             case 9://ready
-                party temp5 = partyList[Smsg.reciever];
+                Party temp5 = partyList[Smsg.reciever];
                 temp5.PlayerReady(Smsg.senderId);
                 UpdateList(temp5);
                 break;
@@ -305,13 +183,13 @@ public class Server : MonoBehaviour
                 UpdateHostListforOneClient(Smsg.senderId);
                 break;
             case 11://Start game Request, sent from Host
-                party GameSelected = partyList[Smsg.senderName];
+                Party GameSelected = partyList[Smsg.senderName];
                 if (GameSelected.allPlayersReady())
                 {
                     //startgame
                     foreach (var entry in GameSelected.playersList)
                     {
-                        server.Send(entry.Key, ObjectToByteArray(new MessageStruct("server", Smsg.Text, 10, null)));
+                        server.Send(entry.Key, ObjectToByteArray(new MessageStruct("server", GameSelected.GameType, 10, null)));
                     }
                 }
                 else
@@ -331,17 +209,17 @@ public class Server : MonoBehaviour
 
     /// <summary>
     /// Update the Party-List only to the Party Members
-    /// A list of all player names and thier ready state is sent to all clients in the party
+    /// A list of all player names and thier ready state is sent to all clients in the Party
     /// if the player is ready the Text will be Green else the Text will be Red
     /// </summary>
-    /// <param name="temp">object from type party it contains all information about the party to which the player belongs</param>
-    void UpdateList(party temp)
+    /// <param name="temp">object from type Party it contains all information about the Party to which the player belongs</param>
+    void UpdateList(Party temp)
     {
         String names = "";
         foreach (var entry in temp.playersList)
         {
-            if (entry.Value.playername != "")
-                names += entry.Value.playername + ":" + entry.Value.isReady+ ";";
+            if (entry.Value.Playername != "")
+                names += entry.Value.Playername + ":" + entry.Value.IsReady+ ";";
         }
     
         Byte[] data = ObjectToByteArray(new MessageStruct("server", names, 5, null));
@@ -350,7 +228,12 @@ public class Server : MonoBehaviour
             server.Send(entry.Key, data);
         }
     }
-    
+
+
+
+
+
+
     /// <summary>
     /// Update the Host list for all players on the StartGame Menu
     /// A list of all host name on the server is sent to all game players
@@ -362,7 +245,7 @@ public class Server : MonoBehaviour
         string hostlist = "";
         foreach (var entry in partyList)
         {
-            hostlist += entry.Value.gameType + ";" + entry.Key + ";" + entry.Value.playersList.Count + ";";
+            hostlist += entry.Value.Module + ":" + entry.Key + ":" + entry.Value.playersList.Count + ":" + entry.Value.GameType + ";";
         }
         Byte[] data = ObjectToByteArray(new MessageStruct("server", hostlist, 9, null));
 
@@ -374,7 +257,7 @@ public class Server : MonoBehaviour
         string hostlist = "";
         foreach (var entry in partyList)
         {
-            hostlist += entry.Value.gameType + ";" + entry.Key + ";" + entry.Value.playersList.Count + ";";
+            hostlist += entry.Value.Module + ":" + entry.Key + ":" + entry.Value.playersList.Count + ":" + entry.Value.GameType + ";";
         }
         Byte[] data = ObjectToByteArray(new MessageStruct("server", hostlist, 9, null));
 

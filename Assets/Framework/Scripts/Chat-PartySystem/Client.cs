@@ -151,10 +151,7 @@ public class Client : MonoBehaviour
     /// list of table rows (table inside lobby)
     /// </summary>
     private List<Transform> EntryTransformListHosts = new List<Transform>();
-    /// <summary>
-    /// Table template
-    /// </summary>
-    private Table table = new Table();
+
 
 
     /// <summary>
@@ -455,14 +452,9 @@ public class Client : MonoBehaviour
             ShowErrorMessage("Only a Host can Start the game");
             return;
         }
-        else if(GameSelect.options[GameSelect.value].text == null || GameSelect.options[GameSelect.value].text == "")
-        {
-            ShowErrorMessage("please Select a game type");
-            return;
-        }
         else
         {
-            MessageStruct Smsg = new MessageStruct(userName, GameSelect.options[GameSelect.value].text, 11, null);
+            MessageStruct Smsg = new MessageStruct(userName, null, 11, null);
             Smsg.senderId = clientId;
             byte[] bytes = ObjectToByteArray(Smsg);
             client.Send(bytes);
@@ -482,7 +474,12 @@ public class Client : MonoBehaviour
             ShowErrorMessage("You are already in a party please leave in order to create a new one");
             return;
         }
-        MessageStruct Smsg = new MessageStruct(userName, gameType, 4, null);
+        else if (GameSelect.options[GameSelect.value].text == null || GameSelect.options[GameSelect.value].text == "")
+        {
+            ShowErrorMessage("please Select a game type");
+            return;
+        }
+        MessageStruct Smsg = new MessageStruct(userName, gameType, 4, GameSelect.options[GameSelect.value].text);
         Smsg.senderId = clientId;
         byte[] bytes = ObjectToByteArray(Smsg);
         client.Send(bytes);
@@ -574,7 +571,7 @@ public class Client : MonoBehaviour
         foreach (string ss in text) {
             Debug.Log(ss);
         }
-        table.ClearEntryList(EntryTransformListInGame);
+        Table.ClearEntryList(EntryTransformListInGame);
         int i = 1;
 
         foreach (string player in text)
@@ -585,11 +582,11 @@ public class Client : MonoBehaviour
                 string[] playerStatus = player.Split(new char[] { ':' });
                 if (playerStatus[1].Equals("True"))
                 {
-                    table.CreateEntryTransform(playerStatus[0], i.ToString(), "Ready", entryContainerInGame, entryTemplateInGame, EntryTransformListInGame, Color.green);
+                    Table.CreateEntryTransform(playerStatus[0], i.ToString(), "Ready",null, entryContainerInGame, entryTemplateInGame, EntryTransformListInGame, Color.green);
                 }
                 else if (playerStatus[1].Equals("False"))
                 {
-                    table.CreateEntryTransform(playerStatus[0], i.ToString(), "Not Ready", entryContainerInGame, entryTemplateInGame, EntryTransformListInGame, Color.red);
+                    Table.CreateEntryTransform(playerStatus[0], i.ToString(), "Not Ready",null, entryContainerInGame, entryTemplateInGame, EntryTransformListInGame, Color.red);
                 }
             }
         }
@@ -597,15 +594,20 @@ public class Client : MonoBehaviour
 
     /// <summary>
     /// This method recieves a List of all hosts fromt the server and displays them in the Host Canvas
-    /// The list elements are the Gametype,Name of the Host and the amount of players in the party.
+    /// The list elements are the Module,Name of the Host, the amount of players in the party and the Gametype.
     /// </summary>
     /// <param name="text"> String array List of Hosts </param>
     void RenderHosts(String[] text)
     {
-        table.ClearEntryList(EntryTransformListHosts);
-        for (int i = 0; i+3 < text.Length; i += 3)
+        Table.ClearEntryList(EntryTransformListHosts);
+
+        foreach (string entry in text)
         {
-            table.CreateEntryTransform(text[i], text[i + 1], text[i + 2], entryContainerHosts, entryTemplateHosts, EntryTransformListHosts,Color.green);
+            if (entry != "" && entry != null)
+            {
+                string[] tempHostsList = entry.Split(new char[] { ':' });
+                Table.CreateEntryTransform(tempHostsList[0], tempHostsList[1], tempHostsList[2], tempHostsList[3], entryContainerHosts, entryTemplateHosts, EntryTransformListHosts, Color.green);
+            }
         }
     }
 
@@ -622,18 +624,28 @@ public class Client : MonoBehaviour
         Destroy(ErorrMessage.gameObject,3); //display time
     }
 
+    /// <summary>
+    /// This method recieves a List of all hosts fromt the server and displays them in the Host Canvas
+    /// The list elements are the Module,Name of the Host, the amount of players in the party and the Gametype.
+    /// </summary>
+    /// <param name="text"> String array List of Hosts </param>
     void RenderHostsInGameMenu(String[] text)
     {
         if (isHost || inParty || (getgameType() == null)) {
             return;
         }
 
-        table.ClearEntryList(EntryTransformListInGame);
+        Table.ClearEntryList(EntryTransformListInGame);
 
-        for (int i = 0; i + 3 < text.Length; i += 3)
+        foreach (string entry in text)
         {
-            if (text[i].Equals(getgameType())) { //Filter
-                table.CreateEntryTransform(text[i], text[i + 1], text[i + 2], entryContainerInGame, entryTemplateInGame, EntryTransformListInGame, Color.green);
+            if (entry != "" && entry != null)
+            {
+                string[] tempHostsList = entry.Split(new char[] { ':' });
+                if (tempHostsList[0].Equals(getgameType())){ //Filter
+
+                    Table.CreateEntryTransform(tempHostsList[0], tempHostsList[1], tempHostsList[2], tempHostsList[3], entryContainerHosts, entryTemplateHosts, EntryTransformListHosts, Color.green);
+                }
             }
         }
     }
