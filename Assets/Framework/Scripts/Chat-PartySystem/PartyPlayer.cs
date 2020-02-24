@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
+
 /// <summary>
 /// PartyPlayer class to manage users before a game starts
 /// it keeps track of the player name and his ready state

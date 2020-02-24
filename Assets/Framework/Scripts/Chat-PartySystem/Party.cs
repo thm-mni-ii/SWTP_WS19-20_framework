@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
+
 /// <summary>
 /// Party class
 /// This class contains all the information and methods to manage a Party
