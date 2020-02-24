@@ -4,9 +4,6 @@ using Firebase.Database;
 using Firebase.Unity.Editor;
 using System;
 using System.Collections.Generic;
-using UnityEngine.UI;
-
-
 
 namespace Mirror
 {
@@ -47,15 +44,15 @@ namespace Mirror
         /// </summary>
         private Client clientVar;
         /// <summary>
-        /// 
+        /// Token from Mirror: https://mirror-networking.com/docs/ 
         /// </summary>
         CharacterController characterController;
         /// <summary>
-        /// 
+        /// Token from Mirror: https://mirror-networking.com/docs/ 
         /// </summary>
         GameObject controllerColliderHitObject;
         /// <summary>
-        /// 
+        /// Token from Supercyan Character Pack: https://assetstore.unity.com/packages/3d/characters/humanoids/character-pack-free-sample-79870
         /// </summary>
         [SerializeField] private Animator m_animator;
         //[SerializeField] private Rigidbody m_rigidBody;
@@ -129,21 +126,16 @@ namespace Mirror
         /// It's read form the Database
         /// </summary>
         List<String> Games = new List<String>();
-
-
-
+        
         /// <summary>
         /// Start is called before the first frame update
         /// </summary>
         void Start()
         {
-
-        // Set up the Editor before calling into the realtime database.
-        FirebaseApp.DefaultInstance.SetEditorDatabaseUrl("https://mmo-spiel-1920.firebaseio.com");
-
-        // Get the root reference location of the database.
+            // Set up the Editor before calling into the realtime database.
+            FirebaseApp.DefaultInstance.SetEditorDatabaseUrl("https://mmo-spiel-1920.firebaseio.com");
+            // Get the root reference location of the database.
             reference = FirebaseDatabase.DefaultInstance.RootReference;
-
             FirebaseDatabase.DefaultInstance.GetReference("Modules").GetValueAsync().ContinueWith(task => {
                 if (task.IsFaulted)
                 {
@@ -157,7 +149,6 @@ namespace Mirror
                     {
                         Modules.Add((String)Module.Key);
                     }
-
                 }
             });
 
@@ -169,12 +160,10 @@ namespace Mirror
                 else if (task.IsCompleted)
                 {
                     DataSnapshot snapshot = task.Result;
-
                     foreach (KeyValuePair<string, object> GameName in (Dictionary<string, object>)snapshot.Value)
                     {
                         Games.Add((String)GameName.Key);
                     }
-
                 }
             });
 
@@ -185,7 +174,6 @@ namespace Mirror
             }
             var sphereCollider = gameObject.AddComponent<SphereCollider>();
             clientVar = globalCanvas.GetComponent<Client>();
-
         }
 
         public void Initialize(GameObject character)
@@ -254,7 +242,7 @@ namespace Mirror
             if (clientVar.clientMessageTF.isFocused) return;
             if (clientVar.partyTextField.isFocused && globalCanvas.GameCanvas.enabled ) return;
 
-m_animator.SetBool("Grounded", isGrounded);
+            m_animator.SetBool("Grounded", isGrounded);
             transform.Rotate(0f, turn * Time.fixedDeltaTime, 0f);
             Vector3 direction = new Vector3(horizontal, jumpSpeed, vertical);
             direction = Vector3.ClampMagnitude(direction, 1f);
@@ -338,12 +326,10 @@ m_animator.SetBool("Grounded", isGrounded);
         /// Check if the Module exists on the Database this Methode is needed to find out which Magic circle the player is standing on
         /// </summary>
         private bool isAvaiableModule(string moduleName) {
-
             if (Modules.Contains(moduleName))
             {   
                 return true;
             }
-
             return false;
         }
 
@@ -359,7 +345,6 @@ m_animator.SetBool("Grounded", isGrounded);
             {
                 clientVar.setgameType(null);
                 globalCanvas.ToggleCanvas("gameOff");
-
             }
         }
     }

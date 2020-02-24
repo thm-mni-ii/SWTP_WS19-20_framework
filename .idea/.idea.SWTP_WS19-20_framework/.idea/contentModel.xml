@@ -50,6 +50,10 @@
             </e>
             <e p="Game.cs" t="Include" />
             <e p="GlobalManager.cs" t="Include" />
+            <e p="InstanceBuilds" t="Include">
+              <e p="Dexit.txt" t="Include" />
+              <e p="InstanceStarter.cs" t="Include" />
+            </e>
             <e p="LoginSystem" t="Include">
               <e p="Login.cs" t="Include" />
               <e p="UserInfo.cs" t="Include" />
