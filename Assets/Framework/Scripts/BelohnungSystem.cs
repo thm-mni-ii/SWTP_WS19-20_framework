@@ -35,15 +35,15 @@ public class BelohnungSystem : MonoBehaviour
     /// </summary>
     public List<string> playerList = new List<string>();
     /// <summary>
-    /// (Token from https://unitycodemonkey.com/video.php?v=iAbaqGYdnyI)
+    /// table template
     /// </summary>
     public Transform entryContainer;
     /// <summary>
-    /// (Token from https://unitycodemonkey.com/video.php?v=iAbaqGYdnyI)
+    /// row in the table
     /// </summary>
     public Transform entryTemplate;
     /// <summary>
-    /// (Token from https://unitycodemonkey.com/video.php?v=iAbaqGYdnyI)
+    /// list of rows
     /// </summary>
     private List<Transform> highscoreEntryTransformList;
     /// <summary>
@@ -59,7 +59,7 @@ public class BelohnungSystem : MonoBehaviour
     /// </summary>
     [SerializeField] private Text scoreText = null;
     /// <summary>
-    /// Score of player will be show on the window
+    /// level of player will be show on the window
     /// </summary>
     [SerializeField] private Text levelText = null;
     
@@ -125,7 +125,7 @@ public class BelohnungSystem : MonoBehaviour
     /// <summary>
     /// (Token from https://unitycodemonkey.com/video.php?v=iAbaqGYdnyI)
     /// </summary>
-    /// <param name="highscoreEntry"></param>
+    /// <param name="playername"></param>
     /// <param name="container"></param>
     /// <param name="transformList"></param>
      private void CreateHighscoreEntryTransform(string playername, Transform container, List<Transform> transformList) {

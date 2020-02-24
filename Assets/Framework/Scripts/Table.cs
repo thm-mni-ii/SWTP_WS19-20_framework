@@ -12,27 +12,32 @@ public class Table : MonoBehaviour
     /// Adds a new Entry to the Table
     /// Used by the HostsTable and PartyTable
     /// </summary>
-    /// <param name="host"></param>
+    /// <param name="index1"></param>
+    /// <param name="index2"></param>
+    /// <param name="index3"></param>
+    /// <param name="index4"></param>
     /// <param name="container"></param>
+    /// <param name="entryTemplate"></param>
     /// <param name="transformList"></param>
-    public static void CreateEntryTransform(string module, string host, string players,string type, Transform container, Transform entryTemplate, List<Transform> transformList, Color color) {
+    /// <param name="color"></param>
+    public static void CreateEntryTransform(string index1, string index2, string index3,string index4, Transform container, Transform entryTemplate, List<Transform> transformList, Color color) {
         float templateHeight = 31f;
         Transform entryTransform = Instantiate(entryTemplate, container);
         RectTransform entryRectTransform = entryTransform.GetComponent<RectTransform>();
         entryRectTransform.anchoredPosition = new Vector2(0, -templateHeight * transformList.Count);
         entryTransform.gameObject.SetActive(true);
         
-        entryTransform.Find("gameText").GetComponent<Text>().text = module;
-        entryTransform.Find("hostText").GetComponent<Text>().text = host;
-        entryTransform.Find("playersText").GetComponent<Text>().text = players;
+        entryTransform.Find("index1").GetComponent<Text>().text = index1;
+        entryTransform.Find("index2").GetComponent<Text>().text = index2;
+        entryTransform.Find("index3").GetComponent<Text>().text = index3;
 
-        entryTransform.Find("gameText").GetComponent<Text>().color = color;
-        entryTransform.Find("hostText").GetComponent<Text>().color = color;
-        entryTransform.Find("playersText").GetComponent<Text>().color = color;
+        entryTransform.Find("index1").GetComponent<Text>().color = color;
+        entryTransform.Find("index2").GetComponent<Text>().color = color;
+        entryTransform.Find("index3").GetComponent<Text>().color = color;
 
-        if (type != null)
+        if (index4 != null)
         {
-            entryTransform.Find("typeText").GetComponent<Text>().text = type;
+            entryTransform.Find("typeText").GetComponent<Text>().text = index4;
             entryTransform.Find("typeText").GetComponent<Text>().color = color;
         }
         transformList.Add(entryTransform);
