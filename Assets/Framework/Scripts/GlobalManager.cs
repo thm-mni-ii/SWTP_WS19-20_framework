@@ -108,7 +108,7 @@ public class GlobalManager : MonoBehaviour {
 	    }
 	    
 	    // hide/show chat canvas by pressed on c
-	    if (Input.GetKeyDown(KeyCode.C))
+	    if (Input.GetKeyDown(KeyCode.Pause))
 	    {
 		    if (hideChatCanvas)
 		    {
@@ -122,8 +122,8 @@ public class GlobalManager : MonoBehaviour {
 		    }
 	    }
 	    
-	    // hide/show PartysList canvas by pressed on p
-	    if (Input.GetKeyDown(KeyCode.P))
+	    // hide/show PartysList canvas by pressed on Tab
+	    if (Input.GetKeyDown(KeyCode.Tab))
 	    {
 		    if (hidePartysListCanvas)
 		    {
@@ -137,8 +137,8 @@ public class GlobalManager : MonoBehaviour {
 		    }
 	    }
 	    
-	    // hide/show TOP10 Canvas by pressed on t
-	    if (Input.GetKeyDown(KeyCode.T))
+	    // hide/show TOP10 Canvas by pressed on Tab
+	    if (Input.GetKeyDown(KeyCode.Tab))
 	    {
 		    if (hideTOP10Canvas)
 		    {
@@ -152,8 +152,8 @@ public class GlobalManager : MonoBehaviour {
 		    }
 	    }
 	    
-	    // hide/show by pressed on h
-	    if (Input.GetKeyDown(KeyCode.H))
+	    // hide/show by pressed on Delete
+	    if (Input.GetKeyDown(KeyCode.Delete))
 	    {
 		    if (hideall)
 		    {
