@@ -19,7 +19,7 @@ public static class InstanceStarter
         switch (filename)
         {
             case "Dexit":
-                path = Environment.CurrentDirectory + "/Assets/InstanceBuilds/Dexit.txt";
+                path = Environment.CurrentDirectory + "/Assets/InstanceBuilds/Dexit.bat";
                 break;
 
             default:
