@@ -392,6 +392,7 @@ public class Client : MonoBehaviour
                 break;
             case 9://update host list
                 string[] hlist = Smsg.Text.Split(new char[] { ';' });
+
                 RenderHosts(hlist);
                 RenderHostsInGameMenu(hlist);
                 break;
@@ -568,8 +569,9 @@ public class Client : MonoBehaviour
     /// <param name="text"> string array - List of the Party players </param>
     void RenderPartyList(String[] text)
     {
-        foreach (string ss in text) {
-            Debug.Log(ss);
+        if (!inParty || (getgameType() == null))
+        {
+            return;
         }
         Table.ClearEntryList(EntryTransformListInGame);
         int i = 1;
@@ -641,10 +643,12 @@ public class Client : MonoBehaviour
         {
             if (entry != "" && entry != null)
             {
+                
                 string[] tempHostsList = entry.Split(new char[] { ':' });
+
                 if (tempHostsList[0].Equals(getgameType())){ //Filter
 
-                    Table.CreateEntryTransform(tempHostsList[0], tempHostsList[1], tempHostsList[2], tempHostsList[3], entryContainerHosts, entryTemplateHosts, EntryTransformListHosts, Color.green);
+                    Table.CreateEntryTransform(tempHostsList[0], tempHostsList[1], tempHostsList[2], tempHostsList[3], entryContainerInGame, entryTemplateInGame, EntryTransformListInGame, Color.green);
                 }
             }
         }

@@ -37,8 +37,8 @@ public class Table : MonoBehaviour
 
         if (index4 != null)
         {
-            entryTransform.Find("typeText").GetComponent<Text>().text = index4;
-            entryTransform.Find("typeText").GetComponent<Text>().color = color;
+            entryTransform.Find("index4").GetComponent<Text>().text = index4;
+            entryTransform.Find("index4").GetComponent<Text>().color = color;
         }
         transformList.Add(entryTransform);
     }
