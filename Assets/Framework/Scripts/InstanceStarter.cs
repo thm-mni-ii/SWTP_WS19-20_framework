@@ -18,8 +18,8 @@ public static class InstanceStarter
         string path = null;
         switch (filename)
         {
-            case "Dexit":
-                path = Environment.CurrentDirectory + "/Assets/InstanceBuilds/Dexit.bat";
+            case "Dixit":
+                path = Environment.CurrentDirectory + "/Assets/InstanceBuildsBatFiles/Dixit.bat";
                 break;
 
             default:

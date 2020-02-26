@@ -164,12 +164,18 @@ public class Client : MonoBehaviour
         if(isGamesRefset) { return; }
         this.Games = list;
 
+
         foreach (String game in this.Games)
         {
-            Dropdown.OptionData m_NewData = new Dropdown.OptionData();
-            m_NewData.text = game;
-            GameSelect.options.Add(m_NewData);
+
+            if (game != "" || game != null)
+            {
+                Dropdown.OptionData m_NewData = new Dropdown.OptionData();
+                m_NewData.text = game;
+                GameSelect.options.Add(m_NewData);
+            }
         }
+        GameSelect.RefreshShownValue();
         isGamesRefset = true;
     }
 
