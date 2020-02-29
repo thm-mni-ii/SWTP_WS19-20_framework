@@ -50,7 +50,7 @@ public class ServerHUD : MonoBehaviour
       if (!showGUI)
          return;
 
-      GUILayout.BeginArea(new Rect(80 + offsetX, 10 + offsetY, 100, 9999));
+      GUILayout.BeginArea(new Rect(10 + offsetX, 140 + offsetY, 100, 9999));
       if (!NetworkClient.isConnected && !NetworkServer.active)
       {
         if (!NetworkClient.active)
@@ -106,7 +106,7 @@ public class ServerHUD : MonoBehaviour
       }
 
       // stop
-      if (NetworkServer.active || NetworkClient.isConnected)
+      if (NetworkServer.active)
       { 
           if (GUILayout.Button("Stop"))
           { 

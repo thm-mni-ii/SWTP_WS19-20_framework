@@ -171,6 +171,16 @@ public class GlobalManager : MonoBehaviour {
         else if (open == "gameOff")
         {
             GameCanvas.enabled = false;
+        }else if (open =="help"){
+
+            if (HelpMenu.enabled)
+            {
+                HelpMenu.enabled = false;
+            }
+            else
+            {
+                HelpMenu.enabled = true;
+            }
         }
     }
 }
