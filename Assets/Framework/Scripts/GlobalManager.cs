@@ -35,11 +35,15 @@ public class GlobalManager : MonoBehaviour {
 	/// TOPPlayerCanvas show, which partys are open
 	/// </summary>
 	public Canvas PartysListCanvas;
-	/// <summary>
-	/// <summary>
-	/// auxiliary variable to hide all windows on lobby
-	/// </summary>
-	public bool hideall = true;
+    /// <summary>
+    /// HelpMenu Canvas shows which the Keyboard shortcut Buttons
+    /// </summary>
+    public Canvas HelpMenu;
+    /// <summary>
+    /// <summary>
+    /// auxiliary variable to hide all windows on lobby
+    /// </summary>
+    public bool hideall = true;
 
     /// <summary>
     /// Use this for initialization canvases, which we need
@@ -73,10 +77,22 @@ public class GlobalManager : MonoBehaviour {
     /// </summary>
     private void hideShowObjects()
     {
-	    
-	  
-	    // hide/show TOP10 Canvas by pressed on Tab
-	    if (Input.GetKeyDown(KeyCode.Tab))
+
+        // hide/show HelpMenu by pressing F1
+        if (Input.GetKeyDown(KeyCode.F1))
+        {
+            if (HelpMenu.enabled)
+            {
+                HelpMenu.enabled = false;
+            }
+            else
+            {
+                HelpMenu.enabled = true;
+            }
+        }
+
+        // hide/show TOP10 Canvas by pressing Tab
+        if (Input.GetKeyDown(KeyCode.Tab))
 	    {
 		    if (TOPPlayerCanvas.enabled)
 		    {
@@ -88,7 +104,7 @@ public class GlobalManager : MonoBehaviour {
 		    }
 	    }
 
-        // hide/show by pressed on Escape
+        // hide/show by pressing Escape
         if (Input.GetKeyDown(KeyCode.Escape))
 	    {
 		    if (hideall)
