@@ -280,7 +280,7 @@ public class Login : MonoBehaviour
                     completeLogin(responseEmail);
                     break;
                 default:
-                    Debug.Log("Error unkown Report (Login.class)");
+                    
                     break;
             }
 
@@ -305,7 +305,6 @@ public class Login : MonoBehaviour
                 {
                     if (task.IsFaulted)
                     {
-                        Debug.Log("reg task failed");
                         return;
                     }
                     else if (task.IsCompleted)
@@ -316,7 +315,6 @@ public class Login : MonoBehaviour
                         {
                             //Invalid username
                             report = 11;
-                            Debug.Log("username or email not found");
                         }
                         else
                         {
@@ -344,14 +342,12 @@ public class Login : MonoBehaviour
                 if (task.IsCanceled)
                 {
                     report = 10;
-                    Debug.LogError("SignInWithEmailAndPasswordAsync was canceled.");
                     return;
                 }
 
                 if (task.IsFaulted)
                 {
                     report = 11;
-                    Debug.LogError("SignInWithEmailAndPasswordAsync encountered an error: " + task.Exception);
                     return;
                 }
 
@@ -361,8 +357,7 @@ public class Login : MonoBehaviour
                     user.email = userInfoFromDatabase.Email;
                     user.id = userInfoFromDatabase.UserId;
                     user.username = userInfoFromDatabase.DisplayName;
-                    Debug.LogFormat("User signed in successfully: {0} ({1})",
-                        userInfoFromDatabase.DisplayName, userInfoFromDatabase.UserId);
+                   
                     report = 1;
                 }
                 else
@@ -415,7 +410,6 @@ public class Login : MonoBehaviour
                 {
                     if (task.IsFaulted)
                     {
-                        Debug.Log("reg task failed");
                         return;
                     }
                     else if (task.IsCompleted)
@@ -424,8 +418,6 @@ public class Login : MonoBehaviour
                         u = (string) snapshot.Value;
                         if (u == null)
                         {
-                            Debug.Log("User not found: everything OK");
-                            // 19: User not found in database (everything OK) -> complete register (by register)
                             report = 19;
                         }
                         else
@@ -463,14 +455,12 @@ public class Login : MonoBehaviour
                 if (task.IsCanceled)
                 {
                     report = 13;
-                    Debug.LogError("CreateUserWithEmailAndPasswordAsync was canceled.");
                     return;
                 }
 
                 if (task.IsFaulted)
                 {
                     report = 14;
-                    Debug.LogError("CreateUserWithEmailAndPasswordAsync encountered an error: " + task.Exception);
                     return;
                 }
 
@@ -479,7 +469,6 @@ public class Login : MonoBehaviour
                 newUser.SendEmailVerificationAsync();
                 setDisplayName(newUser);
                 writeNewUser(newUser.UserId, rUsername.text, rEmail.text);
-                Debug.LogFormat("Firebase user created successfully: {0} ({1})", newUser.DisplayName, newUser.UserId);
                 report = 12;
             });
         }
@@ -505,17 +494,14 @@ public class Login : MonoBehaviour
             {
                 if (task.IsCanceled)
                 {
-                    Debug.LogError("UpdateUserProfileAsync was canceled.");
                     return;
                 }
 
                 if (task.IsFaulted)
                 {
-                    Debug.LogError("UpdateUserProfileAsync encountered an error: " + task.Exception);
                     return;
                 }
 
-                Debug.Log("User profile updated successfully.");
             });
         }
     }
@@ -538,19 +524,16 @@ public class Login : MonoBehaviour
                 if (task.IsCanceled)
                 {
                     report = 17;
-                    Debug.LogError("SendPasswordResetEmailAsync was canceled.");
                     return;
                 }
 
                 if (task.IsFaulted)
                 {
                     report = 18;
-                    Debug.LogError("SendPasswordResetEmailAsync encountered an error: " + task.Exception);
                     return;
                 }
 
                 report = 16;
-                Debug.Log("Password reset email sent successfully.");
             });
         }
         else

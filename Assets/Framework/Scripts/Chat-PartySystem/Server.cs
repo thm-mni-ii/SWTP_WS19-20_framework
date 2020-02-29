@@ -67,16 +67,13 @@ public class Server : MonoBehaviour
                 switch (msg.eventType)
                 {
                     case Telepathy.EventType.Connected:
-                        Debug.Log(msg.connectionId + " Connected");
                         clienList.AddLast(msg.connectionId);
                         server.Send(msg.connectionId, ObjectToByteArray(new MessageStruct("server", msg.connectionId.ToString(), 0, null)));
                         break;
                     case Telepathy.EventType.Data:
-                        //Debug.Log(msg.connectionId + " Data: " + BitConverter.ToString(msg.data));
                         HandleMessage(msg.data);
                         break;
                     case Telepathy.EventType.Disconnected:
-                        Debug.Log(msg.connectionId + " Disconnected");
                         clienList.Remove(msg.connectionId);
                         userList.Remove(msg.connectionId);
                         break;
@@ -118,11 +115,9 @@ public class Server : MonoBehaviour
                        // when id is found add it to the list on our server with the User Information
                 int id = Int32.Parse(Smsg.Text);
                 userList.Add(id, Smsg.senderName);
-                Debug.Log("Added user " + Smsg.senderName + " id: " + id);
                 UpdateHostList();// update Hostslist for client Uponconnection
                 break;
             case 2:    // Global message
-                Debug.Log("Message from : " + Smsg.senderName);
                 SendToAll(data);
                 break;
             case 3:    // Private Message
@@ -202,7 +197,7 @@ public class Server : MonoBehaviour
                 }
                 break;
             default:
-                Debug.Log("msg Error unknown command");
+
                 break;
         }
     }

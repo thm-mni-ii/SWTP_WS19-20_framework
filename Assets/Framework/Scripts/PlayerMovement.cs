@@ -211,14 +211,7 @@ namespace Mirror
             if (!isFalling && Input.GetKey(KeyCode.Space) && (isGrounded || jumpSpeed < 1))
             {
                 jumpSpeed += jumpFactor;
-                /*if (!wasGrounded && isGrounded)
-                {
-                    m_animator.SetTrigger("Land");
-                }
-                if (!isGrounded && wasGrounded)
-                {
-                    m_animator.SetTrigger("Jump");
-                }*/
+
                 m_animator.SetTrigger("Jump");
             }
             else if (isGrounded)
@@ -253,7 +246,6 @@ namespace Mirror
                 characterController.Move(direction * Time.fixedDeltaTime);
             else
             {
-                //Vector3 direction = camera.forward * vertical + camera.right * horizontal;
                 m_animator.SetFloat("MoveSpeed", direction.magnitude);
                 characterController.SimpleMove(direction);
             }

@@ -103,7 +103,6 @@ public class BelohnungSystem : MonoBehaviour
 
      public void updateTable()
      {
-         Debug.Log("Initializing table ...");
          // Sort entry list by Score
         for (int i = 0; i < playerList.Count; i++) {
             for (int j = i + 1; j < playerList.Count; j++) {
@@ -207,7 +206,6 @@ public class BelohnungSystem : MonoBehaviour
         {
             if (args.DatabaseError != null)
             {
-                Debug.LogError(args.DatabaseError.Message);
                 return;
             }
             // Do something with the data in args.Snapshot
@@ -215,7 +213,6 @@ public class BelohnungSystem : MonoBehaviour
             foreach (KeyValuePair<string, Object> users in (Dictionary<string, Object>) args.Snapshot.Value)
             {
                 string tempScore = null; //Save a temporary score for later storage in the list
-                //Debug.Log("KEY: " + users.Key + "   VALUE: " + users.Value);
                 foreach (KeyValuePair<string, Object> userInformation in (Dictionary<string, Object>) users.Value)
                 {
                     //take score
@@ -224,7 +221,7 @@ public class BelohnungSystem : MonoBehaviour
                     {
                         tempScore = userInformation.Value.ToString();
                     }
-                    //Debug.Log("KEY: " + userInformation.Key + "   VALUE: " + userInformation.Value);
+
                     if (userInformation.Key.Equals("username"))
                     {
                         bool ifUserExist = false;
@@ -241,11 +238,6 @@ public class BelohnungSystem : MonoBehaviour
                         }
                     }
                 }
-            }
-            //Debug: Check if every thing okay in the Dictionary
-            foreach (KeyValuePair<string, int> userInMap in usersScores)
-            {
-                Debug.Log("KEY: " + userInMap.Key + "   VALUE: " + userInMap.Value);
             }
             updateTable();
         }
@@ -265,16 +257,13 @@ public class BelohnungSystem : MonoBehaviour
                 if (task.IsFaulted)
                 {
                     // Handle the error...
-                    Debug.Log("score of player " + userInfo.username +" not found");
                     return;
                 }
                 else if (task.IsCompleted)
                 {
                     DataSnapshot snapshot = task.Result;
-                    Debug.Log(snapshot.Value);
                     userInfo.score = Convert.ToInt32(snapshot.Value);
                     score = userInfo.score;
-                    Debug.Log("userInfo.score:" + userInfo.score);
                 }
             });
         return userInfo.score;

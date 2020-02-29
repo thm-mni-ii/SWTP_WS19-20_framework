@@ -235,14 +235,11 @@ public class Client : MonoBehaviour
                 switch (msg.eventType)
                 {
                     case Telepathy.EventType.Connected:
-                        Debug.Log("Client Connected on using ip: " + mainServerip);
                         break;
                     case Telepathy.EventType.Data:
-                       // Debug.Log("Data: " + BitConverter.ToString(msg.data));
                         HandleData(msg.data);
                         break;
                     case Telepathy.EventType.Disconnected:
-                        Debug.Log("Disconnected");
                         break;
                 }
             }

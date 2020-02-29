@@ -55,24 +55,6 @@ public class ServerHUD : MonoBehaviour
       {
         if (!NetworkClient.active)
         { 
-            // LAN Host
-            /*if (Application.platform != RuntimePlatform.WebGLPlayer)
-            {
-                if (GUILayout.Button("LAN Host")) 
-                {
-                    manager.StartHost(); 
-                }
-            }
-
-            // LAN Client + IP
-            GUILayout.BeginHorizontal(); 
-            if (GUILayout.Button("LAN Client"))
-            { 
-                manager.StartClient(); 
-            }
-            manager.networkAddress = GUILayout.TextField(manager.networkAddress);
-            GUILayout.EndHorizontal();
-            */
             // LAN Server Only
             if (Application.platform == RuntimePlatform.WebGLPlayer)
             { 
