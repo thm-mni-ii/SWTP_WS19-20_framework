@@ -50,7 +50,7 @@ public class ServerHUD : MonoBehaviour
       if (!showGUI)
          return;
 
-      GUILayout.BeginArea(new Rect(10 + offsetX, 40 + offsetY, 215, 9999));
+      GUILayout.BeginArea(new Rect(80 + offsetX, 10 + offsetY, 100, 9999));
       if (!NetworkClient.isConnected && !NetworkServer.active)
       {
         if (!NetworkClient.active)
@@ -63,7 +63,7 @@ public class ServerHUD : MonoBehaviour
             }
             else
             { 
-                if (GUILayout.Button("LAN Server Only"))
+                if (GUILayout.Button("Start Server"))
                 { 
                     manager.StartServer();
                     if (!cServer.server.Active)
@@ -88,11 +88,7 @@ public class ServerHUD : MonoBehaviour
           // server / client status message
           if (NetworkServer.active)
           { 
-              GUILayout.Label("Server: active. Transport: " + Transport.activeTransport);
-          }
-          if (NetworkClient.isConnected)
-          { 
-              GUILayout.Label("Client: address=" + manager.networkAddress);
+              GUILayout.Label("Server: active.");
           }
       }
 
