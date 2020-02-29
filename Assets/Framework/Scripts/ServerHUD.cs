@@ -92,18 +92,6 @@ public class ServerHUD : MonoBehaviour
           }
       }
 
-      // client ready
-      if (NetworkClient.isConnected && !ClientScene.ready)
-      { 
-          if (GUILayout.Button("Client Ready"))
-          { 
-              ClientScene.Ready(NetworkClient.connection);
-              if (ClientScene.localPlayer == null)
-              { 
-                  ClientScene.AddPlayer(); 
-              } 
-          }
-      }
 
       // stop
       if (NetworkServer.active)
