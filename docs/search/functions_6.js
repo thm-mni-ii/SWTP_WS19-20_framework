@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['handledata_127',['HandleData',['../class_chat.html#a2ac89a83f1d79b12e4e8a29c85632fe7',1,'Chat']]]
+  ['handledata_145',['HandleData',['../class_client.html#a2b929e8158e761afecb7a5fa7c2b0e6f',1,'Client']]]
 ];

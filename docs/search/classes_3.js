@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['messagestruct_102',['MessageStruct',['../class_message_struct.html',1,'']]]
+  ['login_119',['Login',['../class_login.html',1,'']]]
 ];

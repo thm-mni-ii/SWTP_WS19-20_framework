@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['establishconnection_125',['EstablishConnection',['../class_chat.html#a509b8b8d19c3b3e40927b3d9891b227c',1,'Chat']]]
+  ['establishconnection_142',['EstablishConnection',['../class_client.html#a09e1678392afbb45a23759e7e26924ee',1,'Client']]]
 ];

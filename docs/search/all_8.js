@@ -1,8 +1,8 @@
 var searchData=
 [
-  ['id_26',['id',['../class_login_1_1_user.html#af28b101db5a6b2f51fc48e1c7cb30ad3',1,'Login::User']]],
-  ['index_27',['index',['../class_mirror_1_1_player_movement.html#ab0c41d8728e9abaad45ebd23e166ebce',1,'Mirror::PlayerMovement']]],
-  ['ip_28',['ip',['../class_game.html#a7459906f0238656f71d68b5d7f2edfca',1,'Game']]],
-  ['isfalling_29',['isFalling',['../class_mirror_1_1_player_movement.html#ae21269a119c562ee17d352793ff01496',1,'Mirror::PlayerMovement']]],
-  ['isgrounded_30',['isGrounded',['../class_mirror_1_1_player_movement.html#a7633a482c1d5f270e5f9d73c0407f96d',1,'Mirror::PlayerMovement']]]
+  ['id_39',['id',['../class_login_1_1_user.html#af28b101db5a6b2f51fc48e1c7cb30ad3',1,'Login.User.id()'],['../class_user_info.html#a5f79d934ba6e65f019ad1bcda9465ca3',1,'UserInfo.id()']]],
+  ['index_40',['index',['../class_player_movement.html#a0a02975c3fdfee4ab3ab8269dd828dc3',1,'PlayerMovement']]],
+  ['inputusername_41',['inputUserName',['../class_login.html#a6496e9e2131be0549cfb2ed8a53051dd',1,'Login']]],
+  ['isfalling_42',['isFalling',['../class_player_movement.html#a1f3775d5a365edf148fda09e0ec4dce2',1,'PlayerMovement']]],
+  ['isgrounded_43',['isGrounded',['../class_player_movement.html#a27276d8e80bcd5acbb70354b06d66841',1,'PlayerMovement']]]
 ];

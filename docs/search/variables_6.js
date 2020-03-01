@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['lastlatency_166',['lastLatency',['../class_game.html#a2ab986dc380b7241a347fd98f2e22d14',1,'Game']]],
-  ['logincanvas_167',['LoginCanvas',['../class_global_manager.html#af7655e96dab8464b614cc005658458c7',1,'GlobalManager']]]
+  ['jumpfactor_200',['jumpFactor',['../class_player_movement.html#aa3a9022a591fcb56d6d4ff237c6448ff',1,'PlayerMovement']]],
+  ['jumpspeed_201',['jumpSpeed',['../class_player_movement.html#a0b04326b12b370063895e93d1a20655d',1,'PlayerMovement']]]
 ];

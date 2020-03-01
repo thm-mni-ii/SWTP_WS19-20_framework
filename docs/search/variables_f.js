@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['xp_197',['xp',['../class_login_1_1_user.html#aa34d16353860a4a2e61c2de51308dae4',1,'Login::User']]]
+  ['vertical_235',['vertical',['../class_player_movement.html#a788f79379fe7e677016632398e01fab0',1,'PlayerMovement']]]
 ];

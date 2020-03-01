@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['valuechanged_93',['ValueChanged',['../class_chat.html#a27e980cf9b8de47d02a98eba2a17d90b',1,'Chat']]],
-  ['vertical_94',['vertical',['../class_mirror_1_1_player_movement.html#aebeb8af97a119193fbbca4e3ef074865',1,'Mirror::PlayerMovement']]]
+  ['valuechanged_112',['ValueChanged',['../class_client.html#a559fe3362f05a6911d84b23bfa8aeb25',1,'Client']]],
+  ['vertical_113',['vertical',['../class_player_movement.html#a788f79379fe7e677016632398e01fab0',1,'PlayerMovement']]]
 ];

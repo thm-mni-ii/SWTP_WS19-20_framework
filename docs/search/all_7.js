@@ -1,6 +1,7 @@
 var searchData=
 [
-  ['handledata_23',['HandleData',['../class_chat.html#a2ac89a83f1d79b12e4e8a29c85632fe7',1,'Chat']]],
-  ['horizontal_24',['horizontal',['../class_mirror_1_1_player_movement.html#ad1dd90614c8d05510014232afb8da0b7',1,'Mirror::PlayerMovement']]],
-  ['hostname_25',['hostname',['../class_chat_server_1_1party.html#a739001599a8177e59145c4a1ef612d49',1,'ChatServer::party']]]
+  ['handledata_35',['HandleData',['../class_client.html#a2b929e8158e761afecb7a5fa7c2b0e6f',1,'Client']]],
+  ['helpmenu_36',['HelpMenu',['../class_global_manager.html#a3cffebb4dc183e06198ab5f7c6f9be06',1,'GlobalManager']]],
+  ['hideall_37',['hideall',['../class_global_manager.html#a530253a39fccf0af533b18c71990d97d',1,'GlobalManager']]],
+  ['horizontal_38',['horizontal',['../class_player_movement.html#a023e29307b5b197f2d5d14cc3f7304ef',1,'PlayerMovement']]]
 ];

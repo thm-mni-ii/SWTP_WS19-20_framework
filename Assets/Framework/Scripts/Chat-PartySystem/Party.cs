@@ -69,7 +69,7 @@ public class Party
     /// <param name="player">PartyPlayer Object contains information about the player in the Party</param>
     public bool addPlayer(int con, PartyPlayer player)
     {
-        if (playersList.Count > Maxplayers)
+        if (playersList.Count >= Maxplayers)
             return false;
         else
         {
@@ -83,7 +83,7 @@ public class Party
     /// </summary>
     public bool checkPlayerNumber()
     {
-        if (playersList.Count > Maxplayers || playersList.Count < Minplayers)
+        if (playersList.Count >= Maxplayers || playersList.Count < Minplayers)
             return false;
         else
             return true;

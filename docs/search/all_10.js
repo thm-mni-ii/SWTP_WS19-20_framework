@@ -1,9 +1,11 @@
 var searchData=
 [
-  ['text_81',['Text',['../class_message_struct.html#a516655a09b94e29bb7447ff62555dc7a',1,'MessageStruct']]],
-  ['title_82',['title',['../class_game.html#a40d7a4440fbbbef0cbc9f2aa0b781994',1,'Game']]],
-  ['togglecanvas_83',['ToggleCanvas',['../class_global_manager.html#a365025a5b478ef94398c723b0905e3ad',1,'GlobalManager']]],
-  ['turn_84',['turn',['../class_mirror_1_1_player_movement.html#ae1ccbb21d813556dbc92675b50db8846',1,'Mirror::PlayerMovement']]],
-  ['turnspeedaccel_85',['turnSpeedAccel',['../class_mirror_1_1_player_movement.html#adae9ca561dc93270670dcfa1635eefe8',1,'Mirror::PlayerMovement']]],
-  ['turnspeeddecel_86',['turnSpeedDecel',['../class_mirror_1_1_player_movement.html#a59b34bee8d5cf32e2957da86772bdaa9',1,'Mirror::PlayerMovement']]]
+  ['table_95',['Table',['../class_table.html',1,'']]],
+  ['takescoreofplayer_96',['takeScoreOfPlayer',['../class_belohnung_system.html#afd8eee446bc57aaa49fd40c2f8ac2433',1,'BelohnungSystem']]],
+  ['text_97',['Text',['../class_message_struct.html#a516655a09b94e29bb7447ff62555dc7a',1,'MessageStruct']]],
+  ['togglecanvas_98',['ToggleCanvas',['../class_global_manager.html#a365025a5b478ef94398c723b0905e3ad',1,'GlobalManager']]],
+  ['topplayercanvas_99',['TOPPlayerCanvas',['../class_global_manager.html#ae3e8dac99935dc6e10c1794468465405',1,'GlobalManager']]],
+  ['turn_100',['turn',['../class_player_movement.html#aa63c8f13c79d4b80458e786be6fbd694',1,'PlayerMovement']]],
+  ['turnspeedaccel_101',['turnSpeedAccel',['../class_player_movement.html#a3bead2a1e1b441ce1ff85c4feaf3f0e4',1,'PlayerMovement']]],
+  ['turnspeeddecel_102',['turnSpeedDecel',['../class_player_movement.html#a7352ccdb0351c250933b204415aba6e3',1,'PlayerMovement']]]
 ];
