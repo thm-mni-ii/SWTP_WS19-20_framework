@@ -104,6 +104,8 @@ public class Server : MonoBehaviour
     /// case 7: cancel Party request (sent from host)
     /// case 8: player left a Party
     /// case 9: player is ready
+    /// case 10: Update Partylist for Client
+    ///case 11: Start game Request, sent from Host
     /// </summary>
     /// <param name="data"> Byte data recieved from the server (Telepathy.EventType.Data) </param>
     void HandleMessage(Byte[] data)
@@ -134,6 +136,8 @@ public class Server : MonoBehaviour
             case 4:    //handle a host Party request
                 partyList.Add(Smsg.senderName, new Party(Smsg.senderName, Smsg.Text,Smsg.reciever));
                 Party temp = partyList[Smsg.senderName];
+                temp.Maxplayers = Smsg.max;
+                temp.Minplayers = Smsg.min;
                 temp.addPlayer(Smsg.senderId, new PartyPlayer(Smsg.senderName));
                 UpdateList(temp);
                 UpdateHostList();
@@ -147,7 +151,10 @@ public class Server : MonoBehaviour
                     return;
                 }
                 Party temp2 = partyList[Smsg.reciever];
-                temp2.addPlayer(Smsg.senderId, new PartyPlayer(Smsg.senderName));
+                if(temp2.addPlayer(Smsg.senderId, new PartyPlayer(Smsg.senderName))){
+                    server.Send(Smsg.senderId, ObjectToByteArray(new MessageStruct("server: The Party is full", null, 8, null)));
+                    return;
+                }
                 UpdateList(temp2);
                 UpdateHostList();
                 break;
@@ -179,7 +186,16 @@ public class Server : MonoBehaviour
                 break;
             case 11://Start game Request, sent from Host
                 Party GameSelected = partyList[Smsg.senderName];
-                if (GameSelected.allPlayersReady())
+                if (!GameSelected.checkPlayerNumber())
+                {
+                    //start failed
+                    foreach (var entry in GameSelected.playersList)
+                    {
+                        server.Send(entry.Key, ObjectToByteArray(new MessageStruct("server: Player count must be between "+ GameSelected.Maxplayers+ " and " + GameSelected.Minplayers, null, 11, null)));
+                    }
+
+                }
+                else if (GameSelected.allPlayersReady())
                 {
                     //startgame
                     foreach (var entry in GameSelected.playersList)

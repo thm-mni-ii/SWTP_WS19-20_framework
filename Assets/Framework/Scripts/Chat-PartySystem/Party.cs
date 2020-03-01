@@ -35,7 +35,7 @@ public class Party
     private string module;
     /// <summary>
     /// Game Type
-    /// Game types include { Dexit }
+    /// Game types include { Dixit }
     /// </summary>
     private string gameType;
     /// <summary>
@@ -43,23 +43,52 @@ public class Party
     /// </summary>
     public Dictionary<int, PartyPlayer> playersList = new Dictionary<int, PartyPlayer>();
 
+    /// <summary>
+    /// Maximum number of players allowed in the party
+    /// </summary>
+    private int maxplayers;
+    /// <summary>
+    /// Minimal number of players allowed in the party
+    /// </summary>
+    private int minplayers;
+
     public bool GameStarted { get => gameStarted; set => gameStarted = value; }
     public string Hostname { get => hostname; set => hostname = value; }
     public uint PlayersReady { get => playersReady; set => playersReady = value; }
     public string GameType { get => gameType; set => gameType = value; }
     public string Module { get => module; set => module = value; }
+    public int Maxplayers { get => maxplayers; set => maxplayers = value; }
+    public int Minplayers { get => minplayers; set => minplayers = value; }
 
     /// <summary>
     /// add a new player the Party
+    /// return false if there is no space in the party
+    /// return true if player added succesfully
     /// </summary>
     /// <param name="con">Connection id (client id/number on server)</param>
     /// <param name="player">PartyPlayer Object contains information about the player in the Party</param>
-    public void addPlayer(int con, PartyPlayer player)
+    public bool addPlayer(int con, PartyPlayer player)
     {
-        playersList.Add(con, player);
+        if (playersList.Count > Maxplayers)
+            return false;
+        else
+        {
+            playersList.Add(con, player);
+        }
+        return true;
     }
 
-    
+    /// <summary>
+    /// Check if the player count is within the allowed range
+    /// </summary>
+    public bool checkPlayerNumber()
+    {
+        if (playersList.Count > Maxplayers || playersList.Count < Minplayers)
+            return false;
+        else
+            return true;
+    }
+
     /// <summary>
     /// remove a player from the Party
     /// </summary>

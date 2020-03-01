@@ -121,7 +121,7 @@ public class Client : MonoBehaviour
     /// It References the Games list from PlayerMovement Class
     /// Games Contains the name of all Game types that are avaiable like Dexit..
     /// </summary>
-    List<String> Games;
+    Dictionary<string,Game> Games;
 
     /* Table Definitions */
     /// <summary>
@@ -159,19 +159,19 @@ public class Client : MonoBehaviour
     /// It also fills the Game types in the GameSelect Dropdown object
     /// </summary>
     /// <param name="list"></param>
-    public void setGamesRef(List<String> list)
+    public void setGamesRef(Dictionary<string, Game> list)
     {
         if(isGamesRefset) { return; }
         this.Games = list;
 
 
-        foreach (String game in this.Games)
+        foreach (KeyValuePair<string, Game> game in this.Games)
         {
 
-            if (game != "" || game != null)
+            if (game.Key != "" || game.Key != null)
             {
                 Dropdown.OptionData m_NewData = new Dropdown.OptionData();
-                m_NewData.text = game;
+                m_NewData.text = game.Key;
                 GameSelect.options.Add(m_NewData);
             }
         }
@@ -485,6 +485,8 @@ public class Client : MonoBehaviour
         }
         MessageStruct Smsg = new MessageStruct(userName, gameType, 4, GameSelect.options[GameSelect.value].text);
         Smsg.senderId = clientId;
+        Smsg.max = this.Games[GameSelect.options[GameSelect.value].text].Maxplayers;
+        Smsg.min = this.Games[GameSelect.options[GameSelect.value].text].Minplayers;
         byte[] bytes = ObjectToByteArray(Smsg);
         client.Send(bytes);
         partyhostname = userName;

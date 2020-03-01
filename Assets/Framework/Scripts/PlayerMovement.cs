@@ -4,166 +4,192 @@ using Firebase.Database;
 using Firebase.Unity.Editor;
 using System;
 using System.Collections.Generic;
+using Mirror;
 
-namespace Mirror
+
+
+[RequireComponent(typeof(CharacterController))]
+
+
+/// <summary>
+/// PlayerMovement class to set the Movement of the player 
+/// (class token from mirror: https://mirror-networking.com/docs/)
+/// </summary>
+public class PlayerMovement : NetworkBehaviour
 {
-    [RequireComponent(typeof(CharacterController))]
-    /**
-     * PlayerMovement class to set the Movement of the player 
-     * (class token from mirror: https://mirror-networking.com/docs/)
-     */
-    public class PlayerMovement : NetworkBehaviour
+ 
+    /// <summary>
+    /// Token from Mirror: https://mirror-networking.com/docs/ 
+    /// </summary>
+    [SyncVar]
+    public int index;
+    /// <summary>
+    /// manage the whole game. Hide and show the components.
+    /// </summary>
+    private GlobalManager globalCanvas;
+    /// <summary>
+    /// Player score (helpful for the reward system)
+    /// </summary>
+    [SyncVar]
+    public uint score;
+    /// <summary>
+    /// playerColor: to distinguish between player levels
+    /// </summary>
+    [SyncVar(hook = nameof(SetColor))]
+    public Color playerColor = Color.black;
+    /// <summary>
+    /// Unity clones the material when GetComponent<Renderer>().material is called
+    /// Cache it here and destroy it in OnDestroy to prevent a memory leak
+    /// </summary>
+    Material cachedMaterial;
+    /// <summary>
+    /// a reference to the client class which contains all of the client information it is used here to change the scene/canvas of the player,
+    /// and to fix the problem where the player moves automaticly, when he types in the chat
+    /// </summary>
+    private Client clientVar;
+    /// <summary>
+    /// Token from Mirror: https://mirror-networking.com/docs/ 
+    /// </summary>
+    CharacterController characterController;
+    /// <summary>
+    /// Token from Mirror: https://mirror-networking.com/docs/ 
+    /// </summary>
+    GameObject controllerColliderHitObject;
+    /// <summary>
+    /// Token from Supercyan Character Pack: https://assetstore.unity.com/packages/3d/characters/humanoids/character-pack-free-sample-79870
+    /// </summary>
+    [SerializeField] private Animator m_animator;
+    //[SerializeField] private Rigidbody m_rigidBody;
+
+    /****** MovementVariables *******/
+    /// <summary>
+    /// Token from Mirror: https://mirror-networking.com/docs/ 
+    /// </summary>
+    [Header("Movement Settings")]
+    public float moveSpeed = 8f;
+    /// <summary>
+    /// Token from Mirror: https://mirror-networking.com/docs/ 
+    /// </summary>
+    public float turnSpeedAccel = 10f;
+    /// <summary>
+    /// Token from Mirror: https://mirror-networking.com/docs/ 
+    /// </summary>
+    public float turnSpeedDecel = 10f;
+    /// <summary>
+    /// Token from Mirror: https://mirror-networking.com/docs/ 
+    /// </summary>
+    public float maxTurnSpeed = 150f;
+    /// <summary>
+    /// Token from Mirror: https://mirror-networking.com/docs/ 
+    /// </summary>
+    [Header("Jump Settings")]
+    public float jumpSpeed = 0f;
+    /// <summary>
+    /// Token from Mirror: https://mirror-networking.com/docs/ 
+    /// </summary>
+    public float jumpFactor = .025F;
+    /// <summary>
+    /// Token from Mirror: https://mirror-networking.com/docs/ 
+    /// </summary>
+    public bool wasGrounded = false;
+    /// <summary>
+    /// Token from Mirror: https://mirror-networking.com/docs/ 
+    /// </summary>
+    [Header("Diagnostics")]
+    public float horizontal = 0f;
+    /// <summary>
+    /// Token from Mirror: https://mirror-networking.com/docs/ 
+    /// </summary>
+    public float vertical = 0f;
+    /// <summary>
+    /// Token from Mirror: https://mirror-networking.com/docs/ 
+    /// </summary>
+    public float turn = 0f;
+    /// <summary>
+    /// Token from Mirror: https://mirror-networking.com/docs/ 
+    /// </summary>
+    public bool isGrounded = true;
+    /// <summary>
+    /// Token from Mirror: https://mirror-networking.com/docs/ 
+    /// </summary>
+    public bool isFalling = false;
+    /// <summary>
+    /// Reference to the Database
+    /// It is needed to get the name of the Modules
+    /// </summary>
+    public DatabaseReference reference;
+
+    /// <summary>
+    ///List of all the Modules 
+    /// The List is read from Database
+    /// </summary>
+    List<String> Modules = new List<String>();
+
+    /// <summary>
+    /// List of All Game 
+    /// It's read form the Database
+    /// </summary>
+    Dictionary<string,Game> Games = new Dictionary<string,Game>();
+
+
+
+
+    /// <summary>
+    /// Start is called before the first frame update
+    /// </summary>
+    void Start()
     {
-        /// <summary>
-        /// Token from Mirror: https://mirror-networking.com/docs/ 
-        /// </summary>
-        [SyncVar]
-        public int index;
-        /// <summary>
-        /// manage the whole game. Hide and show the components.
-        /// </summary>
-        private GlobalManager globalCanvas;
-        /// <summary>
-        /// Player score (helpful for the reward system)
-        /// </summary>
-        [SyncVar]
-        public uint score;
-        /// <summary>
-        /// playerColor: to distinguish between player levels
-        /// </summary>
-        [SyncVar(hook = nameof(SetColor))]
-        public Color playerColor = Color.black;
-        /// <summary>
-        /// Unity clones the material when GetComponent<Renderer>().material is called
-        /// Cache it here and destroy it in OnDestroy to prevent a memory leak
-        /// </summary>
-        Material cachedMaterial;
-        /// <summary>
-        /// a reference to the client class which contains all of the client information it is used here to change the scene/canvas of the player,
-        /// and to fix the problem where the player moves automaticly, when he types in the chat
-        /// </summary>
-        private Client clientVar;
-        /// <summary>
-        /// Token from Mirror: https://mirror-networking.com/docs/ 
-        /// </summary>
-        CharacterController characterController;
-        /// <summary>
-        /// Token from Mirror: https://mirror-networking.com/docs/ 
-        /// </summary>
-        GameObject controllerColliderHitObject;
-        /// <summary>
-        /// Token from Supercyan Character Pack: https://assetstore.unity.com/packages/3d/characters/humanoids/character-pack-free-sample-79870
-        /// </summary>
-        [SerializeField] private Animator m_animator;
-        //[SerializeField] private Rigidbody m_rigidBody;
+        // Set up the Editor before calling into the realtime database.
+        FirebaseApp.DefaultInstance.SetEditorDatabaseUrl("https://mmo-spiel-1920.firebaseio.com");
+        // Get the root reference location of the database.
+        reference = FirebaseDatabase.DefaultInstance.RootReference;
+        FirebaseDatabase.DefaultInstance.GetReference("Modules").GetValueAsync().ContinueWith(task => {
+            if (task.IsFaulted)
+            {
+                // Handle the error...
+            }
+            else if (task.IsCompleted)
+            {
+                DataSnapshot snapshot = task.Result;
 
-        /****** MovementVariables *******/
-        /// <summary>
-        /// Token from Mirror: https://mirror-networking.com/docs/ 
-        /// </summary>
-        [Header("Movement Settings")]
-        public float moveSpeed = 8f;
-        /// <summary>
-        /// Token from Mirror: https://mirror-networking.com/docs/ 
-        /// </summary>
-        public float turnSpeedAccel = 10f;
-        /// <summary>
-        /// Token from Mirror: https://mirror-networking.com/docs/ 
-        /// </summary>
-        public float turnSpeedDecel = 10f;
-        /// <summary>
-        /// Token from Mirror: https://mirror-networking.com/docs/ 
-        /// </summary>
-        public float maxTurnSpeed = 150f;
-        /// <summary>
-        /// Token from Mirror: https://mirror-networking.com/docs/ 
-        /// </summary>
-        [Header("Jump Settings")]
-        public float jumpSpeed = 0f;
-        /// <summary>
-        /// Token from Mirror: https://mirror-networking.com/docs/ 
-        /// </summary>
-        public float jumpFactor = .025F;
-        /// <summary>
-        /// Token from Mirror: https://mirror-networking.com/docs/ 
-        /// </summary>
-        public bool wasGrounded = false;
-        /// <summary>
-        /// Token from Mirror: https://mirror-networking.com/docs/ 
-        /// </summary>
-        [Header("Diagnostics")]
-        public float horizontal = 0f;
-        /// <summary>
-        /// Token from Mirror: https://mirror-networking.com/docs/ 
-        /// </summary>
-        public float vertical = 0f;
-        /// <summary>
-        /// Token from Mirror: https://mirror-networking.com/docs/ 
-        /// </summary>
-        public float turn = 0f;
-        /// <summary>
-        /// Token from Mirror: https://mirror-networking.com/docs/ 
-        /// </summary>
-        public bool isGrounded = true;
-        /// <summary>
-        /// Token from Mirror: https://mirror-networking.com/docs/ 
-        /// </summary>
-        public bool isFalling = false;
-        /// <summary>
-        /// Reference to the Database
-        /// It is needed to get the name of the Modules
-        /// </summary>
-        public DatabaseReference reference;
-        
-        /// <summary>
-        ///List of all the Modules 
-        /// The List is read from Database
-        /// </summary>
-        List<String> Modules = new List<String>();
+                foreach (KeyValuePair<string, object> Module in (Dictionary<string, object>)snapshot.Value)
+                {
+                    Modules.Add((String)Module.Key);
+                }
+            }
+        });
 
-        /// <summary>
-        /// List of All Game 
-        /// It's read form the Database
-        /// </summary>
-        List<String> Games = new List<String>();
-        
-        /// <summary>
-        /// Start is called before the first frame update
-        /// </summary>
-        void Start()
+        FirebaseDatabase.DefaultInstance.GetReference("Games").GetValueAsync().ContinueWith(task => {
+        if (task.IsFaulted)
         {
-            // Set up the Editor before calling into the realtime database.
-            FirebaseApp.DefaultInstance.SetEditorDatabaseUrl("https://mmo-spiel-1920.firebaseio.com");
-            // Get the root reference location of the database.
-            reference = FirebaseDatabase.DefaultInstance.RootReference;
-            FirebaseDatabase.DefaultInstance.GetReference("Modules").GetValueAsync().ContinueWith(task => {
-                if (task.IsFaulted)
-                {
-                    // Handle the error...
-                }
-                else if (task.IsCompleted)
-                {
-                    DataSnapshot snapshot = task.Result;
+            // Handle the error...
+        }
+        else if (task.IsCompleted)
+        {
 
-                    foreach (KeyValuePair<string, object> Module in (Dictionary<string, object>)snapshot.Value)
+                DataSnapshot snapshot = task.Result;
+    
+                foreach (KeyValuePair<string, object> GameName in (Dictionary<string, object>)snapshot.Value)
                     {
-                        Modules.Add((String)Module.Key);
-                    }
-                }
-            });
+                    int max=0;
+                    int min=0;
+                    foreach (KeyValuePair<string, object> num in (Dictionary<string, object>)GameName.Value)
+                    {
+                        if (num.Key.Equals("Maxplayers"))
+                        {
+                            max = Int32.Parse(num.Value.ToString());
 
-            FirebaseDatabase.DefaultInstance.GetReference("Games").GetValueAsync().ContinueWith(task => {
-                if (task.IsFaulted)
-                {
-                    // Handle the error...
-                }
-                else if (task.IsCompleted)
-                {
-                    DataSnapshot snapshot = task.Result;
-                    foreach (KeyValuePair<string, object> GameName in (Dictionary<string, object>)snapshot.Value)
-                    {
-                        Games.Add((String)GameName.Key);
+                        }
+                        else if (num.Key.Equals("Minplayers"))
+                        {
+                                min = Int32.Parse(num.Value.ToString());
+                        }
                     }
+
+                    Game game = new Game(max,min);
+                    Games.Add(GameName.Key, game);
+                }
+
                 }
             });
 
@@ -340,4 +366,3 @@ namespace Mirror
             }
         }
     }
-}

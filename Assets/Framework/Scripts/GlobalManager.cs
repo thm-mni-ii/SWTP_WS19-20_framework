@@ -149,6 +149,7 @@ public class GlobalManager : MonoBehaviour {
             LoginCanvas.enabled = false;
             ChatCanvas.enabled = true;
             ForgotCanvas.enabled = false;
+            TOPPlayerCanvas.enabled = false;
             GameCanvas.enabled = false;
         }
         else if (open == "forgot")
@@ -158,20 +159,20 @@ public class GlobalManager : MonoBehaviour {
             ChatCanvas.enabled = false;
             ForgotCanvas.enabled = true;
             TOPPlayerCanvas.enabled = false;
-        } else if (open == "toplist")
-        {
-	        TOPPlayerCanvas.enabled = true;
         } else if (open == "partylist")
         {
 	        PartysListCanvas.enabled = true;
         }
         else if (open == "gameOn") {
             GameCanvas.enabled = true;
+            PartysListCanvas.enabled = false;
         }
         else if (open == "gameOff")
         {
             GameCanvas.enabled = false;
-        }else if (open =="help"){
+            PartysListCanvas.enabled = true;
+        }
+        else if (open =="help"){
 
             if (HelpMenu.enabled)
             {

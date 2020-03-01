@@ -89,22 +89,18 @@ public class ServerHUD : MonoBehaviour
           if (NetworkServer.active)
           { 
               GUILayout.Label("Server: active.");
-          }
+                //stop
+                if (GUILayout.Button("Stop"))
+                {
+                    if (cServer.server.Active)
+                    {
+                        cServer.server.Stop();
+                    }
+                    manager.StopHost();
+                }
+            }
       }
 
-
-      // stop
-      if (NetworkServer.active)
-      { 
-          if (GUILayout.Button("Stop"))
-          { 
-              if (cServer.server.Active)
-              { 
-                  cServer.server.Stop();
-              }
-              manager.StopHost();
-          }
-      }
       GUILayout.EndArea();
    }
 }

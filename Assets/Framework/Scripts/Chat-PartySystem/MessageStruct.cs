@@ -46,6 +46,15 @@ public class MessageStruct
     /// Sender id to know, who sent the Massage
     /// </summary>
     public int senderId = 0;
+    
+    /// <summary>
+    ///Min number of players when hosting a party 
+    /// </summary>
+    public int min=0;
+    /// <summary>
+    ///Max number of players when hosting a party 
+    /// </summary>
+    public int max=0;
 
     MessageStruct() { }
 
