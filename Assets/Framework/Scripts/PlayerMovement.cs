@@ -12,8 +12,8 @@ using Mirror;
 
 
 /// <summary>
-/// PlayerMovement class to set the Movement of the player 
-/// (class token from mirror: https://mirror-networking.com/docs/)
+/// PlayerMovement class to Control the Movement of the player 
+/// For more info https://mirror-networking.com/docs/
 /// </summary>
 public class PlayerMovement : NetworkBehaviour
 {
@@ -321,7 +321,6 @@ public class PlayerMovement : NetworkBehaviour
         /// <summary>
         /// override methode
         /// When the player stand on the "Magic Circle" :
-        ///
         /// change the game type of in the client variable accordingly
         /// and show the startgame canvas to allow players to join host a party and start a game
         /// </summary>
@@ -352,8 +351,8 @@ public class PlayerMovement : NetworkBehaviour
         }
 
         /// <summary>
-        /// override methode
-        /// disable the startgame canvas when the player leave the "Magic Circle"
+        /// Override Method
+        /// Disables the startgame canvas when the player leave the "Magic Circle"
         /// </summary>
         /// <param name="other"></param>
         private void OnTriggerExit(Collider other)

@@ -4,15 +4,14 @@ using Firebase;
 using Firebase.Database;
 using Firebase.Unity.Editor;
 using Mirror;
-
+/// <summary>
+/// Login class contains all necessary Methods, Variables and Database access to handle login Requests.
+/// 1. (sign in) verify if the access data are right and make a connection between client and server
+/// 2. (sign up/register)  register a new data in the database
+/// 3. (sign out) logout from the connection between client and server
+/// 4. other Functions like: forget the password
+/// </summary>
 [RequireComponent(typeof(NetworkManager))]
-/**
- * login class has many tasks:
- * 1. (sign in) verify if the access data are right and make a connection between client and server
- * 2. (sign up/register)  register a new data in the database
- * 3. (sign out) logout from the connection between client and server
- * 4. other functions like: forget the password
-  */
 public class Login : MonoBehaviour
 {
     /// <summary>
@@ -197,7 +196,7 @@ public class Login : MonoBehaviour
         {
             checkUserExist();
         }
-
+       
         /* Show the connection status after clicking the Login button */
         if (connecting)
         {

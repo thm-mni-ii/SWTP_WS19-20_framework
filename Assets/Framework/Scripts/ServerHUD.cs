@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
 using Mirror;
-    
-/**
- * ServerHUD is a GUI of the main server in the game
- * the main server token from mirror
- */
+
+/// <summary>
+/// ServerHUD shows the Start Server button
+/// If the client is also the Server Host the Stop Button will be visible else it will disappear
+/// </summary>
 public class ServerHUD : MonoBehaviour
 {
    /// <summary>
@@ -31,7 +31,8 @@ public class ServerHUD : MonoBehaviour
    public int offsetY;
    
    /// <summary>
-   /// Get NetworkManager and Server from Mirror
+   /// Called once the Component is called for the first time,
+   /// To get the reference of the networkManager and Server scripts
    /// </summary>
    void Awake()
    {
@@ -40,10 +41,8 @@ public class ServerHUD : MonoBehaviour
    }
    
    /// <summary>
-   /// handle events in NetworkManager
-   /// events are:
-   /// LAN Server Only to make and start a new server
-   /// other events are deleted by us
+   /// Shows the Start server Button GUI for the Client if theres no Connection
+   /// Once the connection is established the Stop button will show for the Host and disappear for the Clients
    /// </summary>
    void OnGUI()
    {

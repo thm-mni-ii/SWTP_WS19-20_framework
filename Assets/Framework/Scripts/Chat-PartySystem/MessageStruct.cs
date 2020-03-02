@@ -1,20 +1,9 @@
 ﻿using System;
 
+/// <summary>
+/// MessageStruct Contains the Data when sending a Message
+/// </summary>
 [Serializable]
-
-/**
- * MessageStruct for transformation messages (include message information)
- * Message types:
- * 0 - Client id is sent from server
- * 1 - connection started with this message the user id and data will be sent to server and saved in a list
- * 2 - chat message
- * 3 - Private Message
- * 4 - Host request
- * 5 - update list from server
- * 6 - join a party
- * 7 - party is canceled
- * 8 - join party failed
- */
 public class MessageStruct 
 {
     /// <summary>
@@ -26,16 +15,9 @@ public class MessageStruct
     /// </summary>
     public string Text = null;
     /// <summary>
-    ///  Message types are:
-    /// 0 - Client id is sent from server
-    /// 1 - connection started with this message the user id and data will be sent to server and saved in a list
-    /// 2 - chat message
-    /// 3 - Private Message
-    /// 4 - Host request
-    /// 5 - update list from server
-    /// 6 - join a party
-    /// 7 - party is canceled
-    /// 8 - join party failed
+    /// A Message type is the Variable which determines that use of a Message
+    /// each type describes a different request
+    /// for more information about message types check the Client/Server classes
     /// </summary>
     public int messagetype = 0;
     /// <summary>
@@ -59,17 +41,7 @@ public class MessageStruct
     MessageStruct() { }
 
     /// <summary>
-    /// MessageStruct for transformation messages (include message information)
-    /// Message types:
-    /// 0 - Client id is sent from server
-    /// 1 - connection started with this message the user id and data will be sent to server and saved in a list
-    /// 2 - chat message
-    /// 3 - Private Message
-    /// 4 - Host request
-    /// 5 - update list from server
-    /// 6 - join a party
-    /// 7 - party is canceled
-    /// 8 - join party failed
+    /// MessageStruct Constructor
     /// </summary>
     /// <param name="sender">sender username</param>
     /// <param name="text">message</param>

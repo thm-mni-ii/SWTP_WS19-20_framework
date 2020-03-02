@@ -1,10 +1,11 @@
 ﻿using UnityEngine;
 using System;
 
+/// <summary>
+/// Data struct of user Information,
+/// All the Information about the client is read from Database and saved on a UserInfo object after login.
+/// </summary>
 [Serializable]
-/**
- * Data struct of user information
- */
 public class UserInfo : MonoBehaviour
 {
     /// <summary>

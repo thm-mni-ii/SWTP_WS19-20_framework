@@ -5,9 +5,9 @@ using UnityEngine.UI;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 
-/**
- *  Chat Class to set Chat client configuration
- */
+/// <summary>
+/// Client Class Contains all Methods and Variables to serve the Client while in the Game.
+/// </summary>
 public class Client : MonoBehaviour
 {
     /// <summary>
@@ -342,8 +342,8 @@ public class Client : MonoBehaviour
     }
 
     /// <summary>
-    /// handle the data, send from the server
-    /// Typs of data are:
+    /// Handle the Data, recieved from the server
+    /// Typs of recieved Data are:
     /// case 1: data are only for server should never be used here
     /// case 2: message recieved
     /// case 3: Private Message for special client
@@ -353,6 +353,8 @@ public class Client : MonoBehaviour
     /// case 7: party canceled
     /// case 8: join failed 
     /// case 9: update host list
+    /// case 10: start game for client
+    /// case 11: failed start game request
     /// </summary>
     /// <param name="data"> Byte data recieved from the server (Telepathy.EventType.Data)  </param>
     public void HandleData(Byte[] data)

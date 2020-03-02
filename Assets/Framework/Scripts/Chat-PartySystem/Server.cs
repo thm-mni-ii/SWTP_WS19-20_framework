@@ -5,10 +5,10 @@ using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 
-/**
- * Server class
- * This class contains all the methods and variables for the handling of client requests on the main server
- */
+/// <summary>
+/// Server class
+///This class contains all the methods and variables for the handling of client requests on the main server
+/// </summary>
 public class Server : MonoBehaviour
 {
     /// <summary>
@@ -91,10 +91,10 @@ public class Server : MonoBehaviour
     }
 
     /// <summary>
-    /// handle the data, sent to the serve from the clients
-    /// Each number represents a Request made from the clients
-    /// This Method recieves the data and handles it based on the Request type 
-    /// Types of Requests are:
+    /// Handle the Data, sent to the Server from the Clients
+    /// Each number represents a Request made from the Clients
+    /// This Method recieves the Data and handles it based on the Request type 
+    /// Types of Client Requests are:
     /// case 1: user information after connection
     /// case 2: Global message
     /// case 3: Private Message
@@ -105,7 +105,7 @@ public class Server : MonoBehaviour
     /// case 8: player left a Party
     /// case 9: player is ready
     /// case 10: Update Partylist for Client
-    ///case 11: Start game Request, sent from Host
+    /// case 11: Start game Request, sent from Host
     /// </summary>
     /// <param name="data"> Byte data recieved from the server (Telepathy.EventType.Data) </param>
     void HandleMessage(Byte[] data)

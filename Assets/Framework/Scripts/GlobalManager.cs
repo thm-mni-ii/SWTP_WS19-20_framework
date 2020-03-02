@@ -1,10 +1,11 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-/**
- * GlobalManager class to manage the whole game (like: Canvases)
- * Hide and show the components
- */
+
+/// <summary>
+/// GlobalManager class Manages Graphical User Interfaces (GUIs)
+/// Like hiding and showing the components
+/// </summary>
 public class GlobalManager : MonoBehaviour {
 	
 	/// <summary>
@@ -53,6 +54,8 @@ public class GlobalManager : MonoBehaviour {
     /// 3. ChatCanvas
     /// 4. ForgotCanvas
     /// 5. GameCanvas
+    /// 6.TOPPlayerCanvas
+    /// 7. PartysListCanvas
     /// </summary>
     void Awake () {
 		RegisterCanvas.enabled = false;

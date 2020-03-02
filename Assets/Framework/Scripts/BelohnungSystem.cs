@@ -5,9 +5,9 @@ using System.Collections.Generic;
 using UnityEngine.UI;
 using Object = System.Object;
 
-/**
- * The reward system is a method of realizing the levels based on the score.
- */
+/// <summary>
+/// The reward system is a method of realizing the levels based on the score.
+/// </summary>
 public class BelohnungSystem : MonoBehaviour
 {
     /// <summary>
