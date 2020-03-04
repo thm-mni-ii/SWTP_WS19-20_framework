@@ -22,12 +22,6 @@
               </e>
             </e>
           </e>
-          <e p="Plugins" t="Include">
-            <e p="Http" t="Include">
-              <e p="link.xml" t="Include" />
-            </e>
-            <e p="link.xml" t="Include" />
-          </e>
         </e>
         <e p="Framework" t="Include">
           <e p="Fonts" t="Include">
@@ -37,20 +31,24 @@
             <e p="LuckiestGuy" t="Include">
               <e p="FontLicense.txt" t="Include" />
             </e>
-            <e p="vampire_wars" t="Include">
-              <e p="license.txt" t="Include" />
+          </e>
+          <e p="Models" t="Include">
+            <e p="Supercyan Character Pack Free Sample" t="Include">
+              <e p="Shaders" t="Include">
+                <e p="FreeCelShader.shader" t="Include" />
+              </e>
             </e>
           </e>
           <e p="Scripts" t="Include">
             <e p="BelohnungSystem.cs" t="Include" />
             <e p="Chat-PartySystem" t="Include">
               <e p="Client.cs" t="Include" />
+              <e p="Game.cs" t="Include" />
               <e p="MessageStruct.cs" t="Include" />
               <e p="Party.cs" t="Include" />
               <e p="PartyPlayer.cs" t="Include" />
               <e p="Server.cs" t="Include" />
             </e>
-            <e p="Game.cs" t="Include" />
             <e p="GlobalManager.cs" t="Include" />
             <e p="InstanceStarter.cs" t="Include" />
             <e p="LoginSystem" t="Include">
@@ -61,9 +59,6 @@
             <e p="ServerHUD.cs" t="Include" />
             <e p="Table.cs" t="Include" />
           </e>
-        </e>
-        <e p="InstanceBuilds" t="Include">
-          <e p="Dexit.txt" t="Include" />
         </e>
         <e p="Mirror" t="Include">
           <e p="Authenticators" t="Include">
@@ -304,16 +299,6 @@
                 <e p="AndroidManifest.xml" t="Include" />
               </e>
             </e>
-          </e>
-        </e>
-        <e p="Supercyan Character Pack Free Sample" t="Include">
-          <e p="Scripts" t="Include">
-            <e p="CameraLogicFree.cs" t="Include" />
-            <e p="DemoFree.cs" t="Include" />
-            <e p="SimpleCharacterControlFree.cs" t="Include" />
-          </e>
-          <e p="Shaders" t="Include">
-            <e p="FreeCelShader.shader" t="Include" />
           </e>
         </e>
       </e>
