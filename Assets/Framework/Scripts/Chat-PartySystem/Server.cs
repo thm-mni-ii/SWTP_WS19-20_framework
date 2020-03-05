@@ -151,7 +151,7 @@ public class Server : MonoBehaviour
                     return;
                 }
                 Party temp2 = partyList[Smsg.reciever];
-                if(temp2.addPlayer(Smsg.senderId, new PartyPlayer(Smsg.senderName))){
+                if(!temp2.addPlayer(Smsg.senderId, new PartyPlayer(Smsg.senderName))){
                     server.Send(Smsg.senderId, ObjectToByteArray(new MessageStruct("server: The Party is full", null, 8, null)));
                     return;
                 }
