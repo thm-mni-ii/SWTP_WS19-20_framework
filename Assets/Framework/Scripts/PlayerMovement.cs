@@ -58,8 +58,8 @@ public class PlayerMovement : NetworkBehaviour
     /// <summary>
     /// Token from Supercyan Character Pack: https://assetstore.unity.com/packages/3d/characters/humanoids/character-pack-free-sample-79870
     /// </summary>
-    [Header("Components")]
-    public Animator m_animator;
+   // [Header("Components")]
+    //public Animator m_animator;
 
 
     /****** MovementVariables *******/
@@ -228,7 +228,7 @@ public class PlayerMovement : NetworkBehaviour
             {
                 jumpSpeed += jumpFactor;
 
-                m_animator.SetTrigger("Jump");
+              //  m_animator.SetTrigger("Jump");
             }
             else if (isGrounded)
             {
@@ -238,7 +238,7 @@ public class PlayerMovement : NetworkBehaviour
             {
                 isFalling = true;
                 jumpSpeed = 0;
-                m_animator.SetTrigger("Land");
+                //m_animator.SetTrigger("Land");
             }
         }
 
@@ -251,7 +251,7 @@ public class PlayerMovement : NetworkBehaviour
             if (clientVar.clientMessageTF.isFocused) return;
             if (clientVar.partyTextField.isFocused && globalCanvas.GameCanvas.enabled ) return;
 
-            m_animator.SetBool("Grounded", isGrounded);
+            //m_animator.SetBool("Grounded", isGrounded);
             transform.Rotate(0f, turn * Time.fixedDeltaTime, 0f);
             Vector3 direction = new Vector3(horizontal, jumpSpeed, vertical);
             direction = Vector3.ClampMagnitude(direction, 1f);
@@ -262,7 +262,7 @@ public class PlayerMovement : NetworkBehaviour
                 characterController.Move(direction * Time.fixedDeltaTime);
             else
             {
-                m_animator.SetFloat("MoveSpeed", direction.magnitude);
+              //  m_animator.SetFloat("MoveSpeed", direction.magnitude);
                 characterController.SimpleMove(direction);
             }
             isGrounded = characterController.isGrounded;
