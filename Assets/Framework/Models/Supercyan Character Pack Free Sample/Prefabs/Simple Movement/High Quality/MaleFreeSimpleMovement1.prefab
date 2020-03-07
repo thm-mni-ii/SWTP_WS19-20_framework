@@ -1087,7 +1087,7 @@ MonoBehaviour:
   index: 0
   score: 0
   playerColor: {r: 0, g: 0, b: 0, a: 1}
-  m_animator: {fileID: 0}
+  m_animator: {fileID: 95665039525092722}
   moveSpeed: 8
   turnSpeedAccel: 10
   turnSpeedDecel: 10
