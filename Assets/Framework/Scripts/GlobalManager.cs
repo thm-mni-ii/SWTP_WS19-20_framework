@@ -44,7 +44,17 @@ public class GlobalManager : MonoBehaviour {
     /// <summary>
     /// auxiliary variable to hide all windows on lobby
     /// </summary>
-    public bool hideall = true;
+    private bool hideall = true;
+
+
+    public Text muteButtonText;
+
+
+    /// <summary>
+    /// This Variable changes based on the Audio components state
+    /// if it is muted then true else false
+    /// </summary>
+    private bool isMuted = false;
 
     /// <summary>
     /// Use this for initialization canvases, which we need
@@ -73,6 +83,25 @@ public class GlobalManager : MonoBehaviour {
     private void Update()
     {
 	    hideShowObjects();
+    }
+
+    /// <summary>
+    /// Mute / Unmute the Audio in the Game
+    /// </summary>
+    public void MuteAudio()
+    {
+        if (isMuted)
+        {
+            this.GetComponent<AudioSource>().Play();
+            isMuted = false;
+            muteButtonText.text = "Mute";
+        }
+        else
+        {
+            this.GetComponent<AudioSource>().Stop();
+            isMuted = true;
+            muteButtonText.text = "UnMute";
+        }
     }
 
     /// <summary>
