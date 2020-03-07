@@ -83,7 +83,7 @@ public class Party
     /// </summary>
     public bool checkPlayerNumber()
     {
-        if (playersList.Count >= Maxplayers || playersList.Count < Minplayers)
+        if (playersList.Count > Maxplayers || playersList.Count < Minplayers)
             return false;
         else
             return true;
