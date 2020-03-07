@@ -199,7 +199,6 @@ public class PlayerMovement : NetworkBehaviour
             {
                 globalCanvas = GM.GetComponent<GlobalManager>();
             }
-            var sphereCollider = gameObject.AddComponent<SphereCollider>();
             clientVar = globalCanvas.GetComponent<Client>();
         }
 
