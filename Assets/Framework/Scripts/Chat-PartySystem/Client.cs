@@ -597,6 +597,7 @@ public class Client : MonoBehaviour
                 {
                     Table.CreateEntryTransform(playerStatus[0], i.ToString(), "Not Ready",null, entryContainerInGame, entryTemplateInGame, EntryTransformListInGame, Color.red);
                 }
+                i++;
             }
         }
     }
