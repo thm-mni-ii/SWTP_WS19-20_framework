@@ -58,8 +58,9 @@ public class PlayerMovement : NetworkBehaviour
     /// <summary>
     /// Token from Supercyan Character Pack: https://assetstore.unity.com/packages/3d/characters/humanoids/character-pack-free-sample-79870
     /// </summary>
-    [SerializeField] private Animator m_animator;
-    //[SerializeField] private Rigidbody m_rigidBody;
+    [Header("Components")]
+    public Animator m_animator;
+
 
     /****** MovementVariables *******/
     /// <summary>
@@ -202,17 +203,6 @@ public class PlayerMovement : NetworkBehaviour
             clientVar = globalCanvas.GetComponent<Client>();
         }
 
-        public void Initialize(GameObject character)
-        {
-            m_animator = character.GetComponent<Animator>();
-            //m_rigidBody = character.GetComponent<Rigidbody>();
-        }
-
-        void Awake()
-        {
-            if (!m_animator) { gameObject.GetComponent<Animator>(); }
-            //if(!m_rigidBody) { gameObject.GetComponent<Animator>(); }
-        }
 
         /// <summary>
         /// Update player position - Token from Mirror: https://mirror-networking.com/docs/
