@@ -187,7 +187,7 @@ public class PlayerMovement : NetworkBehaviour
                         }
                     }
 
-                    Game game = new Game(max,min);
+                    Game game = new Game(min,max);
                     Games.Add(GameName.Key, game);
                 }
 
